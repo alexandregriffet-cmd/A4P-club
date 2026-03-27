@@ -1074,6 +1074,114 @@ function nextQuestion() {
   }
 }
 
+// ═══ CALCUL RÉSULTATS ═══
+function calcResults(type, answers, questions) {
+  if (type === 'CMP') return calcCMP(answers, questions)
+  if (type === 'PMP') return calcPMP(answers, questions)
+  if (type === 'MPA') return calcMPA(answers, questions)
+  if (type === 'PSYCHO') return calcPSYCHO(answers, questions)
+  return { globalScore: 0, profilCode: '—', profilLabel: '—', scores: {}, dimensions: [] }
+}
+
+function calcCMP(answers, questions) {
+  let tP=0,tM=0,tB=0,tR=0,n=0
+  questions.forEach(q => {
+    const i = answers[q.id]
+    if (i === undefined) return
+    const o = q.options[i]
+    tP += o.scores.pression; tM += o.scores.maturite
+    tB += o.scores.blocage; tR += o.scores.ressource; n++
+  })
+  if (!n) return { globalScore: 0, profilCode: 'CMP-?', profilLabel: '—', scores: {}, dimensions: [] }
+  const sP=Math.round((tP/(n*5))*100), sM=Math.round((tM/(n*5))*100)
+  const sB=Math.round((tB/(n*5))*100), sR=Math.round((tR/(n*5))*100)
+  const g = Math.round((sP + sM + (100 - sB) + sR) / 4)
+  const profils = [
+    { min:85, code:'CMP-5', label:'Expert mental', description:"Votre profil révèle un niveau de maîtrise mentale que l'on rencontre chez les sportifs qui ont travaillé en profondeur leur rapport à la pression, à l'erreur et à l'adversité. Vous ne subissez pas les situations difficiles — vous les traversez avec une lucidité et une stabilité remarquables.", forces:["Capacité à rester dans l'action sous pression maximale","Rebond rapide et constructif après l'erreur ou l'échec","Prise de décision lucide dans les moments décisifs","Stabilité émotionnelle qui soutient le collectif"], vigilances:["Risque de sous-estimer la charge mentale des coéquipiers","Tendance à gérer seul sans demander de soutien"], leviers:["Développer votre rôle de leadership mental au sein du collectif","Transmettre vos outils mentaux à vos coéquipiers"] },
+    { min:70, code:'CMP-4', label:'Performeur solide', description:"Votre profil est celui d'un sportif qui a construit de vraies fondations mentales. Dans la grande majorité des situations, vous trouvez les ressources pour rester dans le match et gérer vos émotions.", forces:["Bonne capacité de régulation émotionnelle","Engagement constant même dans l'adversité","Aptitude à apprendre de ses erreurs"], vigilances:["Certaines situations de pression extrême encore déstabilisantes","Confiance parfois dépendante des résultats récents"], leviers:["Identifier les 2-3 situations qui fragilisent encore votre mental","Renforcer vos routines de préparation mentale"] },
+    { min:55, code:'CMP-3', label:'Potentiel engagé', description:"Votre profil révèle un sportif engagé qui possède des ressources mentales réelles. Vous êtes capable de performances solides dans des contextes favorables et avez conscience de ce qui vous limite.", forces:["Volonté réelle de progresser","Conscience claire de ses forces et limites"], vigilances:["Confiance fragilisée dans les moments à fort enjeu","Difficulté à s'adapter rapidement quand le contexte change"], leviers:["Développer des routines de recentrage utilisables en compétition","Construire une confiance ancrée sur des preuves concrètes"] },
+    { min:40, code:'CMP-2', label:'En construction', description:"Le mental représente actuellement un facteur limitant dans votre performance compétitive. Les situations de pression révèlent des blocages fréquents qui vous empêchent d'exprimer votre plein potentiel.", forces:["Honnêteté dans l'auto-évaluation","Potentiel de progression important"], vigilances:["Blocages mentaux fréquents en situation de pression","Confiance très dépendante des résultats immédiats"], leviers:["Commencer par un accompagnement structuré en préparation mentale","Mettre en place des routines simples d'activation et de récupération"] },
+    { min:0, code:'CMP-1', label:'Débutant mental', description:"La dimension mentale est aujourd'hui un frein majeur à votre expression compétitive. Les situations de pression génèrent des blocages importants. Ce n'est pas une limite définitive — c'est un manque de préparation dans un domaine précis.", forces:["Courage de l'honnêteté dans l'auto-évaluation","Marge de progression considérable"], vigilances:["Blocages mentaux profonds en compétition","Pression compétitive très difficile à gérer"], leviers:["Commencer par des objectifs de processus très simples","S'engager dans un suivi régulier avec un préparateur mental"] }
+  ]
+  const p = profils.find(x => g >= x.min) || profils[4]
+  return { globalScore:g, profilCode:p.code, profilLabel:p.label, description:p.description, forces:p.forces, vigilances:p.vigilances, leviers:p.leviers, scores:{pression:sP,maturite:sM,blocage:sB,ressource:sR}, dimensions:[{label:'Sous pression',value:sP,color:'#2f4a8a'},{label:'Maturité mentale',value:sM,color:'#1a6a5a'},{label:'Ressources',value:sR,color:'#5a3a8a'},{label:'Sans blocage',value:100-sB,color:'#C9A84C'}] }
+}
+
+function calcPMP(answers, questions) {
+  const dims = {}
+  questions.forEach(q => {
+    const v = answers[q.id]; if (!v) return
+    if (!dims[q.dimension]) dims[q.dimension] = { total:0, count:0 }
+    const score = q.reverse ? 6 - v : v
+    dims[q.dimension].total += score; dims[q.dimension].count++
+  })
+  const scores = {}, dimensions = []
+  const dc = {'Activation':'#2f4a8a','Attention':'#5a3a8a','Régulation':'#1a6a5a','Engagement':'#8a4a2f','Confiance':'#2f6a8a','Résilience':'#6a2f8a','Cognition':'#4a6a2f','Motricité':'#8a2f5a'}
+  const da = {'Activation':"Vous vous activez rapidement et transformez la pression en énergie utile.",'Attention':"Vous maintenez votre focus même sous pression et vous reconcentrez rapidement.",'Régulation':"Vous gérez bien vos émotions sous pression et restez stable.",'Engagement':"Votre engagement est constant et fiable même dans l'adversité.",'Confiance':"Vous avez une confiance solide en vos capacités dans les moments importants.",'Résilience':"Vous rebondissez vite après les difficultés et transformez les échecs en apprentissage.",'Cognition':"Vous analysez bien les situations et prenez des décisions éclairées.",'Motricité':"Vous avez une conscience corporelle fine et percevez rapidement les ajustements nécessaires."}
+  const dl = {'Activation':"Travaillez vos routines d'activation avant la compétition.",'Attention':"Renforcez votre ancrage attentionnel dans les moments critiques.",'Régulation':"Développez des outils de régulation émotionnelle.",'Engagement':"Renforcez votre ancrage motivationnel.",'Confiance':"Construisez une confiance basée sur les preuves concrètes.",'Résilience':"Développez votre capacité de rebond après les coups durs.",'Cognition':"Développez votre lucidité décisionnelle sous pression.",'Motricité':"Développez votre conscience proprioceptive."}
+  Object.keys(dims).forEach(d => {
+    const p = Math.round((dims[d].total / (dims[d].count * 5)) * 100)
+    scores[d] = p; dimensions.push({ label:d, value:p, color:dc[d]||'#1B3A6B' })
+  })
+  const g = dimensions.length > 0 ? Math.round(dimensions.reduce((a,d) => a+d.value, 0) / dimensions.length) : 0
+  const sorted = [...dimensions].sort((a,b) => b.value - a.value)
+  const profiles = {'Activation':'Compétiteur','Attention':'Concentré','Régulation':'Régulateur','Engagement':'Battant','Confiance':'Leader','Résilience':'Résilient','Cognition':'Stratège','Motricité':'Technicien'}
+  const pl = profiles[sorted[0]?.label] || 'Performeur'
+  const lbl = g>=91?'Profil d\'élite':g>=76?'Profil performant':g>=61?'Profil confirmé':g>=41?'Profil en développement':'Profil en construction'
+  const forces = sorted.slice(0,3).map(d => da[d.label] || d.label + ' bien développé (' + d.value + '%)')
+  const leviers = sorted.slice(-3).map(d => (dl[d.label] || d.label) + ' (' + d.value + '%)')
+  return { globalScore:g, profilCode:'PMP', profilLabel:pl+' · '+lbl, description:"Votre score global de "+g+"/100 reflète votre niveau de performance mentale sur 8 dimensions. Votre dimension la plus développée est "+sorted[0]?.label+" ("+sorted[0]?.value+"%). C'est votre ressource mentale principale en compétition.", forces, leviers, scores, dimensions }
+}
+
+function calcMPA(answers, questions) {
+  const counts = { SR:{s:0,t:0}, CI:{s:0,t:0}, LH:{s:0,t:0}, StF:{s:0,t:0} }
+  questions.forEach(q => {
+    const v = answers[q.id]; if (!v) return
+    counts[q.axe].t++; if (v === 'A') counts[q.axe].s++
+  })
+  const scores = {}
+  Object.keys(counts).forEach(a => { scores[a] = counts[a].t > 0 ? Math.round((counts[a].s / counts[a].t) * 100) : 50 })
+  const SR=scores.SR>=50?'S':'R', CI=scores.CI>=50?'C':'I', LH=scores.LH>=50?'L':'H', StF=scores.StF>=50?'St':'F'
+  const code4 = SR+CI+LH+StF
+  const profileKey = 'P'+(scores.SR>=50?0:1)+(scores.CI>=50?0:1)+(scores.LH>=50?0:1)+(scores.StF>=50?0:1)
+  const profil = MPA_PROFILS[profileKey] || Object.values(MPA_PROFILS)[0]
+  const axeL = { SR:{s:'Stimulation externe',r:'Ressource interne'}, CI:{s:'Concret',r:'Intuitif'}, LH:{s:'Logique',r:'Humain'}, StF:{s:'Structure',r:'Fluidité'} }
+  const dims = Object.keys(scores).map(a => {
+    const sc = scores[a]; const dom = sc>=50 ? axeL[a].s : axeL[a].r; const p = sc>=50 ? sc : 100-sc
+    return { label:dom+' ('+a+')', value:p, color:'#1a3a6a' }
+  })
+  const intensities = Object.values(scores).map(s => Math.abs(s-50))
+  const g = Math.min(100, Math.round(50 + intensities.reduce((a,b) => a+b, 0) / 4))
+  return { globalScore:g, profilCode:code4, profilLabel:(profil.nom||'Profil')+' · '+code4, description:profil.description||'', forces:[profil.besoins||''], vigilances:[profil.risques||''], leviers:[profil.coaching||''], sport:profil.sport||[], scores, dimensions:dims }
+}
+
+function calcPSYCHO(answers, questions) {
+  let combatif=0, expressif=0, analytique=0, absorbant=0, regT=0, regN=0, itcaT=0, itcaN=0
+  questions.forEach(q => {
+    const ans = answers[q.id]; if (ans === undefined) return
+    if (q.type === 'situational') {
+      const o = q.options[ans]; if (!o) return
+      combatif += o.scores.combatif||0; expressif += o.scores.expressif||0
+      analytique += o.scores.analytique||0; absorbant += o.scores.absorbant||0
+    }
+    if (q.type === 'likert' && q.cat === 'Régulation') { const s=(q.id==='PE14'||q.id==='PE18')?6-ans:ans; regT+=s; regN++ }
+    if (q.type === 'likert' && q.cat === 'Traits cognitifs') { itcaT+=ans; itcaN++ }
+  })
+  const maxS = questions.filter(q => q.type === 'situational').length * 5
+  const cP=maxS>0?Math.round((combatif/maxS)*100):0
+  const eP=maxS>0?Math.round((expressif/maxS)*100):0
+  const aP=maxS>0?Math.round((analytique/maxS)*100):0
+  const abP=maxS>0?Math.round((absorbant/maxS)*100):0
+  const regS = regN>0 ? Math.round((regT/(regN*5))*100) : 50
+  const itcaAvg = itcaN>0 ? itcaT/itcaN : 2.5
+  const typeMap = [{key:'combatif',val:cP},{key:'expressif',val:eP},{key:'analytique',val:aP},{key:'absorbant',val:abP}]
+  const dom = [...typeMap].sort((a,b) => b.val-a.val)[0].key
+  const profil = PSYCHO_PROFILS[dom]
+  const itcaP = itcaAvg>=3.8 ? ITCA_PROFILS[0] : itcaAvg>=2.8 ? ITCA_PROFILS[1] : ITCA_PROFILS[2]
+  const g = Math.round((regS + (100 - Math.abs(cP - abP))) / 2)
+  return { globalScore:g, profilCode:profil.code, profilLabel:profil.label+' '+profil.emoji, description:profil.description, forces:profil.coping_naturel, vigilances:profil.coping_manquant, leviers:profil.recommandations, neurochimie:profil.neurochimie, itca:itcaP, scores:{combatif:cP,expressif:eP,analytique:aP,absorbant:abP,regulation:regS}, dimensions:[{label:'Combatif 🔥',value:cP,color:'#7a1a1a'},{label:'Expressif 🌟',value:eP,color:'#1a3a6a'},{label:'Analytique 🧠',value:aP,color:'#1a4a2a'},{label:'Absorbant 🌊',value:abP,color:'#4a2a6a'},{label:'Régulation',value:regS,color:'#C9A84C'}] }
+}
+
 // ═══ FIN DU TEST ═══
 async function finishTest() {
   const results = calcResults(currentTest, testAnswers, testQuestions)
