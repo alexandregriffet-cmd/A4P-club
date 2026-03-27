@@ -1260,6 +1260,78 @@ function renderResults(type, res) {
     html += '</div>'
   }
 
+  // Forces
+  if (res.forces && res.forces.length > 0) {
+    html += '<div class="res-card"><div class="res-card-title">💪 Tes forces mentales</div>'
+    res.forces.forEach(f => {
+      html += '<div class="insight-row" style="background:#f0fff4;border-color:#4ade80;">'
+      html += '<div class="insight-text">✅ ' + f + '</div></div>'
+    })
+    html += '</div>'
+  }
+
+  // Leviers
+  if (res.leviers && res.leviers.length > 0) {
+    html += '<div class="res-card"><div class="res-card-title">🚀 Leviers de progression</div>'
+    res.leviers.forEach(l => {
+      html += '<div class="insight-row" style="background:#eef3ff;border-color:#2f4a8a;">'
+      html += '<div class="insight-text">→ ' + l + '</div></div>'
+    })
+    html += '</div>'
+  }
+
+  // Vigilances
+  if (res.vigilances && res.vigilances.length > 0) {
+    html += '<div class="res-card"><div class="res-card-title">⚠️ Points de vigilance</div>'
+    res.vigilances.forEach(v => {
+      html += '<div class="insight-row" style="background:#fff8f0;border-color:#f87171;">'
+      html += '<div class="insight-text">⚠️ ' + v + '</div></div>'
+    })
+    html += '</div>'
+  }
+
+  // Neurochimie (PSYCHO)
+  if (res.neurochimie && res.neurochimie.length > 0) {
+    html += '<div class="res-card"><div class="res-card-title">🧬 Profil neurochimique</div>'
+    res.neurochimie.forEach(nt => {
+      html += '<div style="margin-bottom:14px;background:#f8faff;border-radius:14px;padding:14px;">'
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
+      html += '<span style="font-weight:800;font-size:14px;color:' + nt.color + '">' + nt.nt + '</span>'
+      html += '<span style="background:' + (nt.statut==='dominant'?'#1a6a5a':'#8a4a2f') + ';color:#fff;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:800;">' + (nt.statut==='dominant'?'Dominant':'Carence probable') + '</span>'
+      html += '</div>'
+      html += '<p style="font-size:13px;color:#2a3a5a;margin-bottom:8px;">' + nt.description + '</p>'
+      html += '<ul style="padding-left:16px;color:#4a5a7a;font-size:12px;line-height:1.8;">' + nt.regulation.map(r => '<li>' + r + '</li>').join('') + '</ul>'
+      html += '</div>'
+    })
+    html += '</div>'
+  }
+
+  // Conseils sport (MPA)
+  if (res.sport && res.sport.length > 0) {
+    html += '<div class="res-card"><div class="res-card-title">🏆 Conseils pratiques par sport</div>'
+    res.sport.forEach(s => {
+      html += '<div style="background:#f8faff;border-radius:13px;padding:12px 15px;margin-bottom:8px;border-left:3px solid #1a3a6a;">'
+      html += '<div style="color:#2a3a5a;font-size:14px;line-height:1.5;">' + s + '</div></div>'
+    })
+    html += '</div>'
+  }
+
+  // ITCA (PSYCHO)
+  if (res.itca) {
+    html += '<div class="res-card" style="border:' + (res.itca.alert ? '2px solid #5a1a7a' : '1px solid #e8edf5') + ';">'
+    html += '<div class="res-card-title">🧩 ITCA — Inventaire des Traits Cognitifs Atypiques'
+    if (res.itca.alert) html += ' <span style="background:#5a1a7a;color:#fff;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:800;margin-left:8px;">INVESTIGATION RECOMMANDÉE</span>'
+    html += '</div>'
+    html += '<div style="background:#f8f0ff;border-radius:14px;padding:16px;border-left:4px solid ' + res.itca.color + ';">'
+    html += '<div style="font-weight:900;color:' + res.itca.color + ';font-size:15px;margin-bottom:8px;">' + res.itca.code + ' — ' + res.itca.label + '</div>'
+    html += '<p style="color:#2a3a5a;font-size:14px;line-height:1.7;margin-bottom:10px;">' + res.itca.description + '</p>'
+    html += '<div style="font-weight:800;color:#4a1a6a;margin-bottom:6px;font-size:13px;">Impact sport :</div>'
+    html += '<p style="color:#2a3a5a;font-size:13px;line-height:1.6;margin-bottom:8px;">' + res.itca.sport_impact + '</p>'
+    html += '<div style="font-weight:800;color:#4a1a6a;margin-bottom:6px;font-size:13px;">Orientation :</div>'
+    html += '<p style="color:#2a3a5a;font-size:13px;line-height:1.6;">' + res.itca.orientation + '</p>'
+    html += '</div></div>'
+  }
+
   html += '<div id="saving-status" class="saving-msg">⏳ Enregistrement...</div>'
   html += '<button class="btn-gold" onclick="showPage(\'page-joueur\');loadJoueur(currentUser)">← Retour à mon tableau de bord</button>'
   html += '<button class="btn-outline" onclick="startTest(\'' + type + '\')">Repasser ce test</button>'
