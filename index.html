@@ -9,732 +9,170 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; min-height: 100vh; background: #0f2244; color: #1a2a4a; }
 
-body {
-font-family: ‘DM Sans’, sans-serif;
-min-height: 100vh;
-background: #0f2244;
-color: #1a2a4a;
-}
-
-/* ═══ LOGIN ═══ */
-#page-login {
-min-height: 100vh;
-display: flex;
-align-items: center;
-justify-content: center;
-background: linear-gradient(135deg, #0a1628 0%, #0f2244 40%, #1a3560 100%);
-padding: 20px;
-}
-
-.login-card {
-width: 100%;
-max-width: 420px;
-background: rgba(255,255,255,0.05);
-border: 1px solid rgba(255,255,255,0.12);
-border-radius: 28px;
-padding: 44px 36px;
-backdrop-filter: blur(20px);
-box-shadow: 0 40px 80px rgba(0,0,0,0.4);
-animation: slideUp 0.5s ease;
-}
-
-@keyframes slideUp {
-from { opacity: 0; transform: translateY(24px); }
-to { opacity: 1; transform: translateY(0); }
-}
-
-.login-logo {
-text-align: center;
-margin-bottom: 32px;
-}
-
-.login-logo img {
-width: 80px; height: 80px;
-border-radius: 18px;
-object-fit: cover;
-display: block;
-margin: 0 auto 14px;
-box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-}
-
-.login-logo .eyebrow {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 12px;
-letter-spacing: 0.4em;
-color: #4A90D9;
-text-transform: uppercase;
-margin-bottom: 6px;
-}
-
-.login-logo .brand {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 24px;
-font-weight: 700;
-color: #fff;
-}
-
+/* LOGIN */
+#page-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a1628 0%, #0f2244 40%, #1a3560 100%); padding: 20px; }
+.login-card { width: 100%; max-width: 420px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 28px; padding: 44px 36px; backdrop-filter: blur(20px); box-shadow: 0 40px 80px rgba(0,0,0,0.4); animation: slideUp 0.5s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.login-logo { text-align: center; margin-bottom: 32px; }
+.login-logo img { width: 80px; height: 80px; border-radius: 18px; object-fit: cover; display: block; margin: 0 auto 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.login-logo .eyebrow { font-family: ‘Cormorant Garamond’, serif; font-size: 12px; letter-spacing: 0.4em; color: #4A90D9; text-transform: uppercase; margin-bottom: 6px; }
+.login-logo .brand { font-family: ‘Cormorant Garamond’, serif; font-size: 24px; font-weight: 700; color: #fff; }
 .login-logo .brand span { color: #C9A84C; }
-
-.login-divider {
-height: 1px;
-background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-margin-bottom: 28px;
-}
-
-.login-subtitle {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 20px;
-font-weight: 600;
-color: #fff;
-text-align: center;
-margin-bottom: 24px;
-}
-
+.login-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); margin-bottom: 28px; }
+.login-subtitle { font-family: ‘Cormorant Garamond’, serif; font-size: 20px; font-weight: 600; color: #fff; text-align: center; margin-bottom: 24px; }
 .field { margin-bottom: 14px; }
-
-.field label {
-display: block;
-font-size: 11px;
-font-weight: 600;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-color: rgba(255,255,255,0.45);
-margin-bottom: 7px;
-}
-
-.field input {
-width: 100%;
-padding: 13px 16px;
-background: rgba(255,255,255,0.07);
-border: 1px solid rgba(255,255,255,0.14);
-border-radius: 12px;
-color: #fff;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 15px;
-outline: none;
-transition: all 0.3s;
-}
-
+.field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 7px; }
+.field input { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; color: #fff; font-family: ‘DM Sans’, sans-serif; font-size: 15px; outline: none; transition: all 0.3s; }
 .field input::placeholder { color: rgba(255,255,255,0.25); }
-.field input:focus {
-border-color: #4A90D9;
-background: rgba(74,144,217,0.1);
-box-shadow: 0 0 0 3px rgba(74,144,217,0.15);
-}
-
-.btn-primary {
-width: 100%;
-padding: 15px;
-background: linear-gradient(135deg, #2E5BA8, #4A90D9);
-color: #fff;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 16px;
-font-weight: 700;
-border: none;
-border-radius: 13px;
-cursor: pointer;
-transition: all 0.3s;
-margin-top: 6px;
-}
-
+.field input:focus { border-color: #4A90D9; background: rgba(74,144,217,0.1); box-shadow: 0 0 0 3px rgba(74,144,217,0.15); }
+.btn-primary { width: 100%; padding: 15px; background: linear-gradient(135deg, #2E5BA8, #4A90D9); color: #fff; font-family: ‘DM Sans’, sans-serif; font-size: 16px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; transition: all 0.3s; margin-top: 6px; }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,144,217,0.4); }
 .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.error-box { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.3); border-radius: 11px; padding: 11px 15px; color: #fca5a5; font-size: 13px; text-align: center; margin-top: 12px; display: none; }
 
-.error-box {
-background: rgba(248,113,113,0.12);
-border: 1px solid rgba(248,113,113,0.3);
-border-radius: 11px;
-padding: 11px 15px;
-color: #fca5a5;
-font-size: 13px;
-text-align: center;
-margin-top: 12px;
-display: none;
-}
-
-/* ═══ PAGES COMMUNES ═══ */
+/* PAGES */
 .page { display: none; min-height: 100vh; background: #f0f4ff; }
 .page.active { display: block; }
-
-.topbar {
-background: #fff;
-padding: 14px 20px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-position: sticky;
-top: 0;
-z-index: 50;
-gap: 12px;
-flex-wrap: wrap;
-}
-
-.topbar-brand {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 20px;
-font-weight: 700;
-color: #1B3A6B;
-}
-
+.topbar { background: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 50; gap: 12px; flex-wrap: wrap; }
+.topbar-brand { font-family: ‘Cormorant Garamond’, serif; font-size: 20px; font-weight: 700; color: #1B3A6B; }
 .topbar-brand span { color: #C9A84C; }
-
-.topbar-right {
-display: flex;
-align-items: center;
-gap: 10px;
-}
-
-.avatar {
-width: 38px; height: 38px;
-border-radius: 11px;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 16px;
-font-weight: 800;
-color: #fff;
-background: #1B3A6B;
-flex-shrink: 0;
-}
-
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: #fff; background: #1B3A6B; flex-shrink: 0; }
 .user-info .name { font-size: 14px; font-weight: 700; color: #1a2a4a; }
 .user-info .role { font-size: 11px; color: #6c7a99; }
-
-.btn-logout {
-padding: 7px 14px;
-background: transparent;
-border: 1px solid rgba(27,58,107,0.2);
-border-radius: 9px;
-color: #6c7a99;
-font-size: 12px;
-font-weight: 600;
-cursor: pointer;
-transition: all 0.2s;
-}
-
+.btn-logout { padding: 7px 14px; background: transparent; border: 1px solid rgba(27,58,107,0.2); border-radius: 9px; color: #6c7a99; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 .btn-logout:hover { background: #1B3A6B; color: #fff; border-color: #1B3A6B; }
-
 .page-body { padding: 20px; max-width: 760px; margin: 0 auto; }
-
-/* ═══ HERO ═══ */
-.hero {
-border-radius: 22px;
-padding: 28px 24px;
-margin-bottom: 20px;
-color: #fff;
-text-align: center;
-}
-
-.hero h1 {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 28px;
-font-weight: 700;
-margin-bottom: 6px;
-}
-
+.hero { border-radius: 22px; padding: 28px 24px; margin-bottom: 20px; color: #fff; text-align: center; }
+.hero h1 { font-family: ‘Cormorant Garamond’, serif; font-size: 28px; font-weight: 700; margin-bottom: 6px; }
 .hero p { opacity: 0.8; font-size: 15px; }
-
-/* ═══ STATS ═══ */
-.stats-grid {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 12px;
-margin-bottom: 18px;
-}
-
-@media (max-width: 500px) {
-.stats-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.stat-card {
-background: #fff;
-border-radius: 16px;
-padding: 18px 12px;
-text-align: center;
-box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-}
-
-.stat-num {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 32px;
-font-weight: 700;
-color: #1B3A6B;
-line-height: 1;
-margin-bottom: 4px;
-}
-
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+@media (max-width: 500px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+.stat-card { background: #fff; border-radius: 16px; padding: 18px 12px; text-align: center; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
+.stat-num { font-family: ‘Cormorant Garamond’, serif; font-size: 32px; font-weight: 700; color: #1B3A6B; line-height: 1; margin-bottom: 4px; }
 .stat-label { font-size: 11px; color: #6c7a99; font-weight: 600; }
-
-/* ═══ SECTION CARD ═══ */
-.section-card {
-background: #fff;
-border-radius: 20px;
-padding: 22px;
-margin-bottom: 16px;
-box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-}
-
-.section-title {
-font-size: 15px;
-font-weight: 800;
-color: #1a2a4a;
-margin-bottom: 14px;
-}
-
-/* ═══ TEST ITEMS ═══ */
-.test-item {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 14px 16px;
-border-radius: 14px;
-margin-bottom: 10px;
-border: 1px solid #e8edf5;
-background: #f8faff;
-gap: 12px;
-flex-wrap: wrap;
-}
-
-.test-color-bar {
-width: 4px;
-height: 44px;
-border-radius: 4px;
-flex-shrink: 0;
-}
-
+.section-card { background: #fff; border-radius: 20px; padding: 22px; margin-bottom: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
+.section-title { font-size: 15px; font-weight: 800; color: #1a2a4a; margin-bottom: 14px; }
+.test-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; border: 1px solid #e8edf5; background: #f8faff; gap: 12px; flex-wrap: wrap; }
+.test-color-bar { width: 4px; height: 44px; border-radius: 4px; flex-shrink: 0; }
 .test-info { flex: 1; min-width: 120px; }
 .test-name { font-weight: 800; color: #1a2a4a; font-size: 15px; }
 .test-desc { font-size: 12px; color: #6c7a99; margin-top: 2px; }
-
-.badge-ok {
-background: #dcfce7;
-color: #16a34a;
-border-radius: 20px;
-padding: 4px 10px;
-font-size: 11px;
-font-weight: 700;
-white-space: nowrap;
-}
-
-.badge-done {
-background: #e0f2fe;
-color: #0369a1;
-border-radius: 20px;
-padding: 4px 10px;
-font-size: 11px;
-font-weight: 700;
-white-space: nowrap;
-}
-
-.btn-start {
-padding: 9px 18px;
-border-radius: 11px;
-border: none;
-color: #fff;
-font-weight: 700;
-font-size: 13px;
-cursor: pointer;
-transition: all 0.2s;
-white-space: nowrap;
-}
-
+.badge-ok { background: #dcfce7; color: #16a34a; border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.badge-done { background: #e0f2fe; color: #0369a1; border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.btn-start { padding: 9px 18px; border-radius: 11px; border: none; color: #fff; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
 .btn-start:hover { transform: translateY(-1px); filter: brightness(1.1); }
-
-/* ═══ RÉSULTATS ═══ */
-.result-row {
-display: flex;
-align-items: center;
-gap: 12px;
-padding: 13px 15px;
-border-radius: 13px;
-background: #f8faff;
-margin-bottom: 8px;
-flex-wrap: wrap;
-}
-
-.result-badge {
-padding: 5px 12px;
-border-radius: 20px;
-font-size: 12px;
-font-weight: 800;
-color: #fff;
-flex-shrink: 0;
-}
-
+.result-row { display: flex; align-items: center; gap: 12px; padding: 13px 15px; border-radius: 13px; background: #f8faff; margin-bottom: 8px; flex-wrap: wrap; }
+.result-badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
 .result-info { flex: 1; min-width: 100px; }
 .result-name { font-weight: 700; color: #1a2a4a; font-size: 14px; }
 .result-date { font-size: 11px; color: #6c7a99; }
-
 .score-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .score-bar { width: 80px; height: 6px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
 .score-fill { height: 100%; border-radius: 999px; }
 .score-val { font-size: 13px; font-weight: 800; color: #1B3A6B; min-width: 36px; text-align: right; }
-
 .empty-state { text-align: center; padding: 28px; color: #a0aec0; font-size: 14px; }
 
-/* ═══ TEST SCREEN ═══ */
-#page-test {
-min-height: 100vh;
-background: linear-gradient(180deg, #edf3ff, #f7f9ff);
-}
-
-.test-topbar {
-background: #fff;
-padding: 14px 20px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-gap: 12px;
-}
-
-.test-topbar-title {
-font-weight: 800;
-color: #1a2a4a;
-font-size: 15px;
-}
-
-.btn-back {
-padding: 7px 14px;
-background: transparent;
-border: 1px solid rgba(27,58,107,0.2);
-border-radius: 9px;
-color: #6c7a99;
-font-size: 12px;
-font-weight: 600;
-cursor: pointer;
-transition: all 0.2s;
-}
-
+/* TEST */
+#page-test { min-height: 100vh; background: linear-gradient(180deg, #edf3ff, #f7f9ff); }
+.test-topbar { background: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.06); gap: 12px; position: sticky; top: 0; z-index: 50; }
+.test-topbar-title { font-weight: 800; color: #1a2a4a; font-size: 15px; }
+.btn-back { padding: 7px 14px; background: transparent; border: 1px solid rgba(27,58,107,0.2); border-radius: 9px; color: #6c7a99; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 .btn-back:hover { background: #1B3A6B; color: #fff; border-color: #1B3A6B; }
-
 .test-body { padding: 20px; max-width: 700px; margin: 0 auto 60px; }
-
 .progress-wrap { margin-bottom: 18px; }
 .progress-header { display: flex; justify-content: space-between; margin-bottom: 7px; }
 .progress-label { font-size: 11px; font-weight: 600; color: #6c7a99; letter-spacing: 0.06em; }
 .progress-count { font-size: 12px; font-weight: 700; color: #C9A84C; }
 .progress-track { height: 5px; background: #e2e8f4; border-radius: 999px; overflow: hidden; }
 .progress-bar { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
-
-.cat-badge {
-display: inline-block;
-font-size: 11px;
-font-weight: 700;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-padding: 4px 12px;
-border-radius: 20px;
-margin-bottom: 14px;
-}
-
-.question-card {
-background: #fff;
-border-radius: 20px;
-padding: 26px 22px;
-box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-margin-bottom: 14px;
-}
-
-.situation-box {
-background: #f4f7ff;
-border-left: 4px solid #2E5BA8;
-border-radius: 12px;
-padding: 13px 16px;
-margin-bottom: 16px;
-}
-
-.situation-text {
-font-size: 16px;
-font-weight: 800;
-color: #1a2a4a;
-line-height: 1.5;
-}
-
-.question-text {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 20px;
-font-weight: 600;
-color: #1a2a4a;
-line-height: 1.45;
-margin-bottom: 20px;
-}
-
+.cat-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+.question-card { background: #fff; border-radius: 20px; padding: 26px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.07); margin-bottom: 14px; }
+.situation-box { background: #f4f7ff; border-left: 4px solid #2E5BA8; border-radius: 12px; padding: 13px 16px; margin-bottom: 16px; }
+.situation-text { font-size: 16px; font-weight: 800; color: #1a2a4a; line-height: 1.5; }
+.question-text { font-family: ‘Cormorant Garamond’, serif; font-size: 20px; font-weight: 600; color: #1a2a4a; line-height: 1.45; margin-bottom: 20px; }
 .options { display: flex; flex-direction: column; gap: 9px; }
-
-.option-btn {
-padding: 13px 17px;
-border-radius: 13px;
-border: 2px solid #e2e8f4;
-background: #f8faff;
-color: #22366c;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 14px;
-font-weight: 600;
-cursor: pointer;
-text-align: left;
-line-height: 1.4;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-gap: 11px;
-}
-
+.option-btn { padding: 13px 17px; border-radius: 13px; border: 2px solid #e2e8f4; background: #f8faff; color: #22366c; font-family: ‘DM Sans’, sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; text-align: left; line-height: 1.4; transition: all 0.2s; display: flex; align-items: flex-start; gap: 11px; }
 .option-btn:hover { background: rgba(74,144,217,0.08); border-color: rgba(74,144,217,0.4); }
 .option-btn.selected { color: #fff; }
-
-.option-dot {
-width: 18px; height: 18px;
-border-radius: 50%;
-border: 2px solid rgba(255,255,255,0.5);
-flex-shrink: 0;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-
-.option-dot::after {
-content: ‘’;
-width: 7px; height: 7px;
-border-radius: 50%;
-background: #fff;
-display: none;
-}
-
+.option-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.option-dot::after { content: ‘’; width: 7px; height: 7px; border-radius: 50%; background: #fff; display: none; }
 .option-btn.selected .option-dot::after { display: block; }
-
 .likert-options { display: flex; flex-direction: column; gap: 9px; }
-
-.likert-btn {
-padding: 13px 17px;
-border-radius: 13px;
-border: 2px solid #e2e8f4;
-background: #f8faff;
-color: #22366c;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 15px;
-font-weight: 700;
-cursor: pointer;
-text-align: left;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-gap: 12px;
-}
-
+.likert-btn { padding: 13px 17px; border-radius: 13px; border: 2px solid #e2e8f4; background: #f8faff; color: #22366c; font-family: ‘DM Sans’, sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; text-align: left; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
 .likert-btn:hover { background: rgba(74,144,217,0.08); border-color: rgba(74,144,217,0.4); }
 .likert-btn.selected { color: #fff; }
-
-.likert-num {
-font-size: 20px;
-font-weight: 900;
-min-width: 28px;
-opacity: 0.8;
-}
-
-.btn-next {
-width: 100%;
-padding: 15px;
-border-radius: 13px;
-border: none;
-background: #1B3A6B;
-color: #fff;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 16px;
-font-weight: 700;
-cursor: pointer;
-transition: all 0.2s;
-display: none;
-}
-
+.likert-num { font-size: 20px; font-weight: 900; min-width: 28px; opacity: 0.8; }
+.btn-next { width: 100%; padding: 15px; border-radius: 13px; border: none; background: #1B3A6B; color: #fff; font-family: ‘DM Sans’, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: none; margin-top: 4px; }
 .btn-next:hover { background: #2E5BA8; transform: translateY(-1px); }
 
-/* ═══ RÉSULTATS TEST ═══ */
-#page-resultats {
-min-height: 100vh;
-background: linear-gradient(180deg, #edf3ff, #f7f9ff);
-}
-
+/* RÉSULTATS */
+#page-resultats { min-height: 100vh; background: linear-gradient(180deg, #edf3ff, #f7f9ff); }
 .resultats-body { padding: 20px; max-width: 760px; margin: 0 auto 60px; }
-
-.score-hero {
-border-radius: 22px;
-padding: 28px;
-text-align: center;
-margin-bottom: 18px;
-color: #fff;
-}
-
-.score-circle-wrap {
-position: relative;
-width: 160px;
-height: 160px;
-margin: 0 auto 16px;
-}
-
+.score-hero { border-radius: 22px; padding: 28px; text-align: center; margin-bottom: 18px; color: #fff; }
+.score-circle-wrap { position: relative; width: 160px; height: 160px; margin: 0 auto 16px; }
 .score-circle-wrap svg { transform: rotate(-90deg); }
-
-.score-inside {
-position: absolute;
-top: 50%; left: 50%;
-transform: translate(-50%, -50%);
-text-align: center;
-}
-
-.score-number {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 42px;
-font-weight: 700;
-line-height: 1;
-}
-
+.score-inside { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+.score-number { font-family: ‘Cormorant Garamond’, serif; font-size: 42px; font-weight: 700; line-height: 1; }
 .score-unit { font-size: 14px; opacity: 0.7; }
-
-.profil-name {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 24px;
-font-weight: 700;
-margin-bottom: 6px;
-}
-
-.profil-code {
-display: inline-block;
-background: rgba(255,255,255,0.2);
-border-radius: 20px;
-padding: 5px 16px;
-font-size: 13px;
-font-weight: 800;
-}
-
-.res-card {
-background: #fff;
-border-radius: 20px;
-padding: 22px;
-margin-bottom: 14px;
-box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-}
-
-.res-card-title {
-font-size: 15px;
-font-weight: 800;
-color: #1a2a4a;
-margin-bottom: 14px;
-}
-
+.profil-name { font-family: ‘Cormorant Garamond’, serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.profil-code { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 5px 16px; font-size: 13px; font-weight: 800; }
+.res-card { background: #fff; border-radius: 20px; padding: 22px; margin-bottom: 14px; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
+.res-card-title { font-size: 15px; font-weight: 800; color: #1a2a4a; margin-bottom: 14px; }
 .dim-row { margin-bottom: 13px; }
 .dim-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
 .dim-name { font-size: 13px; font-weight: 700; color: #22366c; }
 .dim-pct { font-size: 13px; font-weight: 800; }
 .dim-track { height: 8px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
 .dim-fill { height: 100%; border-radius: 999px; transition: width 1s ease 0.3s; }
-
-.insight-row {
-padding: 13px 15px;
-border-radius: 13px;
-margin-bottom: 10px;
-border-left: 4px solid;
-}
-
-.insight-label {
-font-size: 11px;
-font-weight: 700;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-margin-bottom: 6px;
-}
-
+.insight-row { padding: 13px 15px; border-radius: 13px; margin-bottom: 10px; border-left: 4px solid; }
+.insight-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
 .insight-text { font-size: 14px; line-height: 1.6; color: #2a3a5a; }
-
-.btn-gold {
-width: 100%;
-padding: 15px;
-background: linear-gradient(135deg, #C9A84C, #E8C56A);
-color: #0f2244;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 15px;
-font-weight: 800;
-border: none;
-border-radius: 13px;
-cursor: pointer;
-transition: all 0.2s;
-margin-bottom: 10px;
-}
-
+.btn-gold { width: 100%; padding: 15px; background: linear-gradient(135deg, #C9A84C, #E8C56A); color: #0f2244; font-family: ‘DM Sans’, sans-serif; font-size: 15px; font-weight: 800; border: none; border-radius: 13px; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
 .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(201,168,76,0.4); }
-
-.btn-outline {
-width: 100%;
-padding: 13px;
-background: transparent;
-color: #1B3A6B;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 14px;
-font-weight: 700;
-border: 2px solid #1B3A6B;
-border-radius: 13px;
-cursor: pointer;
-transition: all 0.2s;
-margin-bottom: 10px;
-}
-
+.btn-outline { width: 100%; padding: 13px; background: transparent; color: #1B3A6B; font-family: ‘DM Sans’, sans-serif; font-size: 14px; font-weight: 700; border: 2px solid #1B3A6B; border-radius: 13px; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
 .btn-outline:hover { background: #1B3A6B; color: #fff; }
-
-.saving-msg {
-text-align: center;
-color: #6c7a99;
-font-size: 13px;
-padding: 10px;
-}
+.saving-msg { text-align: center; color: #6c7a99; font-size: 13px; padding: 10px; }
+.nt-row { margin-bottom: 14px; background: #f8faff; border-radius: 14px; padding: 14px; }
+.nt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.nt-name { font-weight: 800; font-size: 14px; }
+.nt-status { border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 800; color: #fff; }
+.sport-row { background: #f8faff; border-radius: 13px; padding: 12px 15px; margin-bottom: 8px; border-left: 3px solid #1a3a6a; }
+.sport-text { color: #2a3a5a; font-size: 14px; line-height: 1.5; }
 </style>
 
 </head>
 <body>
 
-<!-- ═══════════════════════════════
-     PAGE LOGIN
-═══════════════════════════════ -->
+<!-- LOGIN -->
 
 <div id="page-login">
   <div class="login-card">
     <div class="login-logo">
-      <img src="https://alexandregriffet-cmd.github.io/Test-performance-mental-A4P/IMG_1572.jpeg"
-           alt="A4P" onerror="this.style.display='none'" />
+      <img src="https://alexandregriffet-cmd.github.io/Test-performance-mental-A4P/IMG_1572.jpeg" alt="A4P" onerror="this.style.display='none'"/>
       <div class="eyebrow">Académie de Performances</div>
       <div class="brand">A4P · <span>Diagnostic Club</span></div>
     </div>
     <div class="login-divider"></div>
     <div class="login-subtitle">Connexion à votre espace</div>
-    <div class="field">
-      <label>Adresse email</label>
-      <input type="email" id="inp-email" placeholder="votre@email.com" />
-    </div>
-    <div class="field">
-      <label>Mot de passe</label>
-      <input type="password" id="inp-password" placeholder="••••••••" />
-    </div>
+    <div class="field"><label>Adresse email</label><input type="email" id="inp-email" placeholder="votre@email.com"/></div>
+    <div class="field"><label>Mot de passe</label><input type="password" id="inp-password" placeholder="••••••••"/></div>
     <button class="btn-primary" id="btn-login">Se connecter →</button>
-    <div class="error-box" id="login-error">Email ou mot de passe incorrect.</div>
-    <div style="text-align:center;margin-top:24px;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;">
-      ACADÉMIE DE PERFORMANCES · A4P · Plateforme Club
-    </div>
+    <div class="error-box" id="login-error"></div>
+    <div style="text-align:center;margin-top:24px;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;">ACADÉMIE DE PERFORMANCES · A4P · Plateforme Club</div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════
-     DASHBOARD JOUEUR
-═══════════════════════════════ -->
+<!-- DASHBOARD JOUEUR -->
 
 <div class="page" id="page-joueur">
   <div class="topbar">
     <div class="topbar-brand">A4P · <span>Diagnostic Club</span></div>
     <div class="topbar-right">
       <div class="avatar" id="j-avatar">J</div>
-      <div class="user-info">
-        <div class="name" id="j-name">Joueur</div>
-        <div class="role">🎮 Espace Joueur</div>
-      </div>
+      <div class="user-info"><div class="name" id="j-name">Joueur</div><div class="role">🎮 Espace Joueur</div></div>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
     </div>
   </div>
@@ -751,61 +189,39 @@ padding: 10px;
     </div>
     <div class="section-card">
       <div class="section-title">📊 Mes 4 diagnostics A4P</div>
-
-```
-  <div class="test-item">
-    <div class="test-color-bar" style="background:#2f4a8a;"></div>
-    <div class="test-info">
-      <div class="test-name">PMP</div>
-      <div class="test-desc">Profil Mental de Performance · 120 questions</div>
+      <div class="test-item">
+        <div class="test-color-bar" style="background:#2f4a8a;"></div>
+        <div class="test-info"><div class="test-name">PMP</div><div class="test-desc">Profil Mental de Performance · 120 questions · 8 dimensions</div></div>
+        <span class="badge-ok" id="badge-PMP">✅ Disponible</span>
+        <button class="btn-start" style="background:#2f4a8a;" onclick="startTest('PMP')">Démarrer →</button>
+      </div>
+      <div class="test-item">
+        <div class="test-color-bar" style="background:#1a3a6a;"></div>
+        <div class="test-info"><div class="test-name">MPA</div><div class="test-desc">Mode Préférentiel d'Action · 100 questions · 4 axes</div></div>
+        <span class="badge-ok" id="badge-MPA">✅ Disponible</span>
+        <button class="btn-start" style="background:#1a3a6a;" onclick="startTest('MPA')">Démarrer →</button>
+      </div>
+      <div class="test-item">
+        <div class="test-color-bar" style="background:#1a4a2a;"></div>
+        <div class="test-info"><div class="test-name">CMP</div><div class="test-desc">Compétences Mentales de Performance · 30 situations</div></div>
+        <span class="badge-ok" id="badge-CMP">✅ Disponible</span>
+        <button class="btn-start" style="background:#1a4a2a;" onclick="startTest('CMP')">Démarrer →</button>
+      </div>
+      <div class="test-item">
+        <div class="test-color-bar" style="background:#4a1a6a;"></div>
+        <div class="test-info"><div class="test-name">PSYCHO</div><div class="test-desc">Profil Psycho-émotionnel · 50 questions · Neurochimie + ITCA</div></div>
+        <span class="badge-ok" id="badge-PSYCHO">✅ Disponible</span>
+        <button class="btn-start" style="background:#4a1a6a;" onclick="startTest('PSYCHO')">Démarrer →</button>
+      </div>
     </div>
-    <span class="badge-ok" id="badge-PMP">✅ Disponible</span>
-    <button class="btn-start" style="background:#2f4a8a;" onclick="startTest('PMP')">Démarrer →</button>
-  </div>
-
-  <div class="test-item">
-    <div class="test-color-bar" style="background:#1a3a6a;"></div>
-    <div class="test-info">
-      <div class="test-name">MPA</div>
-      <div class="test-desc">Mode Préférentiel d'Action · 100 questions</div>
+    <div class="section-card">
+      <div class="section-title">📈 Mes résultats</div>
+      <div id="j-resultats"><div class="empty-state">Aucun test complété pour l'instant.</div></div>
     </div>
-    <span class="badge-ok" id="badge-MPA">✅ Disponible</span>
-    <button class="btn-start" style="background:#1a3a6a;" onclick="startTest('MPA')">Démarrer →</button>
-  </div>
-
-  <div class="test-item">
-    <div class="test-color-bar" style="background:#1a4a2a;"></div>
-    <div class="test-info">
-      <div class="test-name">CMP</div>
-      <div class="test-desc">Compétences Mentales de Performance · 30 situations</div>
-    </div>
-    <span class="badge-ok" id="badge-CMP">✅ Disponible</span>
-    <button class="btn-start" style="background:#1a4a2a;" onclick="startTest('CMP')">Démarrer →</button>
-  </div>
-
-  <div class="test-item">
-    <div class="test-color-bar" style="background:#4a1a6a;"></div>
-    <div class="test-info">
-      <div class="test-name">PSYCHO</div>
-      <div class="test-desc">Profil Psycho-émotionnel · 50 questions</div>
-    </div>
-    <span class="badge-ok" id="badge-PSYCHO">✅ Disponible</span>
-    <button class="btn-start" style="background:#4a1a6a;" onclick="startTest('PSYCHO')">Démarrer →</button>
   </div>
 </div>
 
-<div class="section-card">
-  <div class="section-title">📈 Mes résultats</div>
-  <div id="j-resultats"><div class="empty-state">Aucun test complété pour l'instant.</div></div>
-</div>
-```
-
-  </div>
-</div>
-
-<!-- ═══════════════════════════════
-     PAGE TEST
-═══════════════════════════════ -->
+<!-- PAGE TEST -->
 
 <div class="page" id="page-test">
   <div class="test-topbar">
@@ -815,63 +231,39 @@ padding: 10px;
   </div>
   <div class="test-body">
     <div class="progress-wrap">
-      <div class="progress-header">
-        <span class="progress-label">PROGRESSION</span>
-        <span class="progress-count" id="test-count">1 / 30</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-bar" id="test-bar" style="width:3%"></div>
-      </div>
+      <div class="progress-header"><span class="progress-label">PROGRESSION</span><span class="progress-count" id="test-count">1 / 30</span></div>
+      <div class="progress-track"><div class="progress-bar" id="test-bar" style="width:3%"></div></div>
     </div>
     <div id="test-question-area"></div>
     <button class="btn-next" id="btn-next" onclick="nextQuestion()">Question suivante →</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════
-     PAGE RÉSULTATS TEST
-═══════════════════════════════ -->
+<!-- PAGE RÉSULTATS -->
 
 <div class="page" id="page-resultats">
   <div class="test-topbar">
-    <button class="btn-back" onclick="showPage('page-joueur')">← Mon tableau de bord</button>
+    <button class="btn-back" onclick="showPage('page-joueur');loadJoueur(currentUser)">← Mon tableau de bord</button>
     <div class="test-topbar-title" id="res-title">Résultats</div>
     <div></div>
   </div>
-  <div class="resultats-body" id="resultats-content">
-  </div>
+  <div class="resultats-body" id="resultats-content"></div>
 </div>
 
 <script>
-// ═══ SUPABASE ═══
+// SUPABASE
 const { createClient } = supabase
-const sb = createClient(
-  'https://uambqnxbjgukcqbrlops.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhbWJxbnhiamd1a2NxYnJsb3BzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODE5NjksImV4cCI6MjA5MDE1Nzk2OX0.NhIi_oM7-uivanX5lekkby88t8redOnqxQjhXHRv5J4'
-)
+const sb = createClient('https://uambqnxbjgukcqbrlops.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhbWJxbnhiamd1a2NxYnJsb3BzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODE5NjksImV4cCI6MjA5MDE1Nzk2OX0.NhIi_oM7-uivanX5lekkby88t8redOnqxQjhXHRv5J4')
 
-let currentUser = null
-let currentTest = null
-let currentQ = 0
-let testAnswers = {}
-let testQuestions = []
+let currentUser = null, currentTest = null, currentQ = 0, testAnswers = {}, testQuestions = []
 
-// ═══ NAVIGATION ═══
 function showPage(id) {
-  document.querySelectorAll('.page, #page-login').forEach(p => {
-    p.style.display = 'none'
-    p.classList.remove('active')
-  })
+  document.querySelectorAll('.page,#page-login').forEach(p => { p.style.display='none'; p.classList.remove('active') })
   const el = document.getElementById(id)
-  el.style.display = 'block'
-  el.classList.add('active')
-  window.scrollTo(0, 0)
+  el.style.display = 'block'; el.classList.add('active'); window.scrollTo(0,0)
 }
 
-// ═══ LOGIN ═══
-document.getElementById('inp-password').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin()
-})
+document.getElementById('inp-password').addEventListener('keydown', e => { if(e.key==='Enter') doLogin() })
 document.getElementById('btn-login').addEventListener('click', doLogin)
 
 async function doLogin() {
@@ -879,300 +271,295 @@ async function doLogin() {
   const password = document.getElementById('inp-password').value.trim()
   const btn = document.getElementById('btn-login')
   const err = document.getElementById('login-error')
-
-  if (!email || !password) { err.textContent = 'Remplissez tous les champs.'; err.style.display = 'block'; return }
-
-  btn.disabled = true
-  btn.textContent = 'Connexion...'
-  err.style.display = 'none'
-
+  if(!email||!password){err.textContent='Remplissez tous les champs.';err.style.display='block';return}
+  btn.disabled=true; btn.textContent='Connexion...'; err.style.display='none'
   try {
-    const { data, error } = await sb.from('utilisateurs').select('*').eq('email', email).eq('mot_de_passe', password).eq('actif', true).single()
-    if (error || !data) {
-      err.textContent = 'Email ou mot de passe incorrect.'
-      err.style.display = 'block'
-      btn.disabled = false
-      btn.textContent = 'Se connecter →'
-      return
-    }
-    currentUser = data
-    btn.textContent = '✅ Connexion réussie'
-    setTimeout(() => {
-      document.getElementById('page-login').style.display = 'none'
-      if (data.role === 'joueur') loadJoueur(data)
-      else { btn.disabled = false; btn.textContent = 'Se connecter →'; err.textContent = 'Ce portail est réservé aux joueurs.'; err.style.display = 'block' }
-    }, 600)
-  } catch(e) {
-    err.textContent = 'Erreur réseau. Réessayez.'
-    err.style.display = 'block'
-    btn.disabled = false
-    btn.textContent = 'Se connecter →'
-  }
+    const {data,error} = await sb.from('utilisateurs').select('*').eq('email',email).eq('mot_de_passe',password).eq('actif',true).single()
+    if(error||!data){err.textContent='Email ou mot de passe incorrect.';err.style.display='block';btn.disabled=false;btn.textContent='Se connecter →';return}
+    currentUser=data; btn.textContent='✅ Connexion réussie'
+    setTimeout(()=>{document.getElementById('page-login').style.display='none';if(data.role==='joueur')loadJoueur(data);else{err.textContent='Ce portail est réservé aux joueurs.';err.style.display='block';btn.disabled=false;btn.textContent='Se connecter →'}},600)
+  } catch(e){err.textContent='Erreur réseau.';err.style.display='block';btn.disabled=false;btn.textContent='Se connecter →'}
 }
 
 function logout() {
-  currentUser = null
-  document.querySelectorAll('.page').forEach(p => { p.style.display = 'none'; p.classList.remove('active') })
-  document.getElementById('page-login').style.display = 'flex'
-  document.getElementById('inp-email').value = ''
-  document.getElementById('inp-password').value = ''
-  document.getElementById('btn-login').disabled = false
-  document.getElementById('btn-login').textContent = 'Se connecter →'
-  document.getElementById('login-error').style.display = 'none'
+  currentUser=null
+  document.querySelectorAll('.page').forEach(p=>{p.style.display='none';p.classList.remove('active')})
+  document.getElementById('page-login').style.display='flex'
+  document.getElementById('inp-email').value=''; document.getElementById('inp-password').value=''
+  document.getElementById('btn-login').disabled=false; document.getElementById('btn-login').textContent='Se connecter →'
+  document.getElementById('login-error').style.display='none'
 }
 
-// ═══ DASHBOARD JOUEUR ═══
 async function loadJoueur(user) {
-  document.getElementById('j-avatar').textContent = user.prenom[0].toUpperCase()
-  document.getElementById('j-name').textContent = user.prenom + ' ' + user.nom
-  document.getElementById('j-welcome').textContent = 'Bonjour ' + user.prenom + ' — prêt pour tes diagnostics ?'
-
+  document.getElementById('j-avatar').textContent=user.prenom[0].toUpperCase()
+  document.getElementById('j-name').textContent=user.prenom+' '+user.nom
+  document.getElementById('j-welcome').textContent='Bonjour '+user.prenom+' — prêt pour tes diagnostics ?'
   showPage('page-joueur')
-
-  const { data: resultats } = await sb.from('resultats').select('*').eq('utilisateur_id', user.id).order('completed_at', { ascending: false })
-  const done = resultats?.length || 0
-  document.getElementById('j-done').textContent = done
-
-  if (done > 0) {
-    const moy = Math.round(resultats.reduce((a, r) => a + (r.score_global || 0), 0) / done)
-    document.getElementById('j-moy').textContent = moy + '%'
-    const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
-    document.getElementById('j-resultats').innerHTML = resultats.map(r => `
+  const {data:resultats} = await sb.from('resultats').select('*').eq('utilisateur_id',user.id).order('completed_at',{ascending:false})
+  const done=resultats?.length||0
+  document.getElementById('j-done').textContent=done
+  if(done>0){
+    const moy=Math.round(resultats.reduce((a,r)=>a+(r.score_global||0),0)/done)
+    document.getElementById('j-moy').textContent=moy+'%'
+    const colors={PMP:'#2f4a8a',MPA:'#1a3a6a',CMP:'#1a4a2a',PSYCHO:'#4a1a6a'}
+    document.getElementById('j-resultats').innerHTML=resultats.map(r=>`
       <div class="result-row">
         <div class="result-badge" style="background:${colors[r.test_type]||'#1B3A6B'}">${r.test_type}</div>
-        <div class="result-info">
-          <div class="result-name">${r.profil_label || r.profil_code || 'Résultat'}</div>
-          <div class="result-date">${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div>
-        </div>
-        <div class="score-wrap">
-          <div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:${colors[r.test_type]||'#1B3A6B'}"></div></div>
-          <div class="score-val">${r.score_global || '—'}%</div>
-        </div>
-      </div>
-    `).join('')
-    const done_types = [...new Set(resultats.map(r => r.test_type))]
-    done_types.forEach(t => {
-      const badge = document.getElementById('badge-' + t)
-      if (badge) { badge.className = 'badge-done'; badge.textContent = '✅ Complété' }
-    })
+        <div class="result-info"><div class="result-name">${r.profil_label||r.profil_code||'Résultat'}</div><div class="result-date">${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div></div>
+        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:${colors[r.test_type]||'#1B3A6B'}"></div></div><div class="score-val">${r.score_global||'—'}%</div></div>
+      </div>`).join('')
+    ;[...new Set(resultats.map(r=>r.test_type))].forEach(t=>{const b=document.getElementById('badge-'+t);if(b){b.className='badge-done';b.textContent='✅ Complété'}})
   }
-
-  if (user.equipe_id) {
-    const { data: eq } = await sb.from('equipes').select('nom').eq('id', user.equipe_id).single()
-    if (eq) document.getElementById('j-equipe').textContent = eq.nom
-  }
+  if(user.equipe_id){const {data:eq}=await sb.from('equipes').select('nom').eq('id',user.equipe_id).single();if(eq)document.getElementById('j-equipe').textContent=eq.nom}
 }
 
-// ═══ DÉMARRER UN TEST ═══
 function startTest(type) {
-  currentTest = type
-  currentQ = 0
-  testAnswers = {}
-  testQuestions = getQuestions(type)
-  document.getElementById('test-title').textContent = 'Test ' + type
-  document.getElementById('btn-next').style.display = 'none'
-  showPage('page-test')
-  renderQuestion()
+  currentTest=type; currentQ=0; testAnswers={}
+  testQuestions=type==='CMP'?CMP_Q:type==='PMP'?PMP_Q:type==='MPA'?MPA_Q:PSYCHO_Q
+  document.getElementById('test-title').textContent='Test '+type
+  document.getElementById('btn-next').style.display='none'
+  showPage('page-test'); renderQuestion()
 }
 
-function backToDashboard() {
-  if (confirm('Quitter le test ? Ta progression sera perdue.')) {
-    showPage('page-joueur')
-  }
-}
+function backToDashboard() { if(confirm('Quitter le test ? Ta progression sera perdue.')) showPage('page-joueur') }
 
-// ═══ RENDU QUESTION ═══
 function renderQuestion() {
-  const q = testQuestions[currentQ]
-  const total = testQuestions.length
-  const pct = Math.round(((currentQ + 1) / total) * 100)
-  const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
-  const color = colors[currentTest] || '#1B3A6B'
-
-  document.getElementById('test-count').textContent = (currentQ + 1) + ' / ' + total
-  document.getElementById('test-progress-txt').textContent = (currentQ + 1) + ' / ' + total
-  document.getElementById('test-bar').style.width = pct + '%'
-  document.getElementById('test-bar').style.background = color
-  document.getElementById('btn-next').style.display = 'none'
-
-  let html = ''
-
-  if (q.type === 'situational') {
-    html += '<div class="situation-box"><div class="situation-text">🎯 ' + q.situation + '</div></div>'
-    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.cat || 'Situation') + '</div>'
-    html += '<div class="question-text">' + q.text + '</div>'
-    html += '<div class="options">'
-    q.options.forEach((opt, i) => {
-      const sel = testAnswers[q.id] === i
-      html += '<button class="option-btn' + (sel ? ' selected' : '') + '" style="' + (sel ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectOption(' + i + ')">'
-      html += '<div class="option-dot"></div><span>' + opt.text + '</span></button>'
+  const q=testQuestions[currentQ], total=testQuestions.length
+  const pct=Math.round(((currentQ+1)/total)*100)
+  const colors={PMP:'#2f4a8a',MPA:'#1a3a6a',CMP:'#1a4a2a',PSYCHO:'#4a1a6a'}
+  const color=colors[currentTest]||'#1B3A6B'
+  document.getElementById('test-count').textContent=(currentQ+1)+' / '+total
+  document.getElementById('test-progress-txt').textContent=(currentQ+1)+' / '+total
+  document.getElementById('test-bar').style.width=pct+'%'
+  document.getElementById('test-bar').style.background=color
+  document.getElementById('btn-next').style.display='none'
+  let html=''
+  if(q.type==='situational'){
+    html+='<div class="question-card">'
+    html+='<div class="situation-box"><div class="situation-text">🎯 '+q.situation+'</div></div>'
+    html+='<div class="cat-badge" style="background:'+color+'22;color:'+color+';border:1px solid '+color+'44;">'+(q.cat||'Situation')+'</div>'
+    html+='<div style="font-size:14px;font-weight:600;color:#6c7a99;margin-bottom:16px;">'+q.text+'</div>'
+    html+='<div class="options">'
+    q.options.forEach((opt,i)=>{
+      const sel=testAnswers[q.id]===i
+      html+='<button class="option-btn'+(sel?' selected':'')+'" style="'+(sel?'background:'+color+';border-color:'+color:'')+'" onclick="selectOpt('+i+')">'
+      html+='<div class="option-dot"></div><span>'+opt.text+'</span></button>'
     })
-    html += '</div>'
-
-  } else if (q.type === 'binary') {
-    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.axe || '') + ' · ' + (q.title || '') + '</div>'
-    html += '<div style="font-size:13px;color:#6c7a99;margin-bottom:16px;text-align:center;font-weight:600;">Choisis l\'affirmation qui te ressemble le plus</div>'
-    html += '<div class="options">'
-    const optA = q.text
-    const optB = q.textB || "L'affirmation opposée me correspond mieux."
-    const selA = testAnswers[q.id] === 'A'
-    const selB = testAnswers[q.id] === 'B'
-    html += '<button class="option-btn' + (selA ? ' selected' : '') + '" style="' + (selA ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectBinary(\'A\')">'
-    html += '<div class="option-dot"></div><span>' + optA + '</span></button>'
-    html += '<button class="option-btn' + (selB ? ' selected' : '') + '" style="' + (selB ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectBinary(\'B\')">'
-    html += '<div class="option-dot"></div><span>' + optB + '</span></button>'
-    html += '</div>'
-
+    html+='</div></div>'
+  } else if(q.type==='binary'){
+    html+='<div class="question-card">'
+    html+='<div class="cat-badge" style="background:'+color+'22;color:'+color+';border:1px solid '+color+'44;">'+(q.axe||'')+' · '+(q.title||'')+'</div>'
+    html+='<div style="font-size:13px;color:#6c7a99;margin-bottom:18px;text-align:center;font-weight:600;">Choisis l\'affirmation qui te ressemble le plus naturellement</div>'
+    html+='<div class="options">'
+    const selA=testAnswers[q.id]==='A', selB=testAnswers[q.id]==='B'
+    html+='<button class="option-btn'+(selA?' selected':'')+'" style="'+(selA?'background:'+color+';border-color:'+color:'')+'" onclick="selectBin(\'A\')">'
+    html+='<div class="option-dot"></div><span>'+q.text+'</span></button>'
+    html+='<button class="option-btn'+(selB?' selected':'')+'" style="'+(selB?'background:'+color+';border-color:'+color:'')+'" onclick="selectBin(\'B\')">'
+    html+='<div class="option-dot"></div><span>'+(q.textB||"L'affirmation opposée me correspond mieux.")+'</span></button>'
+    html+='</div></div>'
   } else {
-    // Likert
-    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.dimension || q.cat || '') + '</div>'
-    html += '<div class="question-text">' + q.text + '</div>'
-    html += '<div class="likert-options">'
-    const labels = ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Toujours']
-    ;[1,2,3,4,5].forEach(v => {
-      const sel = testAnswers[q.id] === v
-      html += '<button class="likert-btn' + (sel ? ' selected' : '') + '" style="' + (sel ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectLikert(' + v + ')">'
-      html += '<span class="likert-num">' + v + '</span><span>' + labels[v-1] + '</span></button>'
+    html+='<div class="question-card">'
+    html+='<div class="cat-badge" style="background:'+color+'22;color:'+color+';border:1px solid '+color+'44;">'+(q.dimension||q.cat||'')+'</div>'
+    html+='<div class="question-text">'+q.text+'</div>'
+    html+='<div class="likert-options">'
+    const labels=['Jamais','Rarement','Parfois','Souvent','Toujours']
+    ;[1,2,3,4,5].forEach(v=>{
+      const sel=testAnswers[q.id]===v
+      html+='<button class="likert-btn'+(sel?' selected':'')+'" style="'+(sel?'background:'+color+';border-color:'+color:'')+'" onclick="selectLik('+v+')">'
+      html+='<span class="likert-num">'+v+'</span><span>'+labels[v-1]+'</span></button>'
     })
-    html += '</div>'
+    html+='</div></div>'
   }
-
-  document.getElementById('test-question-area').innerHTML = html
-
-  if (currentQ === total - 1) {
-    document.getElementById('btn-next').textContent = 'Voir mes résultats →'
-  } else {
-    document.getElementById('btn-next').textContent = 'Question suivante →'
-  }
+  document.getElementById('test-question-area').innerHTML=html
+  document.getElementById('btn-next').textContent=currentQ===total-1?'Voir mes résultats →':'Question suivante →'
 }
 
-function selectOption(idx) {
-  testAnswers[testQuestions[currentQ].id] = idx
-  renderQuestion()
-  document.getElementById('btn-next').style.display = 'block'
+function selectOpt(i){testAnswers[testQuestions[currentQ].id]=i;renderQuestion();document.getElementById('btn-next').style.display='block'}
+function selectBin(v){testAnswers[testQuestions[currentQ].id]=v;renderQuestion();document.getElementById('btn-next').style.display='block'}
+function selectLik(v){testAnswers[testQuestions[currentQ].id]=v;renderQuestion();document.getElementById('btn-next').style.display='block'}
+
+function nextQuestion(){
+  if(testAnswers[testQuestions[currentQ].id]===undefined)return
+  if(currentQ<testQuestions.length-1){currentQ++;renderQuestion()}else finishTest()
 }
 
-function selectBinary(val) {
-  testAnswers[testQuestions[currentQ].id] = val
-  renderQuestion()
-  document.getElementById('btn-next').style.display = 'block'
-}
-
-function selectLikert(val) {
-  testAnswers[testQuestions[currentQ].id] = val
-  renderQuestion()
-  document.getElementById('btn-next').style.display = 'block'
-}
-
-function nextQuestion() {
-  if (testAnswers[testQuestions[currentQ].id] === undefined) return
-  if (currentQ < testQuestions.length - 1) {
-    currentQ++
-    renderQuestion()
-  } else {
-    finishTest()
-  }
-}
-
-// ═══ FIN DU TEST ═══
-async function finishTest() {
-  const results = calcResults(currentTest, testAnswers, testQuestions)
+async function finishTest(){
+  const results=calcResults(currentTest,testAnswers,testQuestions)
   showPage('page-resultats')
-  document.getElementById('res-title').textContent = 'Résultats ' + currentTest
-  renderResults(currentTest, results)
-  await saveResult(currentTest, results)
+  document.getElementById('res-title').textContent='Résultats '+currentTest
+  renderResults(currentTest,results)
+  await saveResult(currentTest,results)
 }
 
-async function saveResult(type, results) {
-  if (!currentUser) return
-  try {
-    await sb.from('resultats').insert({
-      utilisateur_id: currentUser.id,
-      test_type: type,
-      scores: results.scores,
-      profil_code: results.profilCode,
-      profil_label: results.profilLabel,
-      score_global: results.globalScore,
-      equipe_id: currentUser.equipe_id || null,
-      club_id: currentUser.club_id || null
-    })
-    document.getElementById('saving-status') && (document.getElementById('saving-status').textContent = '✅ Résultat enregistré')
-  } catch(e) { console.error(e) }
+async function saveResult(type,results){
+  if(!currentUser)return
+  try{
+    await sb.from('resultats').insert({utilisateur_id:currentUser.id,test_type:type,scores:results.scores,profil_code:results.profilCode,profil_label:results.profilLabel,score_global:results.globalScore,equipe_id:currentUser.equipe_id||null,club_id:currentUser.club_id||null})
+    const el=document.getElementById('saving-status');if(el)el.textContent='✅ Résultat enregistré dans Supabase'
+  }catch(e){console.error(e)}
 }
 
-// ═══ RENDU RÉSULTATS ═══
-function renderResults(type, res) {
-  const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
-  const color = colors[type] || '#1B3A6B'
-  const circ = 2 * Math.PI * 60
-
-  let html = ''
-  html += '<div class="score-hero" style="background:linear-gradient(135deg,' + color + ',' + color + 'cc);">'
-  html += '<div class="score-circle-wrap">'
-  html += '<svg width="160" height="160"><circle cx="80" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="12"/>'
-  html += '<circle cx="80" cy="80" r="60" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"'
-  html += ' stroke-dasharray="' + circ + '" stroke-dashoffset="' + (circ * (1 - res.globalScore / 100)) + '"'
-  html += ' style="transition:stroke-dashoffset 1.5s ease"/></svg>'
-  html += '<div class="score-inside"><div class="score-number">' + res.globalScore + '</div><div class="score-unit">/ 100</div></div>'
-  html += '</div>'
-  html += '<div class="profil-name">' + res.profilLabel + '</div>'
-  html += '<div class="profil-code">' + res.profilCode + '</div>'
-  html += '</div>'
-
-  // Dimensions
-  if (res.dimensions && res.dimensions.length > 0) {
-    html += '<div class="res-card"><div class="res-card-title">📊 Tes dimensions</div>'
-    res.dimensions.forEach(d => {
-      html += '<div class="dim-row">'
-      html += '<div class="dim-header"><span class="dim-name">' + d.label + '</span><span class="dim-pct" style="color:' + (d.color||color) + '">' + d.value + '%</span></div>'
-      html += '<div class="dim-track"><div class="dim-fill" style="width:' + d.value + '%;background:' + (d.color||color) + '"></div></div>'
-      html += '</div>'
-    })
-    html += '</div>'
+function renderResults(type,res){
+  const colors={PMP:'#2f4a8a',MPA:'#1a3a6a',CMP:'#1a4a2a',PSYCHO:'#4a1a6a'}
+  const color=colors[type]||'#1B3A6B'
+  const circ=2*Math.PI*60
+  let html=''
+  html+='<div class="score-hero" style="background:linear-gradient(135deg,'+color+','+color+'bb);">'
+  html+='<div class="score-circle-wrap"><svg width="160" height="160">'
+  html+='<circle cx="80" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="12"/>'
+  html+='<circle cx="80" cy="80" r="60" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+(circ*(1-res.globalScore/100))+'" style="transition:stroke-dashoffset 1.5s ease"/>'
+  html+='</svg><div class="score-inside"><div class="score-number">'+res.globalScore+'</div><div class="score-unit">/ 100</div></div></div>'
+  html+='<div class="profil-name">'+res.profilLabel+'</div>'
+  html+='<div class="profil-code">'+res.profilCode+'</div>'
+  html+='</div>'
+  if(res.dimensions&&res.dimensions.length>0){
+    html+='<div class="res-card"><div class="res-card-title">📊 Tes dimensions</div>'
+    res.dimensions.forEach(d=>{html+='<div class="dim-row"><div class="dim-header"><span class="dim-name">'+d.label+'</span><span class="dim-pct" style="color:'+(d.color||color)+'">'+d.value+'%</span></div><div class="dim-track"><div class="dim-fill" style="width:'+d.value+'%;background:'+(d.color||color)+'"></div></div></div>'})
+    html+='</div>'
   }
-
-  // Insights
-  if (res.strength || res.weakness || res.tool) {
-    html += '<div class="res-card"><div class="res-card-title">💡 Tes insights</div>'
-    if (res.strength) {
-      html += '<div class="insight-row" style="background:#f0fff4;border-color:#4ade80;">'
-      html += '<div class="insight-label" style="color:#16a34a;">✦ Ta force principale</div>'
-      html += '<div class="insight-text">' + res.strength + '</div></div>'
-    }
-    if (res.weakness) {
-      html += '<div class="insight-row" style="background:#fff8f0;border-color:#f87171;">'
-      html += '<div class="insight-label" style="color:#dc2626;">⚡ Ton principal frein</div>'
-      html += '<div class="insight-text">' + res.weakness + '</div></div>'
-    }
-    if (res.tool) {
-      html += '<div class="insight-row" style="background:#fefce8;border-color:#C9A84C;">'
-      html += '<div class="insight-label" style="color:#C9A84C;">→ L\'outil A4P pour toi</div>'
-      html += '<div class="insight-text">' + res.tool + '</div></div>'
-    }
-    html += '</div>'
+  if(res.description){html+='<div class="res-card"><div class="res-card-title">🧠 Ton profil</div><p style="color:#2a3a5a;font-size:15px;line-height:1.8;">'+res.description+'</p></div>'}
+  if(res.strength||res.weakness||res.tool){
+    html+='<div class="res-card"><div class="res-card-title">💡 Tes insights</div>'
+    if(res.strength)html+='<div class="insight-row" style="background:#f0fff4;border-color:#4ade80;"><div class="insight-label" style="color:#16a34a;">✦ Ta force principale</div><div class="insight-text">'+res.strength+'</div></div>'
+    if(res.weakness)html+='<div class="insight-row" style="background:#fff8f0;border-color:#f87171;"><div class="insight-label" style="color:#dc2626;">⚡ Ton principal frein</div><div class="insight-text">'+res.weakness+'</div></div>'
+    if(res.tool)html+='<div class="insight-row" style="background:#fefce8;border-color:#C9A84C;"><div class="insight-label" style="color:#C9A84C;">→ L\'outil A4P pour toi</div><div class="insight-text">'+res.tool+'</div></div>'
+    html+='</div>'
   }
-
-  html += '<div id="saving-status" class="saving-msg">⏳ Enregistrement...</div>'
-  html += '<button class="btn-gold" onclick="showPage(\'page-joueur\');loadJoueur(currentUser)">← Retour à mon tableau de bord</button>'
-  html += '<button class="btn-outline" onclick="startTest(\'' + type + '\')">Repasser ce test</button>'
-
-  document.getElementById('resultats-content').innerHTML = html
+  if(res.forces&&res.forces.length>0){
+    html+='<div class="res-card"><div class="res-card-title">💚 Tes forces mentales</div>'
+    res.forces.forEach(f=>html+='<div class="insight-row" style="background:#f0fff4;border-color:#4ade80;"><div class="insight-text">✅ '+f+'</div></div>')
+    html+='</div>'
+  }
+  if(res.vigilances&&res.vigilances.length>0){
+    html+='<div class="res-card"><div class="res-card-title">⚠️ Points de vigilance</div>'
+    res.vigilances.forEach(v=>html+='<div class="insight-row" style="background:#fff8f0;border-color:#f87171;"><div class="insight-text">⚠️ '+v+'</div></div>')
+    html+='</div>'
+  }
+  if(res.leviers&&res.leviers.length>0){
+    html+='<div class="res-card"><div class="res-card-title">🚀 Leviers de progression</div>'
+    res.leviers.forEach(l=>html+='<div class="insight-row" style="background:#eef3ff;border-color:#2f4a8a;"><div class="insight-text">→ '+l+'</div></div>')
+    html+='</div>'
+  }
+  if(res.neurochimie&&res.neurochimie.length>0){
+    html+='<div class="res-card"><div class="res-card-title">🧬 Profil neurochimique</div>'
+    res.neurochimie.forEach(nt=>{
+      html+='<div class="nt-row"><div class="nt-header"><span class="nt-name" style="color:'+nt.color+'">'+nt.nt+'</span><span class="nt-status" style="background:'+(nt.statut==='dominant'?'#1a6a5a':'#8a4a2f')+'">'+(nt.statut==='dominant'?'Dominant':'Carence probable')+'</span></div>'
+      html+='<p style="font-size:13px;color:#2a3a5a;margin-bottom:8px;">'+nt.description+'</p>'
+      html+='<ul style="padding-left:16px;color:#4a5a7a;font-size:12px;line-height:1.8;">'+nt.regulation.map(r=>'<li>'+r+'</li>').join('')+'</ul></div>'
+    })
+    html+='</div>'
+  }
+  if(res.sport&&res.sport.length>0){
+    html+='<div class="res-card"><div class="res-card-title">🏆 Conseils pratiques par sport</div>'
+    res.sport.forEach(s=>html+='<div class="sport-row"><div class="sport-text">'+s+'</div></div>')
+    html+='</div>'
+  }
+  if(res.itca){
+    html+='<div class="res-card" style="border:'+(res.itca.alert?'2px solid #5a1a7a':'1px solid #e8edf5')+';">'
+    html+='<div class="res-card-title">🧩 ITCA — Inventaire des Traits Cognitifs Atypiques'+(res.itca.alert?' <span style="background:#5a1a7a;color:#fff;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:800;margin-left:8px;">INVESTIGATION RECOMMANDÉE</span>':'')+'</div>'
+    html+='<div style="background:#f8f0ff;border-radius:14px;padding:16px;border-left:4px solid '+res.itca.color+';">'
+    html+='<div style="font-weight:900;color:'+res.itca.color+';font-size:15px;margin-bottom:8px;">'+res.itca.code+' — '+res.itca.label+'</div>'
+    html+='<p style="color:#2a3a5a;font-size:14px;line-height:1.7;margin-bottom:10px;">'+res.itca.description+'</p>'
+    html+='<div style="font-weight:800;color:#4a1a6a;margin-bottom:6px;font-size:13px;">Impact sport :</div>'
+    html+='<p style="color:#2a3a5a;font-size:13px;line-height:1.6;margin-bottom:8px;">'+res.itca.sport_impact+'</p>'
+    html+='<div style="font-weight:800;color:#4a1a6a;margin-bottom:6px;font-size:13px;">Orientation :</div>'
+    html+='<p style="color:#2a3a5a;font-size:13px;line-height:1.6;">'+res.itca.orientation+'</p>'
+    html+='</div></div>'
+  }
+  html+='<div id="saving-status" class="saving-msg">⏳ Enregistrement en cours...</div>'
+  html+='<button class="btn-gold" onclick="showPage(\'page-joueur\');loadJoueur(currentUser)">← Retour à mon tableau de bord</button>'
+  html+='<button class="btn-outline" onclick="startTest(\''+type+'\')">Repasser ce test</button>'
+  document.getElementById('resultats-content').innerHTML=html
 }
 
-// ═══════════════════════════════════════════
-// QUESTIONS DES 4 TESTS
-// ═══════════════════════════════════════════
-
-function getQuestions(type) {
-  if (type === 'CMP') return CMP_QUESTIONS
-  if (type === 'PMP') return PMP_QUESTIONS
-  if (type === 'MPA') return MPA_QUESTIONS
-  if (type === 'PSYCHO') return PSYCHO_QUESTIONS
-  return []
+// CALCUL RÉSULTATS
+function calcResults(type,answers,questions){
+  if(type==='CMP')return calcCMP(answers,questions)
+  if(type==='PMP')return calcPMP(answers,questions)
+  if(type==='MPA')return calcMPA(answers,questions)
+  if(type==='PSYCHO')return calcPSYCHO(answers,questions)
+  return {globalScore:0,profilCode:'—',profilLabel:'—',scores:{},dimensions:[]}
 }
 
-// ═══ CMP — 30 SITUATIONS ═══
-const CMP_QUESTIONS = [
+function calcCMP(answers,questions){
+  let tP=0,tM=0,tB=0,tR=0,n=0
+  questions.forEach(q=>{const i=answers[q.id];if(i===undefined)return;const o=q.options[i];tP+=o.scores.pression;tM+=o.scores.maturite;tB+=o.scores.blocage;tR+=o.scores.ressource;n++})
+  if(!n)return{globalScore:0,profilCode:'CMP-?',profilLabel:'—',scores:{},dimensions:[]}
+  const sP=Math.round((tP/(n*5))*100),sM=Math.round((tM/(n*5))*100),sB=Math.round((tB/(n*5))*100),sR=Math.round((tR/(n*5))*100)
+  const g=Math.round((sP+sM+(100-sB)+sR)/4)
+  const profils=[
+    {min:85,code:'CMP-5',label:'Expert mental',description:"Votre profil révèle un niveau de maîtrise mentale que l'on rencontre chez les sportifs qui ont travaillé en profondeur leur rapport à la pression, à l'erreur et à l'adversité. Vous ne subissez pas les situations difficiles — vous les traversez avec une lucidité et une stabilité qui vous permettent de rester dans l'action là où d'autres se figent ou se dispersent.",forces:["Capacité à rester dans l'action sous pression maximale","Rebond rapide et constructif après l'erreur ou l'échec","Prise de décision lucide dans les moments décisifs","Stabilité émotionnelle qui soutient le collectif","Indépendance mentale face aux perturbations extérieures"],vigilances:["Risque de sous-estimer la charge mentale des coéquipiers","Exigence élevée envers soi-même pouvant masquer une fatigue profonde","Tendance à gérer seul sans demander de soutien"],leviers:["Développer votre rôle de leadership mental au sein du collectif","Transmettre vos outils mentaux à vos coéquipiers","Continuer à explorer de nouveaux défis pour maintenir votre niveau d'éveil"]},
+    {min:70,code:'CMP-4',label:'Performeur solide',description:"Votre profil est celui d'un sportif qui a construit de vraies fondations mentales. Dans la grande majorité des situations compétitives, vous trouvez les ressources pour rester dans le match, gérer vos émotions et prendre des décisions cohérentes.",forces:["Bonne capacité de régulation émotionnelle dans les situations standard","Engagement constant même dans l'adversité","Aptitude à apprendre de ses erreurs et à rebondir","Adaptabilité solide face aux imprévus"],vigilances:["Certaines situations de pression extrême encore déstabilisantes","Confiance parfois dépendante du contexte ou des résultats récents","Quelques blocages spécifiques à identifier et à travailler"],leviers:["Identifier précisément les 2 ou 3 situations qui fragilisent encore votre mental","Renforcer vos routines de préparation mentale avant la compétition","Développer des outils de recentrage rapide pour les situations inédites"]},
+    {min:55,code:'CMP-3',label:'Potentiel engagé',description:"Votre profil révèle un sportif engagé, qui veut progresser et qui possède des ressources mentales réelles. Vous êtes capable de performances solides dans des contextes favorables, et vous avez conscience de ce qui vous limite.",forces:["Volonté réelle de progresser et de se remettre en question","Conscience claire de ses forces et de ses limites","Capacité à tenir dans l'effort même quand c'est difficile"],vigilances:["Confiance fragilisée dans les moments à fort enjeu","Blocages émotionnels récurrents dans certaines situations précises","Difficulté à s'adapter rapidement quand le contexte change"],leviers:["Développer des routines de recentrage utilisables en compétition","Construire une confiance ancrée sur des preuves concrètes de progression","Travailler l'acceptation de l'imperfection comme levier de performance"]},
+    {min:40,code:'CMP-2',label:'En construction',description:"Votre profil indique que le mental représente actuellement un facteur limitant dans votre performance compétitive. Vous avez des qualités réelles en tant que sportif, mais les situations de pression révèlent des blocages fréquents.",forces:["Honnêteté dans l'auto-évaluation, première condition du progrès","Potentiel de progression important une fois les fondations posées"],vigilances:["Blocages mentaux fréquents en situation de pression","Confiance très dépendante des résultats immédiats","Difficulté à gérer les émotions négatives en compétition"],leviers:["Commencer par un accompagnement structuré en préparation mentale","Mettre en place des routines simples d'activation et de récupération mentale","Développer progressivement la régulation émotionnelle par des exercices quotidiens"]},
+    {min:0,code:'CMP-1',label:'Débutant mental',description:"Votre profil indique que la dimension mentale est aujourd'hui un frein majeur à votre expression compétitive. Les situations de pression génèrent des blocages importants et récurrents. Ce n'est pas une limite définitive — c'est un manque de préparation dans un domaine précis.",forces:["Courage de l'honnêteté dans l'auto-évaluation","Marge de progression considérable dans tous les axes"],vigilances:["Blocages mentaux profonds et fréquents en compétition","Pression compétitive très difficile à gérer actuellement","Confiance très fragile, fortement dépendante du contexte"],leviers:["Commencer par des objectifs de processus très simples et atteignables","S'engager dans un suivi régulier avec un préparateur mental","Développer en priorité la connaissance de soi et la régulation émotionnelle de base"]}
+  ]
+  const p=profils.find(x=>g>=x.min)||profils[4]
+  return{globalScore:g,profilCode:p.code,profilLabel:p.label,description:p.description,forces:p.forces,vigilances:p.vigilances,leviers:p.leviers,scores:{pression:sP,maturite:sM,blocage:sB,ressource:sR},dimensions:[{label:'Sous pression',value:sP,color:'#2f4a8a'},{label:'Maturité mentale',value:sM,color:'#1a6a5a'},{label:'Ressources',value:sR,color:'#5a3a8a'},{label:'Sans blocage',value:100-sB,color:'#C9A84C'}]}
+}
+
+function calcPMP(answers,questions){
+  const dims={}
+  questions.forEach(q=>{const v=answers[q.id];if(!v)return;if(!dims[q.dimension])dims[q.dimension]={total:0,count:0};const score=q.reverse?6-v:v;dims[q.dimension].total+=score;dims[q.dimension].count++})
+  const scores={},dimensions=[]
+  const dc={'Activation':'#2f4a8a','Attention':'#5a3a8a','Régulation':'#1a6a5a','Engagement':'#8a4a2f','Confiance':'#2f6a8a','Résilience':'#6a2f8a','Cognition':'#4a6a2f','Motricité':'#8a2f5a'}
+  const da={'Activation':"Vous vous activez rapidement et transformez la pression en énergie utile.",'Attention':"Vous maintenez votre focus même sous pression et vous reconcentrez rapidement.",'Régulation':"Vous gérez bien vos émotions sous pression et restez stable.",'Engagement':"Votre engagement est constant et fiable même dans l'adversité.",'Confiance':"Vous avez une confiance solide en vos capacités dans les moments importants.",'Résilience':"Vous rebondissez vite après les difficultés et transformez les échecs en apprentissage.",'Cognition':"Vous analysez bien les situations et prenez des décisions éclairées.",'Motricité':"Vous avez une conscience corporelle fine et percevez rapidement les ajustements nécessaires."}
+  const dl={'Activation':"Vous avez besoin de temps pour entrer dans l'action. Travailler vos routines de préparation.",'Attention':"Votre attention peut décrocher dans les moments critiques. Renforcer votre ancrage attentionnel.",'Régulation':"Vos émotions peuvent prendre trop de place. Développer des outils de régulation est essentiel.",'Engagement':"Votre niveau d'implication peut varier. Renforcer votre ancrage motivationnel.",'Confiance':"Votre confiance peut être fragile face aux difficultés. Construire une confiance basée sur les preuves.",'Résilience':"Vous pouvez rester bloqué après un coup dur. Développer votre capacité de rebond.",'Cognition':"Votre lecture du jeu peut manquer de clarté dans l'urgence.",'Motricité':"Votre connexion corps-esprit peut manquer de précision. Développer votre conscience proprioceptive."}
+  Object.keys(dims).forEach(d=>{const p=Math.round((dims[d].total/(dims[d].count*5))*100);scores[d]=p;dimensions.push({label:d,value:p,color:dc[d]||'#1B3A6B'})})
+  const g=dimensions.length>0?Math.round(dimensions.reduce((a,d)=>a+d.value,0)/dimensions.length):0
+  const sorted=[...dimensions].sort((a,b)=>b.value-a.value)
+  const top3=sorted.slice(0,3),low3=sorted.slice(-3)
+  const profiles={'Activation':'Compétiteur','Attention':'Concentré','Régulation':'Régulateur','Engagement':'Battant','Confiance':'Leader','Résilience':'Résilient','Cognition':'Stratège','Motricité':'Technicien'}
+  const pl=profiles[sorted[0]?.label]||'Performeur'
+  const lbls=g>=91?['Profil d\'élite','#1a4a2a']:g>=76?['Profil performant','#1a3a6a']:g>=61?['Profil confirmé','#2a4a8a']:g>=41?['Profil en développement','#6a4a1a']:['Profil en construction','#6a1a1a']
+  const forces=top3.map(d=>da[d.label]||d.label+' bien développé')
+  const leviers=low3.map(d=>(dl[d.label]||d.label)+' ('+d.value+'%)')
+  return{globalScore:g,profilCode:'PMP',profilLabel:pl+' · '+lbls[0],description:"Votre score global de "+g+"/100 reflète votre niveau de performance mentale sur 8 dimensions clés. Votre dimension la plus développée est "+sorted[0]?.label+" ("+sorted[0]?.value+"%). C'est votre ressource mentale principale en compétition.",forces,leviers,scores,dimensions}
+}
+
+function calcMPA(answers,questions){
+  const counts={SR:{s:0,t:0},CI:{s:0,t:0},LH:{s:0,t:0},StF:{s:0,t:0}}
+  questions.forEach(q=>{const v=answers[q.id];if(!v)return;counts[q.axe].t++;if(v==='A')counts[q.axe].s++})
+  const scores={}
+  Object.keys(counts).forEach(a=>{scores[a]=counts[a].t>0?Math.round((counts[a].s/counts[a].t)*100):50})
+  const SR=scores.SR>=50?'S':'R',CI=scores.CI>=50?'C':'I',LH=scores.LH>=50?'L':'H',StF=scores.StF>=50?'St':'F'
+  const code4=SR+CI+LH+StF
+  const profileKey='P'+(scores.SR>=50?0:1)+(scores.CI>=50?0:1)+(scores.LH>=50?0:1)+(scores.StF>=50?0:1)
+  const profil=MPA_PROFILS[profileKey]||MPA_PROFILS['P2121']||Object.values(MPA_PROFILS)[0]
+  const axeL={SR:{s:'Stimulation externe',r:'Ressource interne'},CI:{s:'Concret',r:'Intuitif'},LH:{s:'Logique',r:'Humain'},StF:{s:'Structure',r:'Fluidité'}}
+  const dims=Object.keys(scores).map(a=>{const sc=scores[a];const dom=sc>=50?axeL[a].s:axeL[a].r;const p=sc>=50?sc:100-sc;return{label:dom+' ('+a+')',value:p,color:'#1a3a6a'}})
+  const intensities=Object.values(scores).map(s=>Math.abs(s-50))
+  const g=Math.min(100,Math.round(50+intensities.reduce((a,b)=>a+b,0)/4))
+  return{globalScore:g,profilCode:code4,profilLabel:profil.nom+' · '+code4,description:profil.description,forces:[profil.besoins],vigilances:[profil.risques],leviers:[profil.coaching],sport:profil.sport||[],scores,dimensions:dims}
+}
+
+function calcPSYCHO(answers,questions){
+  let combatif=0,expressif=0,analytique=0,absorbant=0,regT=0,regN=0,itcaT=0,itcaN=0
+  questions.forEach(q=>{
+    const ans=answers[q.id]
+    if(ans===undefined)return
+    if(q.type==='situational'){const o=q.options[ans];if(!o)return;combatif+=o.scores.combatif||0;expressif+=o.scores.expressif||0;analytique+=o.scores.analytique||0;absorbant+=o.scores.absorbant||0}
+    if(q.type==='likert'&&(q.cat==='Régulation'||q.dimension==='regulation')){const s=(q.id==='PE14'||q.id==='PE18')?6-ans:ans;regT+=s;regN++}
+    if(q.type==='likert'&&(q.cat==='Traits cognitifs'||q.dimension==='itca')){itcaT+=ans;itcaN++}
+  })
+  const maxS=questions.filter(q=>q.type==='situational').length*5
+  const cP=maxS>0?Math.round((combatif/maxS)*100):0
+  const eP=maxS>0?Math.round((expressif/maxS)*100):0
+  const aP=maxS>0?Math.round((analytique/maxS)*100):0
+  const abP=maxS>0?Math.round((absorbant/maxS)*100):0
+  const regS=regN>0?Math.round((regT/(regN*5))*100):50
+  const itcaAvg=itcaN>0?itcaT/itcaN:2.5
+  const typeMap=[{key:'combatif',val:cP},{key:'expressif',val:eP},{key:'analytique',val:aP},{key:'absorbant',val:abP}]
+  const dom=typeMap.sort((a,b)=>b.val-a.val)[0].key
+  const profil=PSYCHO_PROFILS[dom]
+  const itcaP=itcaAvg>=3.8?ITCA_PROFILS[0]:itcaAvg>=2.8?ITCA_PROFILS[1]:ITCA_PROFILS[2]
+  const g=Math.round((regS+(100-Math.abs(cP-abP)))/2)
+  return{globalScore:g,profilCode:profil.code,profilLabel:profil.label+' '+profil.emoji,description:profil.description,forces:profil.coping_naturel,vigilances:profil.coping_manquant,leviers:profil.recommandations,neurochimie:profil.neurochimie,itca:itcaP,scores:{combatif:cP,expressif:eP,analytique:aP,absorbant:abP,regulation:regS},dimensions:[{label:'Combatif 🔥',value:cP,color:'#7a1a1a'},{label:'Expressif 🌟',value:eP,color:'#1a3a6a'},{label:'Analytique 🧠',value:aP,color:'#1a4a2a'},{label:'Absorbant 🌊',value:abP,color:'#4a2a6a'},{label:'Régulation',value:regS,color:'#C9A84C'}]}
+<script>
+// ═══════════════════════════════════════════════════
+// CMP — 30 SITUATIONS COMPLÈTES
+// ═══════════════════════════════════════════════════
+const CMP_Q=[
   {id:'C1',type:'situational',cat:'Compétition',situation:"Tu viens de rater deux gestes importants de suite en compétition.",text:"Comment réagis-tu ?",options:[{text:"Je reste concentré sur le prochain geste, l'erreur est déjà passée.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prends une grande respiration et je me recentre mentalement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je me demande ce qui ne va pas et j'essaie de comprendre.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça m'affecte mais je continue quand même.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je perds confiance et mon niveau de jeu se dégrade.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C2',type:'situational',cat:'Arbitrage',situation:"L'arbitre prend une décision que tu estimes injuste à un moment crucial.",text:"Quelle est ta réaction ?",options:[{text:"J'accepte et je me concentre immédiatement sur la suite.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je ressens la frustration mais je la mets de côté rapidement.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"Je proteste brièvement puis je reprends le match.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça me perturbe et j'ai du mal à me reconcentrer.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je reste bloqué sur l'injustice et mon match est perturbé.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C3',type:'situational',cat:'Pression',situation:"Tu es mené au score à 10 minutes de la fin. Ton équipe compte sur toi.",text:"Comment tu te mobilises ?",options:[{text:"Je me focalise sur ce que je peux faire maintenant pour changer le cours.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je puise dans ma combativité et j'intensifie mon engagement.",scores:{pression:4,maturite:4,blocage:0,ressource:5}},{text:"Je me sens sous pression mais je reste en jeu.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Le score m'oppresse et je joue moins librement.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je commence à penser que c'est perdu.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
@@ -1180,14 +567,14 @@ const CMP_QUESTIONS = [
   {id:'C5',type:'situational',cat:'Préparation',situation:"La nuit avant une compétition importante, tu n'arrives pas à dormir.",text:"Comment tu gères ?",options:[{text:"J'utilise une routine de relaxation et j'accepte que quelques heures suffisent.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je me dis que ce n'est pas grave et je visualise positivement.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"Je suis agité mais je finis par trouver le sommeil.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je m'inquiète du manque de sommeil et ça empire la situation.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je passe la nuit à stresser et j'arrive épuisé à la compétition.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C6',type:'situational',cat:'Résilience',situation:"Tu traverses une série de 5 défaites consécutives.",text:"Quelle est ton attitude ?",options:[{text:"J'analyse ce qui ne va pas et je cherche des solutions concrètes.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je garde confiance dans mon potentiel malgré les résultats.",scores:{pression:4,maturite:5,blocage:0,ressource:5}},{text:"Je doute mais je continue à m'entraîner sérieusement.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ma motivation baisse et j'ai du mal à me projeter positivement.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je commence à remettre en question ma place dans ce sport.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C7',type:'situational',cat:'Adversité',situation:"Un adversaire cherche à te provoquer verbalement pendant le match.",text:"Comment tu réagis ?",options:[{text:"Je reste imperméable et je me concentre sur mon jeu.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je le vois comme une tentative de déstabilisation et j'en souris.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je l'entends mais j'essaie de rester concentré.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça m'agace et je perds un peu le fil du jeu.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je rentre dans son jeu et ma performance s'en ressent.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
-  {id:'C8',type:'situational',cat:'Décision',situation:"Tu dois prendre une décision tactique importante en une fraction de seconde.",text:"Que se passe-t-il ?",options:[{text:"Je fais confiance à mon instinct et j'agis avec conviction.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'appuie sur mes automatismes d'entraînement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"J'hésite légèrement mais j'arrive à décider.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'hésite trop et je perds l'opportunité.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me fige et je ne prends pas de décision.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C8',type:'situational',cat:'Décision',situation:"Tu dois prendre une décision tactique importante en une fraction de seconde.",text:"Que se passe-t-il mentalement ?",options:[{text:"Je fais confiance à mon instinct et j'agis avec conviction.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'appuie sur mes automatismes d'entraînement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"J'hésite légèrement mais j'arrive à décider.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'hésite trop et je perds l'opportunité.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me fige et je ne prends pas de décision.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C9',type:'situational',cat:'Public',situation:"Le public ou les supporters te sifflent ou te critiquent.",text:"Comment tu le vis ?",options:[{text:"Je joue pour ma performance, pas pour le public.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je l'entends mais je reste dans ma bulle.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"C'est désagréable mais je continue à jouer.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça me touche et affecte ma confiance.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me sens honteux et je n'ose plus prendre de risques.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C10',type:'situational',cat:'Retour blessure',situation:"Tu reviens d'une longue blessure et tu joues ton premier match de retour.",text:"Quelle est ton attitude ?",options:[{text:"Je suis impatient de retrouver les sensations et j'y vais pleinement.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je suis prudent mais confiant dans ma préparation.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"J'ai quelques appréhensions mais je gère.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'ai peur de me reblesser et ça me retient.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"La peur de la blessure domine et je n'ose pas m'engager.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C11',type:'situational',cat:'Adaptation',situation:"Tu dois performer dans un sport ou poste dans lequel tu n'es pas à l'aise.",text:"Comment tu t'adaptes ?",options:[{text:"Je vois ça comme un défi et je donne le maximum.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'adapte en m'appuyant sur mes qualités de base.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je fais de mon mieux même si je me sens moins à l'aise.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je me sens exposé et mon niveau chute.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je veux éviter cette situation à tout prix.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C12',type:'situational',cat:'Collectif',situation:"Ton meilleur coéquipier est absent pour la compétition décisive.",text:"Quelle est ta réaction ?",options:[{text:"Je me mobilise encore plus pour compenser l'absence.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'adapte et je cherche comment l'équipe peut compenser collectivement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je le regrette mais je reste concentré sur ce que je peux faire.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"Son absence me pèse et je manque de confiance.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je pense que c'est perdu d'avance sans lui.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C13',type:'situational',cat:'Leadership',situation:"Tu dois t'exprimer devant toute ton équipe pour partager ta vision tactique.",text:"Comment tu te comportes ?",options:[{text:"Je m'exprime clairement et avec conviction.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prépare ce que je veux dire et je le transmets bien.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je le fais mais je ne suis pas totalement à l'aise.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je préfère que quelqu'un d'autre prenne la parole.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je me tais même si j'ai des idées importantes à partager.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C14',type:'situational',cat:'Tactique',situation:"Tu réalises pendant le match que ta stratégie de départ ne fonctionne pas.",text:"Comment tu réagis ?",options:[{text:"Je m'adapte immédiatement et je change d'approche.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prends un temps d'arrêt mental et je trouve une alternative.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je le vois mais j'ai du mal à changer en cours de match.",scores:{pression:3,maturite:3,blocage:3,ressource:3}},{text:"Je reste sur ma stratégie initiale même si ça ne marche pas.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me sens perdu et je n'arrive plus à jouer.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
-  {id:'C15',type:'situational',cat:'Enjeu',situation:"Tu as une opportunité décisive et tu sais que tout le monde te regarde.",text:"Comment tu te comportes ?",options:[{text:"Je me concentre sur le geste technique et j'y vais.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Le regard des autres m'aide à me dépasser.",scores:{pression:5,maturite:4,blocage:0,ressource:5}},{text:"Je ressens la pression mais je tente quand même.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'ai peur de rater et ça alourdit mon geste.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je préfère passer la balle ou éviter d'être décisif.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C15',type:'situational',cat:'Enjeu décisif',situation:"Tu as une opportunité décisive et tu sais que tout le monde te regarde.",text:"Comment tu te comportes ?",options:[{text:"Je me concentre sur le geste technique et j'y vais.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Le regard des autres m'aide à me dépasser.",scores:{pression:5,maturite:4,blocage:0,ressource:5}},{text:"Je ressens la pression mais je tente quand même.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'ai peur de rater et ça alourdit mon geste.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je préfère passer la balle ou éviter d'être décisif.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C16',type:'situational',cat:'Changement',situation:"Ton entraîneur change ta position ou ton rôle la veille d'une compétition.",text:"Quelle est ta réaction ?",options:[{text:"J'accepte et je me prépare mentalement à ce nouveau rôle.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je comprends la décision et je m'y adapte.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"C'est surprenant mais j'essaie de m'y préparer.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je suis déstabilisé et ça affecte ma préparation.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je suis en colère et ma concentration est perturbée.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C17',type:'situational',cat:'Conditions',situation:"Tu dois performer dans des conditions difficiles (froid, pluie, terrain dégradé).",text:"Comment tu t'adaptes ?",options:[{text:"Les conditions difficiles ne me concernent pas, je m'adapte.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je vois ça comme un avantage car ça neutralise certains adversaires.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"C'est inconfortable mais je fais avec.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"Les conditions m'affectent et je suis moins efficace.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je suis bloqué mentalement par les mauvaises conditions.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C18',type:'situational',cat:'Temps de jeu',situation:"Tu n'as pas eu de temps de jeu depuis plusieurs semaines.",text:"Comment tu le vis ?",options:[{text:"Je travaille encore plus dur à l'entraînement pour montrer ma valeur.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je reste prêt mentalement pour saisir ma chance quand elle viendra.",scores:{pression:4,maturite:5,blocage:0,ressource:5}},{text:"Je suis frustré mais je maintiens mon niveau d'entraînement.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ma motivation baisse et l'entraînement devient difficile.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je commence à envisager d'arrêter ou de changer de club.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
@@ -1197,275 +584,340 @@ const CMP_QUESTIONS = [
   {id:'C22',type:'situational',cat:'Gestion du score',situation:"Ton équipe est en train de gagner et tu veux protéger le résultat.",text:"Comment tu joues ?",options:[{text:"Je reste dans le même état d'esprit, victoire ou défaite.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je gère intelligemment sans me fermer complètement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je deviens un peu plus prudent mais je reste dans le jeu.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"Je me mets à jouer petit et à éviter les risques.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"La peur de perdre me paralyse et je joue très mal.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C23',type:'situational',cat:'Après victoire',situation:"Après une grande victoire, tu dois rester concentré pour la compétition suivante.",text:"Comment tu gardes le cap ?",options:[{text:"Je profite de la victoire puis je me replonge dans la préparation.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je garde les pieds sur terre et je me projette déjà sur la suite.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je savoure peut-être un peu trop mais je reviens vite.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'ai du mal à retrouver la même intensité mentale.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je me repose sur mes lauriers et ma préparation en souffre.",scores:{pression:1,maturite:1,blocage:4,ressource:1}}]},
   {id:'C24',type:'situational',cat:'Vie perso',situation:"Tu dois performer alors que ta vie personnelle traverse une période difficile.",text:"Comment tu gères ?",options:[{text:"Je sépare clairement vie personnelle et sport, le terrain est ma zone protégée.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"C'est difficile mais je trouve dans le sport un refuge.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"Je fais de mon mieux mais certaines pensées s'immiscent.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ma vie perso envahit mes pensées pendant le sport.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je ne peux pas performer dans ce contexte.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
-  {id:'C25',type:'situational',cat:'Relation',situation:"Tu dois jouer avec un coéquipier avec qui tu as des difficultés relationnelles.",text:"Comment tu joues ?",options:[{text:"Je mets nos différences de côté et je me concentre sur le jeu collectif.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je reste professionnel et je joue normalement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"C'est compliqué mais je ne laisse pas ça trop affecter mon jeu.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"La relation difficile affecte mes passes et ma communication.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je joue en évitant au maximum d'interagir avec lui.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C25',type:'situational',cat:'Relation difficile',situation:"Tu dois jouer avec un coéquipier avec qui tu as des difficultés relationnelles.",text:"Comment tu joues ?",options:[{text:"Je mets nos différences de côté et je me concentre sur le jeu collectif.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je reste professionnel et je joue normalement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"C'est compliqué mais je ne laisse pas ça trop affecter mon jeu.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"La relation difficile affecte mes passes et ma communication.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je joue en évitant au maximum d'interagir avec lui.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C26',type:'situational',cat:'Défaite collective',situation:"Tu as bien joué mais ton équipe a perdu à cause d'erreurs collectives.",text:"Comment tu le vis ?",options:[{text:"Je suis satisfait de ma performance individuelle et j'analyse collectivement.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prends ma part de responsabilité collective sans me flageller.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je suis frustré mais j'arrive à relativiser.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"La défaite collective annule ma satisfaction personnelle.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je rumine longtemps sur cette défaite.",scores:{pression:1,maturite:1,blocage:4,ressource:1}}]},
   {id:'C27',type:'situational',cat:'Remplaçant',situation:"Tu dois gérer une longue attente avant de rentrer en jeu comme remplaçant.",text:"Comment tu te maintiens prêt ?",options:[{text:"Je reste mentalement activé et prêt à entrer à tout moment.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'échauffe mentalement et je visualise mes actions.",scores:{pression:4,maturite:5,blocage:0,ressource:5}},{text:"J'ai du mal à maintenir mon activation mais je reste attentif.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"L'attente me déconcentre et je rentre froid mentalement.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je suis tellement déçu de ne pas jouer que je suis démotivé.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C28',type:'situational',cat:'Geste réussi',situation:"Tu réussis un geste exceptionnel mais tu dois rester concentré sur la suite.",text:"Comment tu gères l'après ?",options:[{text:"Je savoure brièvement puis je me reconnecte immédiatement.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je reste dans le flux sans me laisser emporter.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je savoure un peu trop mais je reviens vite dans le match.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"L'euphorie dure trop longtemps et je perds le fil.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je me laisse totalement emporter et mon niveau chute après.",scores:{pression:1,maturite:1,blocage:4,ressource:1}}]},
-  {id:'C29',type:'situational',cat:'Élimination',situation:"Tu dois performer dans un championnat ou tournoi à élimination directe.",text:"Comment tu aborde ça ?",options:[{text:"L'enjeu élevé m'élève et je performe mieux qu'en saison.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je me prépare spécifiquement pour ce format et je suis prêt.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"La pression est plus forte mais je la gère globalement.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"L'élimination directe m'inhibe et je joue en dessous de mes moyens.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je suis tétanisé par l'enjeu et je ne performe pas.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C29',type:'situational',cat:'Élimination directe',situation:"Tu dois performer dans un championnat ou tournoi à élimination directe.",text:"Comment tu abordes ça ?",options:[{text:"L'enjeu élevé m'élève et je performe mieux qu'en saison.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je me prépare spécifiquement pour ce format et je suis prêt.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"La pression est plus forte mais je la gère globalement.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"L'élimination directe m'inhibe et je joue en dessous de mes moyens.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je suis tétanisé par l'enjeu et je ne performe pas.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C30',type:'situational',cat:'Recruteurs',situation:"Tu dois performer devant des recruteurs ou des sélectionneurs pour la première fois.",text:"Comment tu te comportes ?",options:[{text:"Je joue mon jeu normalement, la sélection est une conséquence pas un objectif.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je vois ça comme une opportunité et je me dépasse.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je ressens une pression supplémentaire mais je performe quand même.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Sous le regard des recruteurs je joue en dessous de mon niveau.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me fige complètement et je rate ma chance.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]}
 ]
 
-// ═══ PMP — 120 QUESTIONS (version courte 40q pour la démo, facilement extensible) ═══
-const PMP_QUESTIONS = [
-  {id:'Q1',type:'likert',dimension:'Activation',text:"Avant une compétition, je me sens rapidement prêt à entrer dans l'action."},
-  {id:'Q2',type:'likert',dimension:'Activation',text:"J'ai besoin de beaucoup de temps pour me mettre en rythme avant d'être performant."},
-  {id:'Q3',type:'likert',dimension:'Activation',text:"Quand l'intensité monte, mon énergie mentale augmente aussi."},
-  {id:'Q4',type:'likert',dimension:'Activation',text:"Je me sens stimulé par l'ambiance compétitive."},
-  {id:'Q5',type:'likert',dimension:'Activation',text:"Je sais mobiliser mon énergie quand il faut répondre présent."},
-  {id:'Q6',type:'likert',dimension:'Attention',text:"Je reste concentré même quand l'environnement est bruyant."},
-  {id:'Q7',type:'likert',dimension:'Attention',text:"Je reviens vite à l'instant présent après une erreur."},
-  {id:'Q8',type:'likert',dimension:'Attention',text:"Je sais me refocaliser sur une consigne importante."},
-  {id:'Q9',type:'likert',dimension:'Attention',text:"Je garde le fil du jeu même sous pression."},
-  {id:'Q10',type:'likert',dimension:'Attention',text:"Je peux maintenir mon attention jusqu'à la fin."},
-  {id:'Q11',type:'likert',dimension:'Régulation',text:"Je garde un certain calme quand la pression monte."},
-  {id:'Q12',type:'likert',dimension:'Régulation',text:"Je sais faire redescendre la tension quand j'en ai besoin."},
-  {id:'Q13',type:'likert',dimension:'Régulation',text:"Je retrouve assez vite mon équilibre émotionnel."},
-  {id:'Q14',type:'likert',dimension:'Régulation',text:"Je sais respirer et me recentrer dans les moments tendus."},
-  {id:'Q15',type:'likert',dimension:'Régulation',text:"Je peux rester stable après un événement contrarié."},
-  {id:'Q16',type:'likert',dimension:'Engagement',text:"Je m'implique pleinement dans ce que j'ai à faire."},
-  {id:'Q17',type:'likert',dimension:'Engagement',text:"Je fournis mes efforts même quand je ne suis pas en réussite."},
-  {id:'Q18',type:'likert',dimension:'Engagement',text:"Je reste investi jusqu'au bout de la séance ou du match."},
-  {id:'Q19',type:'likert',dimension:'Engagement',text:"Je vais au contact du défi plutôt que de l'éviter."},
-  {id:'Q20',type:'likert',dimension:'Engagement',text:"Je continue à chercher des solutions quand c'est compliqué."},
-  {id:'Q21',type:'likert',dimension:'Confiance',text:"Je crois en ma capacité à réussir dans les moments importants."},
-  {id:'Q22',type:'likert',dimension:'Confiance',text:"Je peux m'appuyer sur mes qualités quand l'enjeu augmente."},
-  {id:'Q23',type:'likert',dimension:'Confiance',text:"Je me sens capable de répondre présent face à l'adversité."},
-  {id:'Q24',type:'likert',dimension:'Confiance',text:"Je m'appuie sur mes repères pour rester solide intérieurement."},
-  {id:'Q25',type:'likert',dimension:'Confiance',text:"Je peux me faire confiance sans avoir besoin d'être parfait."},
-  {id:'Q26',type:'likert',dimension:'Résilience',text:"Je rebondis assez vite après un échec ou une erreur."},
-  {id:'Q27',type:'likert',dimension:'Résilience',text:"Je sais repartir après un moment compliqué."},
-  {id:'Q28',type:'likert',dimension:'Résilience',text:"Je transforme souvent les difficultés en apprentissage."},
-  {id:'Q29',type:'likert',dimension:'Résilience',text:"Je peux repartir proprement après avoir subi un coup dur."},
-  {id:'Q30',type:'likert',dimension:'Résilience',text:"Je garde l'idée que rien n'est fini après une erreur."},
-  {id:'Q31',type:'likert',dimension:'Cognition',text:"J'aime comprendre en profondeur ce qu'il faut faire pour progresser."},
-  {id:'Q32',type:'likert',dimension:'Cognition',text:"Je repère assez vite les logiques d'une situation de jeu."},
-  {id:'Q33',type:'likert',dimension:'Cognition',text:"J'aime anticiper plusieurs options avant d'agir."},
-  {id:'Q34',type:'likert',dimension:'Cognition',text:"Je vois facilement comment adapter mon comportement à la situation."},
-  {id:'Q35',type:'likert',dimension:'Cognition',text:"Je repère les indices utiles pour prendre une bonne décision."},
-  {id:'Q36',type:'likert',dimension:'Motricité',text:"Je ressens facilement comment mon corps s'organise dans le mouvement."},
-  {id:'Q37',type:'likert',dimension:'Motricité',text:"Je perçois assez vite si mon geste est juste ou non."},
-  {id:'Q38',type:'likert',dimension:'Motricité',text:"Je repère comment mon équilibre influence mon efficacité."},
-  {id:'Q39',type:'likert',dimension:'Motricité',text:"Je sens assez bien ce qui change dans mes appuis et mon rythme."},
-  {id:'Q40',type:'likert',dimension:'Motricité',text:"Je comprends la relation entre sensation, geste et efficacité."}
+// ═══════════════════════════════════════════════════
+// PMP — 120 QUESTIONS COMPLÈTES
+// ═══════════════════════════════════════════════════
+const PMP_Q=[
+  {id:'Q1',type:'likert',dimension:'Activation',reverse:false,text:"Avant une compétition, je me sens rapidement prêt à entrer dans l'action."},
+  {id:'Q2',type:'likert',dimension:'Activation',reverse:false,text:"J'ai besoin de beaucoup de temps pour me mettre en rythme avant d'être performant."},
+  {id:'Q3',type:'likert',dimension:'Activation',reverse:false,text:"Quand l'intensité monte, mon énergie mentale augmente aussi."},
+  {id:'Q4',type:'likert',dimension:'Activation',reverse:true,text:"Je démarre souvent trop doucement dans les premières minutes."},
+  {id:'Q5',type:'likert',dimension:'Activation',reverse:false,text:"Je me sens stimulé par l'ambiance compétitive."},
+  {id:'Q6',type:'likert',dimension:'Activation',reverse:false,text:"Quand il y a de l'enjeu, je me réveille mentalement."},
+  {id:'Q7',type:'likert',dimension:'Activation',reverse:true,text:"Je manque souvent d'allant au moment où il faut accélérer."},
+  {id:'Q8',type:'likert',dimension:'Activation',reverse:false,text:"Je sais mobiliser mon énergie quand il faut répondre présent."},
+  {id:'Q9',type:'likert',dimension:'Activation',reverse:false,text:"Je ressens une dynamique positive quand le défi est élevé."},
+  {id:'Q10',type:'likert',dimension:'Activation',reverse:true,text:"Je subis parfois le rythme au lieu de l'imposer."},
+  {id:'Q11',type:'likert',dimension:'Activation',reverse:false,text:"Je peux élever mon niveau d'activation sans m'éparpiller."},
+  {id:'Q12',type:'likert',dimension:'Activation',reverse:true,text:"Je me sens trop passif dans les moments décisifs."},
+  {id:'Q13',type:'likert',dimension:'Activation',reverse:false,text:"Je transforme facilement la tension en énergie utile."},
+  {id:'Q14',type:'likert',dimension:'Activation',reverse:true,text:"Je manque parfois d'intensité alors que la situation l'exige."},
+  {id:'Q15',type:'likert',dimension:'Activation',reverse:false,text:"Je me mets mentalement en route assez vite."},
+  {id:'Q16',type:'likert',dimension:'Attention',reverse:false,text:"Je reste concentré même quand l'environnement est bruyant."},
+  {id:'Q17',type:'likert',dimension:'Attention',reverse:true,text:"Je me laisse facilement distraire pendant l'entraînement ou le match."},
+  {id:'Q18',type:'likert',dimension:'Attention',reverse:false,text:"Je reviens vite à l'instant présent après une erreur."},
+  {id:'Q19',type:'likert',dimension:'Attention',reverse:true,text:"Mon attention décroche dès que la séance dure longtemps."},
+  {id:'Q20',type:'likert',dimension:'Attention',reverse:false,text:"Je sais me refocaliser sur une consigne importante."},
+  {id:'Q21',type:'likert',dimension:'Attention',reverse:false,text:"Quand plusieurs choses se passent en même temps, je garde le bon repère."},
+  {id:'Q22',type:'likert',dimension:'Attention',reverse:true,text:"Je pense trop à autre chose pendant la performance."},
+  {id:'Q23',type:'likert',dimension:'Attention',reverse:false,text:"Je suis capable de me reconcentrer très vite."},
+  {id:'Q24',type:'likert',dimension:'Attention',reverse:false,text:"Je garde le fil du jeu même sous pression."},
+  {id:'Q25',type:'likert',dimension:'Attention',reverse:true,text:"Je perds parfois ma concentration sur des détails inutiles."},
+  {id:'Q26',type:'likert',dimension:'Attention',reverse:false,text:"Je peux maintenir mon attention jusqu'à la fin."},
+  {id:'Q27',type:'likert',dimension:'Attention',reverse:true,text:"Mon esprit part facilement ailleurs avant un geste important."},
+  {id:'Q28',type:'likert',dimension:'Attention',reverse:false,text:"Je sais quoi regarder au bon moment."},
+  {id:'Q29',type:'likert',dimension:'Attention',reverse:true,text:"Je m'éparpille quand le contexte devient complexe."},
+  {id:'Q30',type:'likert',dimension:'Attention',reverse:false,text:"Je suis présent mentalement sur ce que j'ai à faire."},
+  {id:'Q31',type:'likert',dimension:'Régulation',reverse:false,text:"Je garde un certain calme quand la pression monte."},
+  {id:'Q32',type:'likert',dimension:'Régulation',reverse:true,text:"Mes émotions prennent parfois trop de place dans ma performance."},
+  {id:'Q33',type:'likert',dimension:'Régulation',reverse:false,text:"Je sais faire redescendre la tension quand j'en ai besoin."},
+  {id:'Q34',type:'likert',dimension:'Régulation',reverse:false,text:"Une frustration peut me poursuivre longtemps pendant l'effort."},
+  {id:'Q35',type:'likert',dimension:'Régulation',reverse:false,text:"Je retrouve assez vite mon équilibre émotionnel."},
+  {id:'Q36',type:'likert',dimension:'Régulation',reverse:false,text:"Je gère plutôt bien l'agacement après une décision injuste."},
+  {id:'Q37',type:'likert',dimension:'Régulation',reverse:false,text:"Quand quelque chose m'énerve, cela dérègle facilement mon jeu."},
+  {id:'Q38',type:'likert',dimension:'Régulation',reverse:false,text:"Je sais respirer et me recentrer dans les moments tendus."},
+  {id:'Q39',type:'likert',dimension:'Régulation',reverse:true,text:"Je ne me laisse pas dominer trop longtemps par le stress."},
+  {id:'Q40',type:'likert',dimension:'Régulation',reverse:false,text:"Je monte vite en émotion et j'ai du mal à redescendre."},
+  {id:'Q41',type:'likert',dimension:'Régulation',reverse:false,text:"Je peux rester stable après un événement contrarié."},
+  {id:'Q42',type:'likert',dimension:'Régulation',reverse:true,text:"Une erreur me fait parfois sortir de mon match émotionnellement."},
+  {id:'Q43',type:'likert',dimension:'Régulation',reverse:false,text:"Je sais réguler mon niveau de tension intérieure."},
+  {id:'Q44',type:'likert',dimension:'Régulation',reverse:true,text:"Je me crispe facilement quand je veux trop bien faire."},
+  {id:'Q45',type:'likert',dimension:'Régulation',reverse:true,text:"Je retrouve mon axe émotionnel après un moment difficile."},
+  {id:'Q46',type:'likert',dimension:'Engagement',reverse:false,text:"Je m'implique pleinement dans ce que j'ai à faire."},
+  {id:'Q47',type:'likert',dimension:'Engagement',reverse:true,text:"Quand c'est difficile, j'ai parfois tendance à lâcher intérieurement."},
+  {id:'Q48',type:'likert',dimension:'Engagement',reverse:false,text:"Je fournis mes efforts même quand je ne suis pas en réussite."},
+  {id:'Q49',type:'likert',dimension:'Engagement',reverse:false,text:"Je reste investi jusqu'au bout de la séance ou du match."},
+  {id:'Q50',type:'likert',dimension:'Engagement',reverse:true,text:"Mon niveau d'engagement dépend trop de mon humeur du moment."},
+  {id:'Q51',type:'likert',dimension:'Engagement',reverse:false,text:"Je vais au contact du défi plutôt que de l'éviter."},
+  {id:'Q52',type:'likert',dimension:'Engagement',reverse:false,text:"Je garde de l'intention même quand la fatigue arrive."},
+  {id:'Q53',type:'likert',dimension:'Engagement',reverse:true,text:"Je me désengage parfois si la situation tourne mal."},
+  {id:'Q54',type:'likert',dimension:'Engagement',reverse:false,text:"Je suis capable de maintenir mon intensité mentale dans l'effort."},
+  {id:'Q55',type:'likert',dimension:'Engagement',reverse:false,text:"Je continue à chercher des solutions quand c'est compliqué."},
+  {id:'Q56',type:'likert',dimension:'Engagement',reverse:true,text:"Quand je doute, mon implication baisse rapidement."},
+  {id:'Q57',type:'likert',dimension:'Engagement',reverse:false,text:"Je prends ma part dans l'effort collectif."},
+  {id:'Q58',type:'likert',dimension:'Engagement',reverse:false,text:"Je reste combatif même après plusieurs difficultés."},
+  {id:'Q59',type:'likert',dimension:'Engagement',reverse:false,text:"Je peux perdre mon envie de me battre quand je suis contrarié."},
+  {id:'Q60',type:'likert',dimension:'Engagement',reverse:false,text:"Je tiens mentalement mon engagement sur la durée."},
+  {id:'Q61',type:'likert',dimension:'Confiance',reverse:false,text:"Je crois en ma capacité à réussir dans les moments importants."},
+  {id:'Q62',type:'likert',dimension:'Confiance',reverse:true,text:"Je doute souvent de moi avant un événement important."},
+  {id:'Q63',type:'likert',dimension:'Confiance',reverse:false,text:"Je peux m'appuyer sur mes qualités quand l'enjeu augmente."},
+  {id:'Q64',type:'likert',dimension:'Confiance',reverse:false,text:"Une erreur peut rapidement faire baisser ma confiance."},
+  {id:'Q65',type:'likert',dimension:'Confiance',reverse:false,text:"Je me sens capable de répondre présent face à l'adversité."},
+  {id:'Q66',type:'likert',dimension:'Confiance',reverse:true,text:"J'entre parfois en compétition avec l'idée que cela va être trop dur pour moi."},
+  {id:'Q67',type:'likert',dimension:'Confiance',reverse:true,text:"Je garde un minimum de certitude même quand je traverse un passage difficile."},
+  {id:'Q68',type:'likert',dimension:'Confiance',reverse:false,text:"Je me compare souvent aux autres d'une manière qui me fragilise."},
+  {id:'Q69',type:'likert',dimension:'Confiance',reverse:false,text:"Je m'appuie sur mes repères pour rester solide intérieurement."},
+  {id:'Q70',type:'likert',dimension:'Confiance',reverse:true,text:"Mon estime de mes capacités varie trop selon mes derniers résultats."},
+  {id:'Q71',type:'likert',dimension:'Confiance',reverse:false,text:"Je peux me faire confiance sans avoir besoin d'être parfait."},
+  {id:'Q72',type:'likert',dimension:'Confiance',reverse:true,text:"Je me sens parfois inférieur aux autres dans les moments qui comptent."},
+  {id:'Q73',type:'likert',dimension:'Confiance',reverse:false,text:"Je sais reconnaître mes points forts."},
+  {id:'Q74',type:'likert',dimension:'Confiance',reverse:true,text:"Je laisse facilement un détail négatif éteindre ma confiance."},
+  {id:'Q75',type:'likert',dimension:'Confiance',reverse:false,text:"Je crois en ma marge de progression."},
+  {id:'Q76',type:'likert',dimension:'Résilience',reverse:false,text:"Je rebondis assez vite après un échec ou une erreur."},
+  {id:'Q77',type:'likert',dimension:'Résilience',reverse:true,text:"Je rumine longtemps quand quelque chose se passe mal."},
+  {id:'Q78',type:'likert',dimension:'Résilience',reverse:false,text:"Je sais repartir après un moment compliqué."},
+  {id:'Q79',type:'likert',dimension:'Résilience',reverse:true,text:"Un mauvais passage peut me faire sortir durablement de ma performance."},
+  {id:'Q80',type:'likert',dimension:'Résilience',reverse:false,text:"Je transforme souvent les difficultés en apprentissage."},
+  {id:'Q81',type:'likert',dimension:'Résilience',reverse:false,text:"Je mets parfois beaucoup de temps à me remettre d'une déception."},
+  {id:'Q82',type:'likert',dimension:'Résilience',reverse:false,text:"Je peux repartir proprement après avoir subi un coup dur."},
+  {id:'Q83',type:'likert',dimension:'Résilience',reverse:false,text:"Je garde l'idée que rien n'est fini après une erreur."},
+  {id:'Q84',type:'likert',dimension:'Résilience',reverse:true,text:"Je reste bloqué trop longtemps sur ce qui n'a pas marché."},
+  {id:'Q85',type:'likert',dimension:'Résilience',reverse:false,text:"Je reprends vite le fil après une contre-performance."},
+  {id:'Q86',type:'likert',dimension:'Résilience',reverse:false,text:"Je tire des leçons utiles de mes difficultés."},
+  {id:'Q87',type:'likert',dimension:'Résilience',reverse:false,text:"Un échec me touche parfois plus longtemps que je ne le voudrais."},
+  {id:'Q88',type:'likert',dimension:'Résilience',reverse:false,text:"Je sais me reconstruire dans l'action."},
+  {id:'Q89',type:'likert',dimension:'Résilience',reverse:false,text:"Je peux reprendre confiance après un passage raté."},
+  {id:'Q90',type:'likert',dimension:'Résilience',reverse:false,text:"Je me relève mentalement quand la situation se complique."},
+  {id:'Q91',type:'likert',dimension:'Cognition',reverse:false,text:"J'aime comprendre en profondeur ce qu'il faut faire pour progresser."},
+  {id:'Q92',type:'likert',dimension:'Cognition',reverse:true,text:"Je préfère agir sans trop analyser ce que je fais."},
+  {id:'Q93',type:'likert',dimension:'Cognition',reverse:false,text:"Je repère assez vite les logiques d'une situation de jeu."},
+  {id:'Q94',type:'likert',dimension:'Cognition',reverse:false,text:"Je comprends bien les liens entre stratégie, intention et exécution."},
+  {id:'Q95',type:'likert',dimension:'Cognition',reverse:false,text:"Je prends parfois des décisions sans vraiment lire ce qui se passe."},
+  {id:'Q96',type:'likert',dimension:'Cognition',reverse:false,text:"J'aime anticiper plusieurs options avant d'agir."},
+  {id:'Q97',type:'likert',dimension:'Cognition',reverse:false,text:"Je vois facilement comment adapter mon comportement à la situation."},
+  {id:'Q98',type:'likert',dimension:'Cognition',reverse:false,text:"Je peux manquer de lucidité tactique quand l'action s'accélère."},
+  {id:'Q99',type:'likert',dimension:'Cognition',reverse:false,text:"J'apprends mieux quand je comprends le sens de l'exercice."},
+  {id:'Q100',type:'likert',dimension:'Cognition',reverse:false,text:"Je repère les indices utiles pour prendre une bonne décision."},
+  {id:'Q101',type:'likert',dimension:'Cognition',reverse:false,text:"Je réfléchis volontiers à ce qui me fait progresser."},
+  {id:'Q102',type:'likert',dimension:'Cognition',reverse:true,text:"Je peine parfois à analyser calmement ce qui se passe."},
+  {id:'Q103',type:'likert',dimension:'Cognition',reverse:false,text:"Je peux relier mes sensations à des repères concrets."},
+  {id:'Q104',type:'likert',dimension:'Cognition',reverse:false,text:"Je lis souvent la situation avec un temps de retard."},
+  {id:'Q105',type:'likert',dimension:'Cognition',reverse:false,text:"Je développe de la clarté quand je prends du recul."},
+  {id:'Q106',type:'likert',dimension:'Motricité',reverse:false,text:"Je ressens facilement comment mon corps s'organise dans le mouvement."},
+  {id:'Q107',type:'likert',dimension:'Motricité',reverse:true,text:"Je manque parfois de repères corporels pendant l'action."},
+  {id:'Q108',type:'likert',dimension:'Motricité',reverse:false,text:"Je perçois assez vite si mon geste est juste ou non."},
+  {id:'Q109',type:'likert',dimension:'Motricité',reverse:false,text:"Je comprends mieux quand on me montre et que je ressens l'action."},
+  {id:'Q110',type:'likert',dimension:'Motricité',reverse:true,text:"Je me sens parfois coupé de mes sensations dans le mouvement."},
+  {id:'Q111',type:'likert',dimension:'Motricité',reverse:false,text:"Je repère comment mon équilibre influence mon efficacité."},
+  {id:'Q112',type:'likert',dimension:'Motricité',reverse:false,text:"Je trouve assez vite une manière personnelle de réaliser un geste."},
+  {id:'Q113',type:'likert',dimension:'Motricité',reverse:false,text:"J'ai besoin de beaucoup de répétitions pour sentir un mouvement juste."},
+  {id:'Q114',type:'likert',dimension:'Motricité',reverse:false,text:"Je sens assez bien ce qui change dans mes appuis et mon rythme."},
+  {id:'Q115',type:'likert',dimension:'Motricité',reverse:false,text:"Je peux adapter mon geste sans tout perdre mentalement."},
+  {id:'Q116',type:'likert',dimension:'Motricité',reverse:false,text:"Je perçois rapidement les effets d'une correction technique."},
+  {id:'Q117',type:'likert',dimension:'Motricité',reverse:true,text:"Je me sens parfois trop rigide dans mon organisation corporelle."},
+  {id:'Q118',type:'likert',dimension:'Motricité',reverse:false,text:"Je fais confiance à mes sensations pour ajuster mon mouvement."},
+  {id:'Q119',type:'likert',dimension:'Motricité',reverse:true,text:"Je peine à identifier ce qui change dans mon corps quand je réussis."},
+  {id:'Q120',type:'likert',dimension:'Motricité',reverse:false,text:"Je comprends la relation entre sensation, geste et efficacité."}
 ]
 
-// ═══ MPA — 40 QUESTIONS BINAIRES ═══
-const MPA_QUESTIONS = [
+// ═══════════════════════════════════════════════════
+// MPA — 100 QUESTIONS COMPLÈTES
+// ═══════════════════════════════════════════════════
+const MPA_Q=[
   {id:'M1',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Avant une compétition, l'ambiance autour de toi te donne de l'énergie.",textB:"Tu préfères te préparer seul, dans ta bulle, avant de performer."},
-  {id:'M2',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Le contact avec tes coéquipiers avant le match te booste mentalement.",textB:"Tu préfères te retrouver seul pour récupérer et te ressourcer."},
-  {id:'M3',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Tu te sens plus vivant quand il y a du monde et de l'animation autour de toi.",textB:"Tu puises ta force dans ta vie intérieure plus que dans les autres."},
-  {id:'M4',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Dans un groupe, tu prends naturellement la parole sans effort.",textB:"Tu as besoin de temps seul pour recharger tes batteries mentales."},
-  {id:'M5',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"L'énergie collective d'une équipe t'élève dans ta performance.",textB:"Tu performes mieux quand tu peux te concentrer sans interactions."},
-  {id:'M6',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu apprends mieux avec des exercices précis et des répétitions concrètes.",textB:"Tu perçois rapidement les possibilités cachées dans une situation de jeu."},
-  {id:'M7',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu fais confiance à ce que tu observes directement sur le terrain.",textB:"Tu anticipes souvent ce qui va se passer avant que ça arrive."},
-  {id:'M8',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères des consignes claires et détaillées plutôt que des principes généraux.",textB:"Tu comprends vite le sens global d'un exercice sans avoir besoin de détails."},
-  {id:'M9',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu t'appuies sur ton expérience passée pour gérer les situations nouvelles.",textB:"Tu fais souvent confiance à tes intuitions dans les moments décisifs."},
-  {id:'M10',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères voir une démonstration concrète avant d'essayer.",textB:"Tu imagines facilement différentes façons de réaliser un geste."},
-  {id:'M11',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Dans une décision importante, tu te bases d'abord sur la logique et les faits.",textB:"Tu prends en compte les émotions des autres avant de décider."},
-  {id:'M12',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu préfères un retour direct et factuel même s'il est difficile à entendre.",textB:"La qualité des relations dans ton équipe a un fort impact sur ta performance."},
-  {id:'M13',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu analyses une contre-performance de façon objective sans te laisser envahir.",textB:"Tu es très attentif au bien-être de tes coéquipiers."},
-  {id:'M14',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu arrives facilement à rester détaché émotionnellement quand il faut décider.",textB:"Tu es naturellement empathique et tu ressens facilement ce que vivent les autres."},
-  {id:'M15',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu évalues ta performance sur des critères objectifs et mesurables.",textB:"Tu as besoin de te sentir apprécié pour donner le meilleur de toi-même."},
-  {id:'M16',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu te prépares toujours avec une routine précise avant de performer.",textB:"Tu t'adaptes facilement quand le planning change au dernier moment."},
-  {id:'M17',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu aimes avoir un programme d'entraînement clair et planifié à l'avance.",textB:"Tu performes bien même dans les situations non prévues et improvisées."},
-  {id:'M18',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu te sens rassuré quand les rôles et les responsabilités sont bien définis.",textB:"Tu trouves les environnements trop rigides étouffants."},
-  {id:'M19',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu travailles mieux avec des délais précis et des objectifs mesurables.",textB:"Tu préfères décider en fonction du contexte du moment plutôt que d'un plan fixe."},
-  {id:'M20',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tes routines de préparation sont essentielles à ta performance.",textB:"Tu te sens à l'aise dans l'incertitude et tu la gères bien."}
+  {id:'M2',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu préfères te préparer seul, dans ta bulle, avant de performer.",textB:"Avant une compétition, l'ambiance autour de toi te donne de l'énergie."},
+  {id:'M3',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Le contact avec tes coéquipiers avant le match te booste mentalement.",textB:"Après un effort intense, tu as besoin de silence pour récupérer."},
+  {id:'M4',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Après un effort intense, tu as besoin de silence pour récupérer.",textB:"Le contact avec tes coéquipiers avant le match te booste mentalement."},
+  {id:'M5',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Tu te sens plus vivant quand il y a du monde et de l'animation autour de toi.",textB:"Tu puises ta force dans ta vie intérieure plus que dans les autres."},
+  {id:'M6',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu puises ta force dans ta vie intérieure plus que dans les autres.",textB:"Tu te sens plus vivant quand il y a du monde et de l'animation autour de toi."},
+  {id:'M7',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Dans un groupe, tu prends naturellement la parole sans effort.",textB:"Tu as besoin de temps seul pour recharger tes batteries mentales."},
+  {id:'M8',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu as besoin de temps seul pour recharger tes batteries mentales.",textB:"Dans un groupe, tu prends naturellement la parole sans effort."},
+  {id:'M9',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"L'énergie collective d'une équipe t'élève dans ta performance.",textB:"Tu performes mieux quand tu peux te concentrer sans interactions."},
+  {id:'M10',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu performes mieux quand tu peux te concentrer sans interactions.",textB:"L'énergie collective d'une équipe t'élève dans ta performance."},
+  {id:'M11',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Tu aimes partager tes émotions et ressentis après un match.",textB:"Tu gardes souvent tes pensées pour toi, même dans le groupe."},
+  {id:'M12',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu gardes souvent tes pensées pour toi, même dans le groupe.",textB:"Tu aimes partager tes émotions et ressentis après un match."},
+  {id:'M13',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"L'atmosphère d'un stade plein te stimule plus qu'elle ne te perturbe.",textB:"Tu trouves les longues conversations en groupe épuisantes."},
+  {id:'M14',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu trouves les longues conversations en groupe épuisantes.",textB:"L'atmosphère d'un stade plein te stimule plus qu'elle ne te perturbe."},
+  {id:'M15',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Tu apprends mieux quand tu peux échanger avec les autres.",textB:"Tu préfères réfléchir seul avant de donner ton avis."},
+  {id:'M16',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu préfères réfléchir seul avant de donner ton avis.",textB:"Tu apprends mieux quand tu peux échanger avec les autres."},
+  {id:'M17',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"La dynamique collective te donne envie de te dépasser.",textB:"Le calme intérieur est ta principale ressource avant de performer."},
+  {id:'M18',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Le calme intérieur est ta principale ressource avant de performer.",textB:"La dynamique collective te donne envie de te dépasser."},
+  {id:'M19',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Tu te sens à l'aise pour exprimer tes idées en public.",textB:"Tu as besoin d'espace personnel même au sein de ton équipe."},
+  {id:'M20',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu as besoin d'espace personnel même au sein de ton équipe.",textB:"Tu te sens à l'aise pour exprimer tes idées en public."},
+  {id:'M21',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Les encouragements des autres pendant l'effort t'aident vraiment.",textB:"Tu performes mieux dans les environnements calmes et peu chargés."},
+  {id:'M22',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu performes mieux dans les environnements calmes et peu chargés.",textB:"Les encouragements des autres pendant l'effort t'aident vraiment."},
+  {id:'M23',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Tu aimes les réunions d'équipe et les temps collectifs.",textB:"Tu préfères les échanges en tête-à-tête aux réunions de groupe."},
+  {id:'M24',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu préfères les échanges en tête-à-tête aux réunions de groupe.",textB:"Tu aimes les réunions d'équipe et les temps collectifs."},
+  {id:'M25',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"L'interaction avec le public ou les supporters t'energise.",textB:"Tu te ressources dans la solitude et la tranquillité après compétition."},
+  {id:'M26',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu apprends mieux avec des exercices précis et des répétitions concrètes.",textB:"Tu perçois rapidement les possibilités cachées dans une situation de jeu."},
+  {id:'M27',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu perçois rapidement les possibilités cachées dans une situation de jeu.",textB:"Tu apprends mieux avec des exercices précis et des répétitions concrètes."},
+  {id:'M28',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu fais confiance à ce que tu observes directement sur le terrain.",textB:"Tu anticipes souvent ce qui va se passer avant que ça arrive."},
+  {id:'M29',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu anticipes souvent ce qui va se passer avant que ça arrive.",textB:"Tu fais confiance à ce que tu observes directement sur le terrain."},
+  {id:'M30',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères des consignes claires et détaillées plutôt que des principes généraux.",textB:"Tu comprends vite le sens global d'un exercice sans avoir besoin de détails."},
+  {id:'M31',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu comprends vite le sens global d'un exercice sans avoir besoin de détails.",textB:"Tu préfères des consignes claires et détaillées plutôt que des principes généraux."},
+  {id:'M32',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu t'appuies sur ton expérience passée pour gérer les situations nouvelles.",textB:"Tu fais souvent confiance à tes intuitions dans les moments décisifs."},
+  {id:'M33',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu fais souvent confiance à tes intuitions dans les moments décisifs.",textB:"Tu t'appuies sur ton expérience passée pour gérer les situations nouvelles."},
+  {id:'M34',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères voir une démonstration concrète avant d'essayer.",textB:"Tu imagines facilement différentes façons de réaliser un geste."},
+  {id:'M35',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu imagines facilement différentes façons de réaliser un geste.",textB:"Tu préfères voir une démonstration concrète avant d'essayer."},
+  {id:'M36',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu retiens mieux les informations quand elles sont illustrées par des exemples réels.",textB:"Tu aimes explorer de nouvelles approches même sans garantie de résultat."},
+  {id:'M37',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu aimes explorer de nouvelles approches même sans garantie de résultat.",textB:"Tu retiens mieux les informations quand elles sont illustrées par des exemples réels."},
+  {id:'M38',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu es à l'aise avec les routines éprouvées qui ont fait leurs preuves.",textB:"Tu t'ennuies rapidement quand les exercices sont trop répétitifs."},
+  {id:'M39',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu t'ennuies rapidement quand les exercices sont trop répétitifs.",textB:"Tu es à l'aise avec les routines éprouvées qui ont fait leurs preuves."},
+  {id:'M40',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères maîtriser parfaitement une technique avant d'en apprendre une nouvelle.",textB:"Tu vois facilement les liens entre des situations apparemment différentes."},
+  {id:'M41',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu vois facilement les liens entre des situations apparemment différentes.",textB:"Tu préfères maîtriser parfaitement une technique avant d'en apprendre une nouvelle."},
+  {id:'M42',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu fais confiance aux données et aux statistiques pour évaluer ta progression.",textB:"Tu as souvent des idées originales pour résoudre des problèmes tactiques."},
+  {id:'M43',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu as souvent des idées originales pour résoudre des problèmes tactiques.",textB:"Tu fais confiance aux données et aux statistiques pour évaluer ta progression."},
+  {id:'M44',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères un plan structuré à une approche improvisée.",textB:"Tu perçois rapidement l'intention derrière une consigne sans que tout soit expliqué."},
+  {id:'M45',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu perçois rapidement l'intention derrière une consigne sans que tout soit expliqué.",textB:"Tu préfères un plan structuré à une approche improvisée."},
+  {id:'M46',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu analyses les situations à partir de faits précis et observables.",textB:"Tu as une vision globale naturelle qui te permet de voir ce que les autres ne voient pas."},
+  {id:'M47',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu as une vision globale naturelle qui te permet de voir ce que les autres ne voient pas.",textB:"Tu analyses les situations à partir de faits précis et observables."},
+  {id:'M48',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu as besoin de répétitions pour vraiment intégrer un nouveau geste.",textB:"Tu t'adaptes facilement quand la situation change de façon inattendue."},
+  {id:'M49',type:'binary',axe:'CI',pole:'I',title:'Perception',text:"Tu t'adaptes facilement quand la situation change de façon inattendue.",textB:"Tu as besoin de répétitions pour vraiment intégrer un nouveau geste."},
+  {id:'M50',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères les certitudes aux hypothèses quand tu dois décider.",textB:"L'incertitude te stimule et te pousse à trouver des solutions créatives."},
+  {id:'M51',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Dans une décision importante, tu te bases d'abord sur la logique et les faits.",textB:"Tu prends en compte les émotions des autres avant de décider."},
+  {id:'M52',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Tu prends en compte les émotions des autres avant de décider.",textB:"Dans une décision importante, tu te bases d'abord sur la logique et les faits."},
+  {id:'M53',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu préfères un retour direct et factuel même s'il est difficile à entendre.",textB:"La qualité des relations dans ton équipe a un fort impact sur ta performance."},
+  {id:'M54',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"La qualité des relations dans ton équipe a un fort impact sur ta performance.",textB:"Tu préfères un retour direct et factuel même s'il est difficile à entendre."},
+  {id:'M55',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu analyses une contre-performance de façon objective sans te laisser envahir par les émotions.",textB:"Tu es très attentif au bien-être de tes coéquipiers."},
+  {id:'M56',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Tu es très attentif au bien-être de tes coéquipiers.",textB:"Tu analyses une contre-performance de façon objective sans te laisser envahir par les émotions."},
+  {id:'M57',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu appliques les règles même quand elles semblent défavorables à quelqu'un.",textB:"L'atmosphère émotionnelle du groupe influence beaucoup ton état mental."},
+  {id:'M58',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"L'atmosphère émotionnelle du groupe influence beaucoup ton état mental.",textB:"Tu appliques les règles même quand elles semblent défavorables à quelqu'un."},
+  {id:'M59',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu préfères une évaluation précise et chiffrée à une évaluation globale.",textB:"Tu as besoin de te sentir apprécié pour donner le meilleur de toi-même."},
+  {id:'M60',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Tu as besoin de te sentir apprécié pour donner le meilleur de toi-même.",textB:"Tu préfères une évaluation précise et chiffrée à une évaluation globale."},
+  {id:'M61',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu arrives facilement à rester détaché émotionnellement quand il faut décider.",textB:"Tu es naturellement empathique et tu ressens facilement ce que vivent les autres."},
+  {id:'M62',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Tu es naturellement empathique et tu ressens facilement ce que vivent les autres.",textB:"Tu arrives facilement à rester détaché émotionnellement quand il faut décider."},
+  {id:'M63',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu cherches d'abord la solution la plus efficace, quitte à ce qu'elle soit tranchée.",textB:"Tu accordes beaucoup d'importance au respect et à la reconnaissance dans ton groupe."},
+  {id:'M64',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Tu accordes beaucoup d'importance au respect et à la reconnaissance dans ton groupe.",textB:"Tu cherches d'abord la solution la plus efficace, quitte à ce qu'elle soit tranchée."},
+  {id:'M65',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu évalues ta performance sur des critères objectifs et mesurables.",textB:"Une critique formulée sans tact peut vraiment te déstabiliser."},
+  {id:'M66',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Une critique formulée sans tact peut vraiment te déstabiliser.",textB:"Tu évalues ta performance sur des critères objectifs et mesurables."},
+  {id:'M67',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu peux faire abstraction de tes émotions pour prendre la meilleure décision tactique.",textB:"Tu es motivé par les valeurs et le sens plus que par les résultats purs."},
+  {id:'M68',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Tu es motivé par les valeurs et le sens plus que par les résultats purs.",textB:"Tu peux faire abstraction de tes émotions pour prendre la meilleure décision tactique."},
+  {id:'M69',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu ne laisses pas les tensions relationnelles affecter ta concentration.",textB:"Tu as besoin d'un environnement humain positif pour performer à ton meilleur niveau."},
+  {id:'M70',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Tu as besoin d'un environnement humain positif pour performer à ton meilleur niveau.",textB:"Tu ne laisses pas les tensions relationnelles affecter ta concentration."},
+  {id:'M71',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu préfères la vérité utile à un encouragement qui n'est pas mérité.",textB:"Tu cherches naturellement à créer de l'harmonie dans ton groupe."},
+  {id:'M72',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Tu cherches naturellement à créer de l'harmonie dans ton groupe.",textB:"Tu préfères la vérité utile à un encouragement qui n'est pas mérité."},
+  {id:'M73',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu peux critiquer une performance sans que ça affecte la relation.",textB:"Le lien affectif avec ton coach ou tes coéquipiers est essentiel pour toi."},
+  {id:'M74',type:'binary',axe:'LH',pole:'H',title:'Décision',text:"Le lien affectif avec ton coach ou tes coéquipiers est essentiel pour toi.",textB:"Tu peux critiquer une performance sans que ça affecte la relation."},
+  {id:'M75',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu fais confiance aux processus et aux systèmes plus qu'aux intuitions humaines.",textB:"Les relations humaines dans l'équipe ont plus d'impact sur ta performance que les systèmes."},
+  {id:'M76',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu te prépares toujours avec une routine précise avant de performer.",textB:"Tu t'adaptes facilement quand le planning change au dernier moment."},
+  {id:'M77',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu t'adaptes facilement quand le planning change au dernier moment.",textB:"Tu te prépares toujours avec une routine précise avant de performer."},
+  {id:'M78',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu aimes avoir un programme d'entraînement clair et planifié à l'avance.",textB:"Tu performes bien même dans les situations non prévues et improvisées."},
+  {id:'M79',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu performes bien même dans les situations non prévues et improvisées.",textB:"Tu aimes avoir un programme d'entraînement clair et planifié à l'avance."},
+  {id:'M80',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu te sens rassuré quand les rôles et les responsabilités sont bien définis.",textB:"Tu trouves les environnements trop rigides étouffants."},
+  {id:'M81',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu trouves les environnements trop rigides étouffants.",textB:"Tu te sens rassuré quand les rôles et les responsabilités sont bien définis."},
+  {id:'M82',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu prépares tes objectifs longtemps à l'avance avec des étapes précises.",textB:"Tu préfères décider en fonction du contexte du moment plutôt que de suivre un plan fixe."},
+  {id:'M83',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu préfères décider en fonction du contexte du moment plutôt que de suivre un plan fixe.",textB:"Tu prépares tes objectifs longtemps à l'avance avec des étapes précises."},
+  {id:'M84',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu es perturbé quand un événement prévu est annulé ou modifié.",textB:"Tu aimes la spontanéité et les surprises dans ton quotidien sportif."},
+  {id:'M85',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu aimes la spontanéité et les surprises dans ton quotidien sportif.",textB:"Tu es perturbé quand un événement prévu est annulé ou modifié."},
+  {id:'M86',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu travailles mieux avec des délais précis et des objectifs mesurables.",textB:"Tu gardes plusieurs options ouvertes le plus longtemps possible avant de trancher."},
+  {id:'M87',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu gardes plusieurs options ouvertes le plus longtemps possible avant de trancher.",textB:"Tu travailles mieux avec des délais précis et des objectifs mesurables."},
+  {id:'M88',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu aimes clore les sujets et ne pas laisser les choses en suspens.",textB:"Tu t'adaptes naturellement aux imprévus sans stress excessif."},
+  {id:'M89',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu t'adaptes naturellement aux imprévus sans stress excessif.",textB:"Tu aimes clore les sujets et ne pas laisser les choses en suspens."},
+  {id:'M90',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tes routines de préparation sont essentielles à ta performance.",textB:"Tu te sens à l'aise dans l'incertitude et tu la gères bien."},
+  {id:'M91',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu te sens à l'aise dans l'incertitude et tu la gères bien.",textB:"Tes routines de préparation sont essentielles à ta performance."},
+  {id:'M92',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu préfères un cadre organisé même si ça laisse peu de place à l'improvisation.",textB:"Tu apprécies les entraînements variés et non répétitifs."},
+  {id:'M93',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu apprécies les entraînements variés et non répétitifs.",textB:"Tu préfères un cadre organisé même si ça laisse peu de place à l'improvisation."},
+  {id:'M94',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu aimes savoir exactement ce qui t'attend avant une compétition importante.",textB:"Tu peux changer de stratégie en cours de match sans perdre tes moyens."},
+  {id:'M95',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu peux changer de stratégie en cours de match sans perdre tes moyens.",textB:"Tu aimes savoir exactement ce qui t'attend avant une compétition importante."},
+  {id:'M96',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu établis des listes, des plans, des check-lists pour te préparer.",textB:"Tu réagis bien à l'improvisation tactique demandée par ton coach."},
+  {id:'M97',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu réagis bien à l'improvisation tactique demandée par ton coach.",textB:"Tu établis des listes, des plans, des check-lists pour te préparer."},
+  {id:'M98',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu te sens mal à l'aise quand les règles du jeu changent sans prévenir.",textB:"Tu trouves facilement des solutions créatives dans les situations inattendues."},
+  {id:'M99',type:'binary',axe:'StF',pole:'F',title:'Organisation',text:"Tu trouves facilement des solutions créatives dans les situations inattendues.",textB:"Tu te sens mal à l'aise quand les règles du jeu changent sans prévenir."},
+  {id:'M100',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Une bonne organisation est pour toi la base d'une performance réussie.",textB:"Tu t'épanouis dans les contextes où tu peux improviser et t'adapter librement."}
 ]
 
-// ═══ PSYCHO — 20 QUESTIONS ═══
-const PSYCHO_QUESTIONS = [
+// ═══════════════════════════════════════════════════
+// PSYCHO — 50 QUESTIONS COMPLÈTES
+// ═══════════════════════════════════════════════════
+const PSYCHO_Q=[
   {id:'PE1',type:'situational',cat:'Réactions',situation:"Tu commets une erreur décisive au pire moment du match.",text:"Comment tu réagis émotionnellement ?",options:[{text:"Je ressens une frustration intense mais elle me propulse.",scores:{combatif:5,expressif:2,analytique:1,absorbant:0}},{text:"Mes émotions explosent et je le montre visiblement.",scores:{combatif:1,expressif:5,analytique:0,absorbant:1}},{text:"Je prends du recul mentalement et j'analyse ce qui s'est passé.",scores:{combatif:1,expressif:0,analytique:5,absorbant:2}},{text:"L'émotion me submerge et j'ai du mal à rester dans le match.",scores:{combatif:0,expressif:2,analytique:1,absorbant:5}},{text:"Je reste calme extérieurement mais je rumine intérieurement.",scores:{combatif:2,expressif:0,analytique:3,absorbant:3}}]},
-  {id:'PE2',type:'situational',cat:'Réactions',situation:"Un coéquipier te reproche publiquement une erreur que tu n'as pas commise.",text:"Quelle est ta réaction spontanée ?",options:[{text:"Je monte au créneau immédiatement pour défendre ma position.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je vis ça comme une injustice et j'en suis très affecté.",scores:{combatif:1,expressif:4,analytique:0,absorbant:5}},{text:"Je reste silencieux sur le moment et j'en parle calmement après.",scores:{combatif:1,expressif:0,analytique:5,absorbant:2}},{text:"Je me sens envahi par la honte ou la colère sans savoir quoi faire.",scores:{combatif:0,expressif:2,analytique:0,absorbant:5}},{text:"Je relativise et je passe à autre chose rapidement.",scores:{combatif:3,expressif:1,analytique:4,absorbant:0}}]},
+  {id:'PE2',type:'situational',cat:'Réactions',situation:"Un coéquipier te reproche publiquement une erreur que tu n'as pas commise.",text:"Quelle est ta réaction spontanée ?",options:[{text:"Je monte au créneau immédiatement pour défendre ma position.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je vis ça comme une injustice et j'en suis très affecté émotionnellement.",scores:{combatif:1,expressif:4,analytique:0,absorbant:5}},{text:"Je reste silencieux sur le moment et j'en parle calmement après.",scores:{combatif:1,expressif:0,analytique:5,absorbant:2}},{text:"Je me sens envahi par la honte ou la colère sans savoir quoi faire.",scores:{combatif:0,expressif:2,analytique:0,absorbant:5}},{text:"Je relativise et je passe à autre chose rapidement.",scores:{combatif:3,expressif:1,analytique:4,absorbant:0}}]},
   {id:'PE3',type:'situational',cat:'Pression',situation:"Tu dois performer devant un public nombreux et hostile.",text:"Comment tu vis ce moment ?",options:[{text:"L'hostilité m'électrise et décuple mon envie de gagner.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je cherche à capter l'énergie du public, même hostile.",scores:{combatif:2,expressif:5,analytique:0,absorbant:1}},{text:"Je me concentre sur ma performance en faisant abstraction du public.",scores:{combatif:2,expressif:0,analytique:5,absorbant:1}},{text:"L'atmosphère hostile me déstabilise profondément.",scores:{combatif:0,expressif:1,analytique:1,absorbant:5}},{text:"Je ressens une légère appréhension mais je gère.",scores:{combatif:3,expressif:2,analytique:3,absorbant:2}}]},
   {id:'PE4',type:'situational',cat:'Émotion positive',situation:"Tu apprends la veille d'une compétition que tu es titulaire pour la première fois.",text:"Quelle émotion domine ?",options:[{text:"Une excitation intense mêlée d'une envie de prouver ma valeur.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Une joie débordante que j'ai du mal à contenir.",scores:{combatif:1,expressif:5,analytique:0,absorbant:1}},{text:"Une satisfaction calme et une concentration accrue.",scores:{combatif:2,expressif:0,analytique:5,absorbant:1}},{text:"Une anxiété qui prend rapidement le dessus.",scores:{combatif:0,expressif:1,analytique:1,absorbant:5}},{text:"Un mélange de joie et d'inquiétude qui s'équilibrent.",scores:{combatif:2,expressif:2,analytique:2,absorbant:3}}]},
-  {id:'PE5',type:'situational',cat:'Résilience',situation:"Tu traverses une période de 3 semaines sans résultats satisfaisants.",text:"Comment tu traverses ce moment ?",options:[{text:"La frustration me pousse à travailler encore plus intensément.",scores:{combatif:5,expressif:2,analytique:2,absorbant:0}},{text:"Je le vis émotionnellement fort et j'ai besoin d'en parler.",scores:{combatif:1,expressif:5,analytique:0,absorbant:2}},{text:"J'analyse méthodiquement ce qui ne fonctionne pas.",scores:{combatif:1,expressif:0,analytique:5,absorbant:1}},{text:"Je me sens découragé et j'ai du mal à me motiver.",scores:{combatif:0,expressif:1,analytique:0,absorbant:5}},{text:"Je relativise et j'attends que ça repasse.",scores:{combatif:2,expressif:1,analytique:3,absorbant:2}}]},
+  {id:'PE5',type:'situational',cat:'Résilience',situation:"Tu traverses une période de 3 semaines sans résultats satisfaisants.",text:"Comment tu traverses ce moment ?",options:[{text:"La frustration me pousse à travailler encore plus intensément.",scores:{combatif:5,expressif:2,analytique:2,absorbant:0}},{text:"Je le vis émotionnellement fort et j'ai besoin d'en parler autour de moi.",scores:{combatif:1,expressif:5,analytique:0,absorbant:2}},{text:"J'analyse méthodiquement ce qui ne fonctionne pas.",scores:{combatif:1,expressif:0,analytique:5,absorbant:1}},{text:"Je me sens découragé et j'ai du mal à me motiver.",scores:{combatif:0,expressif:1,analytique:0,absorbant:5}},{text:"Je relativise et j'attends que ça repasse.",scores:{combatif:2,expressif:1,analytique:3,absorbant:2}}]},
+  {id:'PE6',type:'situational',cat:'Réactions',situation:"Ton coach annonce un changement tactique radical qui remet en question ton rôle.",text:"Quelle est ta première réaction ?",options:[{text:"Je conteste directement si je ne suis pas d'accord.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je ressens une vive contrariété que j'exprime clairement.",scores:{combatif:2,expressif:5,analytique:0,absorbant:2}},{text:"Je pose des questions pour comprendre la logique avant de réagir.",scores:{combatif:1,expressif:0,analytique:5,absorbant:1}},{text:"Je me sens perdu et anxieux face à ce changement.",scores:{combatif:0,expressif:1,analytique:1,absorbant:5}},{text:"J'accepte et je m'adapte sans trop en faire.",scores:{combatif:2,expressif:1,analytique:3,absorbant:1}}]},
+  {id:'PE7',type:'situational',cat:'Victoire',situation:"Tu gagnes un match important que tout le monde pensait perdu d'avance.",text:"Comment tu te sens dans ce moment ?",options:[{text:"Une fierté intense mêlée d'un sentiment de puissance.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Une joie explosive que je partage immédiatement avec tout le monde.",scores:{combatif:2,expressif:5,analytique:0,absorbant:1}},{text:"Une satisfaction froide et l'envie d'analyser comment c'est arrivé.",scores:{combatif:1,expressif:0,analytique:5,absorbant:1}},{text:"Un soulagement immense mêlé d'incrédulité.",scores:{combatif:0,expressif:2,analytique:1,absorbant:5}},{text:"De la joie mais je reste sobre et concentré sur la suite.",scores:{combatif:3,expressif:2,analytique:4,absorbant:0}}]},
+  {id:'PE8',type:'situational',cat:'Collectif',situation:"Un coéquipier fait une erreur qui coûte le match à toute l'équipe.",text:"Quelle est ta réaction émotionnelle ?",options:[{text:"Je ressens de la colère mais je la retourne vers la prochaine compétition.",scores:{combatif:5,expressif:2,analytique:2,absorbant:0}},{text:"J'exprime ma déception mais je soutiens aussi mon coéquipier.",scores:{combatif:1,expressif:5,analytique:0,absorbant:2}},{text:"Je cherche à comprendre ce qui s'est passé sans juger.",scores:{combatif:1,expressif:0,analytique:5,absorbant:1}},{text:"Je suis envahi par la tristesse ou la frustration durablement.",scores:{combatif:0,expressif:2,analytique:0,absorbant:5}},{text:"Je le vis mais je relativise assez vite.",scores:{combatif:2,expressif:1,analytique:3,absorbant:1}}]},
+  {id:'PE9',type:'situational',cat:'Leadership',situation:"Tu dois prendre la parole devant toute ton équipe après une défaite difficile.",text:"Comment tu vis ce moment ?",options:[{text:"Je parle avec conviction et je booste l'équipe malgré la défaite.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je partage sincèrement mes émotions et celles que je perçois chez les autres.",scores:{combatif:1,expressif:5,analytique:0,absorbant:2}},{text:"Je structure un message clair et factuel sur ce qu'il faut changer.",scores:{combatif:1,expressif:0,analytique:5,absorbant:1}},{text:"Je préfère ne rien dire car mes émotions sont trop présentes.",scores:{combatif:0,expressif:1,analytique:0,absorbant:5}},{text:"Je dis quelques mots sobres et je laisse les autres s'exprimer.",scores:{combatif:2,expressif:1,analytique:3,absorbant:1}}]},
+  {id:'PE10',type:'situational',cat:'Élimination',situation:"Tu es éliminé d'une compétition importante à laquelle tu te préparais depuis 6 mois.",text:"Quelle est ta réaction naturelle ?",options:[{text:"La déception se transforme rapidement en envie de revenir plus fort.",scores:{combatif:5,expressif:2,analytique:2,absorbant:0}},{text:"Je pleure ou j'exprime fortement ma douleur, puis je passe à autre chose.",scores:{combatif:1,expressif:5,analytique:0,absorbant:2}},{text:"J'analyse ce qui n'a pas fonctionné pour ne pas répéter les mêmes erreurs.",scores:{combatif:1,expressif:0,analytique:5,absorbant:1}},{text:"Je traverse une longue période de découragement dont j'ai du mal à sortir.",scores:{combatif:0,expressif:1,analytique:0,absorbant:5}},{text:"Je vis la déception mais je rebondis dans un délai raisonnable.",scores:{combatif:3,expressif:2,analytique:3,absorbant:1}}]},
   {id:'PE11',type:'likert',cat:'Régulation',text:"Je sais identifier précisément ce que je ressens avant, pendant et après une compétition."},
   {id:'PE12',type:'likert',cat:'Régulation',text:"Je dispose de techniques concrètes pour calmer mon stress avant de performer."},
   {id:'PE13',type:'likert',cat:'Régulation',text:"Quand une émotion négative surgit en compétition, je peux la mettre de côté rapidement."},
+  {id:'PE14',type:'likert',cat:'Régulation',text:"Mon humeur du matin influence fortement ma performance dans la journée."},
   {id:'PE15',type:'likert',cat:'Régulation',text:"Je sais utiliser mes émotions positives comme carburant de performance."},
   {id:'PE16',type:'likert',cat:'Régulation',text:"Après un incident émotionnel fort, je reviens rapidement à un état de performance optimal."},
-  {id:'PE21',type:'likert',cat:'Neurochimie',text:"J'ai naturellement un niveau d'énergie et de motivation élevé."},
+  {id:'PE17',type:'likert',cat:'Régulation',text:"Je fais la différence entre une émotion passagère et un état mental profond."},
+  {id:'PE18',type:'likert',cat:'Régulation',text:"J'ai tendance à ruminer les événements négatifs longtemps après qu'ils se sont produits."},
+  {id:'PE19',type:'likert',cat:'Régulation',text:"Je peux performer correctement même quand je traverse une période émotionnellement difficile."},
+  {id:'PE20',type:'likert',cat:'Régulation',text:"Je sais demander du soutien émotionnel quand j'en ai besoin sans me sentir vulnérable."},
+  {id:'PE21',type:'likert',cat:'Neurochimie',text:"J'ai naturellement un niveau d'énergie et de motivation élevé — je n'ai pas besoin d'être stimulé pour m'activer."},
   {id:'PE22',type:'likert',cat:'Neurochimie',text:"Je recherche constamment de nouveaux défis et la routine me pèse rapidement."},
   {id:'PE23',type:'likert',cat:'Neurochimie',text:"Je me sens généralement stable et serein, même dans les périodes de forte pression."},
-  {id:'PE25',type:'likert',cat:'Neurochimie',text:"Je m'active très vite face à un danger ou une urgence."},
+  {id:'PE24',type:'likert',cat:'Neurochimie',text:"Mon humeur varie peu — je suis relativement constant quelle que soit la situation."},
+  {id:'PE25',type:'likert',cat:'Neurochimie',text:"Je m'active très vite face à un danger ou une urgence — ma réactivité est très rapide."},
+  {id:'PE26',type:'likert',cat:'Neurochimie',text:"J'ai souvent du mal à me calmer ou à décrocher mentalement après une compétition intense."},
   {id:'PE27',type:'likert',cat:'Neurochimie',text:"J'apprends vite et je retiens bien les nouvelles informations ou techniques."},
-  {id:'PE41',type:'likert',cat:'Traits cognitifs',text:"Mon cerveau fonctionne souvent à grande vitesse — j'ai beaucoup de pensées simultanées."},
-  {id:'PE42',type:'likert',cat:'Traits cognitifs',text:"Je m'ennuie très vite quand une tâche n'est pas stimulante."},
-  {id:'PE44',type:'likert',cat:'Traits cognitifs',text:"Je ressens les émotions, les ambiances et les sensations plus intensément que la plupart."},
+  {id:'PE28',type:'likert',cat:'Neurochimie',text:"Je ressens parfois des baisses d'énergie inexpliquées ou des périodes de démotivation profonde."},
+  {id:'PE29',type:'likert',cat:'Neurochimie',text:"Mes émotions sont souvent très intenses — je ressens les choses plus fortement que les autres."},
+  {id:'PE30',type:'likert',cat:'Neurochimie',text:"J'ai besoin de rituels ou de routines précises pour me sentir stable et performant."},
+  {id:'PE31',type:'likert',cat:'Coping',text:"Avant une compétition stressante, je m'isole pour me concentrer et entrer dans ma bulle."},
+  {id:'PE32',type:'likert',cat:'Coping',text:"Quand je ressens un stress intense, je cherche à en parler avec quelqu'un."},
+  {id:'PE33',type:'likert',cat:'Coping',text:"Après une mauvaise performance, je me défoule physiquement pour récupérer mentalement."},
+  {id:'PE34',type:'likert',cat:'Coping',text:"J'utilise la visualisation mentale comme outil de préparation régulier."},
+  {id:'PE35',type:'likert',cat:'Coping',text:"J'ai des stratégies de gestion du stress claires et efficaces que j'utilise en compétition."},
+  {id:'PE36',type:'likert',cat:'Coping',text:"Quand je suis épuisé mentalement, le repos et le silence sont ma première ressource."},
+  {id:'PE37',type:'likert',cat:'Coping',text:"Je gère les conflits avec mes coéquipiers directement et sans attendre."},
+  {id:'PE38',type:'likert',cat:'Coping',text:"Mes routines de préparation avant compétition sont précises et efficaces."},
+  {id:'PE39',type:'likert',cat:'Coping',text:"Face à plusieurs sources de stress simultanées, je sais prioriser et traiter une chose à la fois."},
+  {id:'PE40',type:'likert',cat:'Coping',text:"Après une semaine intense, je sais exactement comment récupérer mentalement."},
+  {id:'PE41',type:'likert',cat:'Traits cognitifs',text:"Mon cerveau fonctionne souvent à grande vitesse — j'ai beaucoup de pensées simultanées qui s'enchaînent."},
+  {id:'PE42',type:'likert',cat:'Traits cognitifs',text:"Je m'ennuie très vite quand une tâche n'est pas stimulante ou quand le rythme est trop lent."},
+  {id:'PE43',type:'likert',cat:'Traits cognitifs',text:"J'ai souvent du mal à maintenir mon attention sur une tâche longue et répétitive même si je le veux vraiment."},
+  {id:'PE44',type:'likert',cat:'Traits cognitifs',text:"Je ressens les émotions, les ambiances et les sensations plus intensément que la plupart des gens."},
+  {id:'PE45',type:'likert',cat:'Traits cognitifs',text:"Je comprends souvent les choses très vite et j'ai besoin d'aller à l'essentiel — les explications trop longues m'épuisent."},
+  {id:'PE46',type:'likert',cat:'Traits cognitifs',text:"J'ai tendance à agir ou parler impulsivement, parfois avant d'avoir fini de réfléchir."},
   {id:'PE47',type:'likert',cat:'Traits cognitifs',text:"Je perçois des détails ou des nuances que les autres semblent ne pas remarquer."},
-  {id:'PE48',type:'likert',cat:'Traits cognitifs',text:"Quand quelque chose me passionne vraiment, je peux m'y concentrer pendant des heures."}
+  {id:'PE48',type:'likert',cat:'Traits cognitifs',text:"Quand quelque chose me passionne vraiment, je peux m'y concentrer pendant des heures sans m'en apercevoir."},
+  {id:'PE49',type:'likert',cat:'Traits cognitifs',text:"On m'a souvent dit que je réagissais de façon disproportionnée ou trop intense à certaines situations."},
+  {id:'PE50',type:'likert',cat:'Traits cognitifs',text:"J'ai l'impression que mon mode de fonctionnement est différent de la plupart des gens autour de moi."}
 ]
 
-// ═══════════════════════════════════════════
-// CALCUL DES RÉSULTATS
-// ═══════════════════════════════════════════
-
-function calcResults(type, answers, questions) {
-  if (type === 'CMP') return calcCMP(answers, questions)
-  if (type === 'PMP') return calcPMP(answers, questions)
-  if (type === 'MPA') return calcMPA(answers, questions)
-  if (type === 'PSYCHO') return calcPSYCHO(answers, questions)
-  return { globalScore: 0, profilCode: '—', profilLabel: '—', scores: {}, dimensions: [] }
+// ═══════════════════════════════════════════════════
+// PROFILS MPA
+// ═══════════════════════════════════════════════════
+const MPA_PROFILS={
+  P0000:{code:'D1',nom:'Compétiteur tactique',famille:'D — Dissocié / ST',marche:'🌍 Marche terrienne',description:"Profil d'action immédiate et de précision tactique. Vous avez une capacité naturelle à faire des choix rapides et efficaces dans l'instant. Ancré dans le concret et stimulé par le collectif, vous prenez les décisions avec une logique structurée.",besoins:"Choix tactiques possibles, impact immédiat et efficace",risques:"Vision idéale parfois décalée de la réalité du terrain",coaching:"Ancrez vos objectifs dans la réalité concrète. Travaillez la vision à long terme.",sport:["⚽ Football : position centrale, décisions rapides","🥊 Combat : garde basse et ancrée, puissance dans les appuis","🏀 Basketball : poste 4/5, jeu dans la raquette","🎾 Tennis : jeu de fond de court, puissance dans les échanges","🏉 Rugby : pilier ou numéro 8, impact au contact"]},
+  P0001:{code:'D2',nom:'Pragmatique précis',famille:'D — Dissocié / ST',marche:'🌍 Marche terrienne',description:"Profil de précision et de pragmatisme. Vous combinez efficacité et maîtrise de l'environnement. Concret, stimulé par le groupe, logique dans vos décisions, vous aimez la fluidité et l'adaptation.",besoins:"Précision et efficacité, adaptabilité dans un cadre solide",risques:"Créativité parfois étouffée par trop de structure",coaching:"Développez la régularité dans l'expression de votre créativité.",sport:["⚽ Football : latéral défensif, rigueur tactique","🥊 Combat : technique précise et répétée","🎾 Tennis : service précis, placement géométrique","🏊 Natation : technique de nage ultra-précise"]},
+  P0010:{code:'D3',nom:'Contrôleur stratégique',famille:'D — Dissocié / ST',marche:'🌍 Marche terrienne',description:"Profil de contrôle et de maîtrise stratégique. Concret et organisé, stimulé par le collectif, vous prenez des décisions avec le cœur tout en cherchant la structure.",besoins:"Contrôle et prévisibilité, maîtrise de l'environnement",risques:"Se perdre dans un dédale de contradictions entre logique et humain",coaching:"Travailler l'acceptation de l'imprévu sans perdre ses repères.",sport:["⚽ Football : défenseur central, organisation défensive","🏈 Football américain : quarterback, lecture de jeu","🎾 Tennis : jeu tactique construit","⛷️ Ski alpin : technique millimétrée"]},
+  P0011:{code:'D4',nom:'Architecte fiable',famille:'D — Dissocié / ST',marche:'🌍 Marche terrienne',description:"Profil de fiabilité et d'organisation. Vous excellez dans la structuration méthodique de l'action avec une dimension humaine forte et une grande fluidité d'adaptation.",besoins:"Prévisibilité avec chaleur humaine, organisation souple",risques:"Ne plus distinguer ses désirs de la réalité",coaching:"Développer l'assertivité quand la réalité ne correspond pas au plan.",sport:["⚽ Football : gardien de but, organisation de la défense","🏉 Rugby : demi de mêlée, organisation du jeu","⛳ Golf : répétition méthodique du geste","🤸 Gymnastique : enchaînements millimétrés"]},
+  P0100:{code:'G1',nom:'Performeur expressif',famille:'G — Associé / SF',marche:'🌍 Marche terrienne',description:"Profil expressif et scénique. Vous adorez la compétition et puisez votre énergie dans l'impact sur les autres. Intuitif, stimulé socialement, logique et structuré.",besoins:"Impact et sens dans la connexion aux autres",risques:"Se prendre la tête s'il ne peut pas être suffisant pour les autres",coaching:"Développez la régularité technique. Centrez-vous sur vos propres besoins.",sport:["⚽ Football : avant-centre ou meneur, impact visible","🏀 Basketball : shooting guard, jeu expressif","🎾 Tennis : jeu spectaculaire, winners"]},
+  P0101:{code:'G2',nom:'Leader spontané',famille:'G — Associé / SF',marche:'🌍 Marche terrienne',description:"Profil de leadership naturel et spontané. Vous prenez naturellement la tête du groupe. Intuitif, social, logique, flexible.",besoins:"Pole position, prendre le lead, cohérence avec soi-même",risques:"Devenir dictateur, imposer sa vision sans écoute",coaching:"Développer l'écoute et la confiance aux autres.",sport:["⚽ Football : capitaine d'équipe, milieu leader","🏉 Rugby : capitaine, numéro 8","🏀 Basketball : meneur de jeu","🏐 Volleyball : passeur, coordinateur"]},
+  P0110:{code:'G3',nom:'Connecteur loyal',famille:'G — Associé / SF',marche:'🌍 Marche terrienne',description:"Profil de connexion et de loyauté. Vous créez des liens forts et durables. Intuitif, social, humain, structuré.",besoins:"Recherche de bien-être dans la connexion avec d'autres",risques:"Apprentissage nécessitant de se sentir intégré par le groupe",coaching:"Développer votre autonomie émotionnelle.",sport:["⚽ Football : milieu relayeur","🏉 Rugby : talonneur, rôle de lien dans le collectif","🏐 Volleyball : libéro, soutien défensif"]},
+  P0111:{code:'G4',nom:'Soutien constant',famille:'G — Associé / SF',marche:'🌍 Marche terrienne',description:"Profil de stabilité et de soutien constant. Vous êtes la colonne vertébrale du collectif. Intuitif, social, humain, flexible.",besoins:"Se trouver confronté avec ses propres besoins personnels",risques:"Être aveugle aux besoins fondamentaux du contexte",coaching:"Développer l'assertivité individuelle.",sport:["⚽ Football : défenseur central solide","🏉 Rugby : pilier, ancrage au sol","🎽 Marathon : régularité d'allure"]},
+  P1000:{code:'R1',nom:'Créatif enthousiaste',famille:'R — Dissocié / NF',marche:'🌬️ Marche aérienne',description:"Profil expressif et créatif. Votre adaptation et spontanéité sans limite sont vos forces. Concret, solitaire, logique, fluide.",besoins:"Adaptation et spontanéité sans limite",risques:"Rigidité paradoxale quand la créativité est bloquée",coaching:"Développer des automatismes de base. Créer une structure minimale.",sport:["⚽ Football : ailier créatif, dribble, improvisation","🏀 Basketball : small forward créatif, mouvements aériens","🏄 Surf / Snowboard : sports de glisse créatifs"]},
+  P1001:{code:'R2',nom:'Engagé par les valeurs',famille:'R — Dissocié / NF',marche:'🌬️ Marche aérienne',description:"Profil authentique et engagé. Votre performance est profondément liée à votre cohérence avec vos valeurs. Concret, solitaire, logique, adaptable.",besoins:"Se sentir en cohérence avec soi-même",risques:"Devenir trop directif quand les valeurs sont bafouées",coaching:"Relier chaque objectif à vos valeurs.",sport:["⚽ Football : milieu créatif ou ailier, jeu élégant","🎾 Tennis : style personnel et authentique","🏄 Sports de nature : surf, escalade"]},
+  P1010:{code:'R3',nom:'Visionnaire innovant',famille:'R — Dissocié / NF',marche:'🌬️ Marche aérienne',description:"Profil visionnaire et innovant. Vous anticipez les tendances et voyez les possibilités là où les autres voient des obstacles. Concret, solitaire, humain, structuré.",besoins:"Concrétisation des idées en osant prendre des risques",risques:"Vivre décalé par rapport à la réalité",coaching:"Ancrer votre vision dans des repères concrets vérifiables.",sport:["⚽ Football : meneur de jeu visionnaire","🏀 Basketball : playmaker, vision du jeu exceptionnelle","🏒 Hockey : créateur de jeu, vision 360°"]},
+  P1011:{code:'R4',nom:'Intuitif organisé',famille:'R — Dissocié / NF',marche:'🌬️ Marche aérienne',description:"Profil intuitif et organisé. Vous avez une capacité exceptionnelle à virtualiser mentalement les situations. Concret, solitaire, humain, flexible.",besoins:"Capacité à virtualiser tout ce qu'il vit",risques:"Éternel insatisfait qui pense toujours pouvoir faire mieux",coaching:"Faire confiance à vos intuitions. Varier votre entourage.",sport:["⚽ Football : meneur de jeu intuitif","🎾 Tennis : anticipation remarquable","🧗 Escalade : lecture de la voie mentalement avant de grimper"]},
+  P1100:{code:'C1',nom:'Innovateur créatif',famille:'C — Associé / NT',marche:'🌬️ Marche aérienne',description:"Profil d'innovation et d'improvisation intellectuelle. Vous trouvez des solutions originales en temps réel. Intuitif, social, logique, structuré.",besoins:"Improvisation et expertise en cas d'activation intellectuelle",risques:"Se perdre dans le dédale du possible au lieu d'agir",coaching:"Développer des automatismes de base solides.",sport:["⚽ Football : numéro 10 créatif, dribbles inventifs","🏀 Basketball : crossovers, moves uniques","🎭 Freestyle : skateboard, BMX"]},
+  P1101:{code:'C2',nom:'Stratège maître',famille:'C — Associé / NT',marche:'🌬️ Marche aérienne',description:"Profil stratégique et analytique. Vous maîtrisez les systèmes complexes. Intuitif, social, logique, flexible.",besoins:"Maîtrise et prévisibilité, expertise stratégique",risques:"Se mettre au service de ce qu'il pense être juste",coaching:"Développer la confiance dans l'exécution automatique.",sport:["⚽ Football : coordinateur tactique","🎾 Tennis : joueur de stratégie, variations de jeu","🏈 Football américain : quarterback stratège"]},
+  P1110:{code:'C3',nom:'Meneur tactique',famille:'C — Associé / NT',marche:'🌬️ Marche aérienne',description:"Profil de leadership tactique. Vous prenez naturellement le contrôle des situations complexes. Intuitif, social, humain, structuré.",besoins:"Contrôle et prévisibilité, leadership tactique",risques:"Toujours vouloir avoir un plan B",coaching:"Développer la capacité à être pleinement dans l'instant.",sport:["⚽ Football : capitaine stratège","🏀 Basketball : point guard tactique","🏒 Hockey : capitaine organisateur"]},
+  P1111:{code:'C4',nom:'Visionnaire global',famille:'C — Associé / NT',marche:'🌬️ Marche aérienne',description:"Profil visionnaire et perfectionniste. Vision globale exceptionnelle. Intuitif, social, humain, flexible.",besoins:"Vision globale, expertise avec capacité à virtualiser tout",risques:"Éternel insatisfait qui pense toujours pouvoir faire mieux",coaching:"Accepter la performance actuelle comme étape valable.",sport:["⚽ Football : directeur de jeu total, vision 360°","🎾 Tennis : jeu complet, anticipation parfaite","🧗 Escalade : lecture globale de la voie"]}
 }
 
-// CMP
-function calcCMP(answers, questions) {
-  let totalP=0,totalM=0,totalB=0,totalR=0,count=0
-  questions.forEach(q => {
-    const idx = answers[q.id]
-    if (idx === undefined) return
-    const opt = q.options[idx]
-    totalP += opt.scores.pression
-    totalM += opt.scores.maturite
-    totalB += opt.scores.blocage
-    totalR += opt.scores.ressource
-    count++
-  })
-  if (!count) return { globalScore: 0, profilCode: 'CMP-?', profilLabel: '—', scores: {}, dimensions: [] }
-  const scorePression = Math.round((totalP / (count * 5)) * 100)
-  const scoreMaturite = Math.round((totalM / (count * 5)) * 100)
-  const scoreBlocage = Math.round((totalB / (count * 5)) * 100)
-  const scoreRessource = Math.round((totalR / (count * 5)) * 100)
-  const globalScore = Math.round((scorePression + scoreMaturite + (100 - scoreBlocage) + scoreRessource) / 4)
-  const profils = [
-    {min:85,code:'CMP-5',label:'Expert mental',strength:"Maîtrise mentale exceptionnelle sous pression.",weakness:"Risque de sous-estimer la charge mentale des coéquipiers.",tool:"Développez votre rôle de leadership mental au sein du collectif."},
-    {min:70,code:'CMP-4',label:'Performeur solide',strength:"Ressources mentales bien développées.",weakness:"Quelques situations de pression extrême encore déstabilisantes.",tool:"Identifiez les 2-3 situations qui fragilisent encore votre mental."},
-    {min:55,code:'CMP-3',label:'Potentiel engagé',strength:"Volonté réelle de progresser.",weakness:"Confiance fragilisée dans les moments à fort enjeu.",tool:"Développez des routines de recentrage utilisables en compétition."},
-    {min:40,code:'CMP-2',label:'En construction',strength:"Honnêteté dans l'auto-évaluation.",weakness:"Blocages mentaux fréquents en situation de pression.",tool:"Commencez par un accompagnement structuré en préparation mentale."},
-    {min:0,code:'CMP-1',label:'Débutant mental',strength:"Marge de progression considérable.",weakness:"Blocages profonds et fréquents en compétition.",tool:"Commencez par des objectifs de processus très simples."}
-  ]
-  const profil = profils.find(p => globalScore >= p.min) || profils[4]
-  return {
-    globalScore, profilCode: profil.code, profilLabel: profil.label,
-    strength: profil.strength, weakness: profil.weakness, tool: profil.tool,
-    scores: { pression: scorePression, maturite: scoreMaturite, blocage: scoreBlocage, ressource: scoreRessource },
-    dimensions: [
-      { label: 'Sous pression', value: scorePression, color: '#2f4a8a' },
-      { label: 'Maturité mentale', value: scoreMaturite, color: '#1a6a5a' },
-      { label: 'Ressources', value: scoreRessource, color: '#5a3a8a' },
-      { label: 'Sans blocage', value: 100 - scoreBlocage, color: '#C9A84C' }
-    ]
-  }
+// ═══════════════════════════════════════════════════
+// PROFILS PSYCHO
+// ═══════════════════════════════════════════════════
+const PSYCHO_PROFILS={
+  combatif:{code:'PE-C',label:'Combatif',emoji:'🔥',description:"Votre profil émotionnel est celui du combatif — un sportif dont les émotions fonctionnent comme un moteur. La pression, la contrariété, le défi ne vous paralysent pas : ils vous activent. Vous avez naturellement tendance à transformer l'énergie négative en combustible pour l'action. Cette capacité est rare et précieuse dans la haute performance.",coping_naturel:["Action immédiate et engagement physique","Confrontation directe des problèmes","Conversion de la frustration en énergie"],coping_manquant:["Régulation de l'intensité émotionnelle","Récupération mentale active","Écoute des signaux d'épuisement"],recommandations:["Développer une routine de récupération mentale structurée après chaque compétition","Apprendre à distinguer l'intensité utile de la surchauffe émotionnelle","Pratiquer la pleine conscience pour développer le bouton off mental","Travailler la communication émotionnelle avec votre entourage sportif"],neurochimie:[{nt:'Noradrénaline',statut:'dominant',color:'#e76f51',description:"Votre système noradrénergique est très actif. Vous êtes naturellement en état d'alerte et de réactivité élevée, ce qui vous permet de répondre rapidement aux situations de défi.",regulation:["Évitez la suractivation par du sport intense le matin","Pratiquez la cohérence cardiaque pour moduler votre réactivité","Limitez la caféine en période de compétition intense"]},{nt:'Dopamine',statut:'dominant',color:'#e63946',description:"Votre système dopaminergique est robuste. Vous êtes motivé, orienté vers les récompenses et l'accomplissement. La compétition alimente naturellement votre circuit de récompense.",regulation:["Fixez-vous des objectifs à court terme pour maintenir le flux dopaminergique","Célébrez vos victoires — même petites — pour renforcer le circuit","Variez les défis pour éviter la lassitude"]},{nt:'GABA',statut:'carence',color:'#457b9d',description:"Votre système GABAergique (inhibiteur naturel) peut manquer de puissance. Vous avez parfois du mal à vous calmer, à décrocher ou à récupérer mentalement.",regulation:["Pratiquez la respiration lente (4-7-8) quotidiennement","Intégrez le magnésium et la L-théanine dans votre alimentation","Prévoyez des plages de déconnexion totale après les compétitions"]}]},
+  expressif:{code:'PE-E',label:'Expressif',emoji:'🌟',description:"Votre profil émotionnel est celui de l'expressif — un sportif qui vit ses émotions pleinement et les communique naturellement. Vous ne cachez pas ce que vous ressentez, et cette authenticité crée des connexions puissantes avec vos coéquipiers et votre entourage.",coping_naturel:["Expression émotionnelle verbale et non-verbale","Recherche de soutien social","Partage des émotions comme processus de décharge"],coping_manquant:["Régulation interne indépendante du groupe","Distanciation émotionnelle dans les moments décisifs","Gestion des critiques sans se sentir attaqué personnellement"],recommandations:["Développer des ressources de régulation interne indépendantes du contexte social","Apprendre à utiliser l'écriture comme outil de traitement émotionnel","Travailler la dissociation entre émotion ressentie et réponse comportementale","Créer un protocole personnel pour les moments de surcharge émotionnelle"],neurochimie:[{nt:'Dopamine',statut:'dominant',color:'#e63946',description:"Votre système dopaminergique est très actif et orienté vers les interactions sociales et les récompenses relationnelles.",regulation:["Entretenez des relations sociales de qualité pour nourrir votre système","Évitez les environnements monotones en période de préparation","Fixez des micro-objectifs quotidiens pour maintenir l'activation"]},{nt:'Sérotonine',statut:'carence',color:'#2a9d8f',description:"Une légère carence sérotoninergique peut expliquer vos variations d'humeur et votre sensibilité accrue aux rejets et aux critiques.",regulation:["Exposez-vous à la lumière naturelle chaque matin","Pratiquez une activité physique régulière à intensité modérée","Intégrez des aliments riches en tryptophane (noix, bananes, œufs)"]}]},
+  analytique:{code:'PE-A',label:'Analytique',emoji:'🧠',description:"Votre profil émotionnel est celui de l'analytique — un sportif qui traite ses émotions par la pensée et l'analyse. Vous avez une capacité remarquable à prendre du recul, à ne pas vous laisser emporter par les vagues émotionnelles et à trouver de la logique là où d'autres ne voient que le chaos.",coping_naturel:["Analyse et recadrage cognitif","Prise de recul et observation","Résolution de problèmes structurée"],coping_manquant:["Connexion au corps et aux sensations","Expression émotionnelle directe","Lâcher-prise et acceptation de l'incertitude"],recommandations:["Développer une pratique corporelle régulière pour reconnecter intellect et corps","S'autoriser à exprimer ses émotions en environnement sécurisé","Travailler l'intuition comme compétence complémentaire à l'analyse","Apprendre à distinguer la vraie maîtrise émotionnelle de l'évitement émotionnel"],neurochimie:[{nt:'Acétylcholine',statut:'dominant',color:'#6a4c93',description:"Votre système cholinergique est très développé. Vous avez une excellente mémoire procédurale, une grande capacité d'apprentissage et une aptitude naturelle à l'analyse fine.",regulation:["Entretenez votre système avec des exercices de mémoire et d'attention","La choline alimentaire (œufs, foie) soutient votre neurochimie naturelle","Le sommeil de qualité est crucial pour consolider vos apprentissages"]},{nt:'Sérotonine',statut:'dominant',color:'#2a9d8f',description:"Votre stabilité émotionnelle est liée à un bon équilibre sérotoninergique. Vous êtes naturellement posé, constant et peu sujet aux variations d'humeur brutales.",regulation:["Maintenez votre stabilité avec une routine de sommeil régulière","L'activité physique quotidienne renforce votre équilibre naturel","Exposez-vous à la nature et à la lumière naturelle régulièrement"]}]},
+  absorbant:{code:'PE-Ab',label:'Absorbant',emoji:'🌊',description:"Votre profil émotionnel est celui de l'absorbant — un sportif dont le système émotionnel est particulièrement sensible et perméable aux événements extérieurs. Vous absorbez les émotions des situations et des personnes qui vous entourent avec une intensité que peu de gens comprennent vraiment.",coping_naturel:["Retrait et isolement pour récupérer","Recherche de validation externe","Sensibilité aux signaux émotionnels des autres"],coping_manquant:["Régulation émotionnelle active et rapide","Distanciation saine des émotions des autres","Confiance en soi indépendante du contexte"],recommandations:["Mettre en place un protocole de régulation émotionnelle d'urgence utilisable en compétition","Travailler avec un préparateur mental sur la construction d'une confiance indépendante du contexte","Développer une pratique quotidienne de régulation (cohérence cardiaque, méditation)","Identifier et protéger les environnements ressources qui vous régénèrent"],neurochimie:[{nt:'Sérotonine',statut:'carence',color:'#2a9d8f',description:"Une carence sérotoninergique se manifeste par une sensibilité accrue aux critiques, des variations d'humeur et une tendance au ruminage.",regulation:["Exposition quotidienne à la lumière naturelle (minimum 20 minutes le matin)","Activité physique régulière à intensité modérée","Alimentation riche en tryptophane (noix, graines de courge, dinde, bananes)"]},{nt:'GABA',statut:'carence',color:'#457b9d',description:"Votre système GABAergique manque de puissance pour inhiber efficacement les réponses de stress.",regulation:["Cohérence cardiaque 3x5 minutes par jour","Magnésium bisglycinate le soir pour soutenir le système GABA","Yoga ou tai-chi pour activer le système nerveux parasympathique"]},{nt:'Noradrénaline',statut:'dominant',color:'#e76f51',description:"Votre système noradrénergique est hypersensible — il s'active fortement et rapidement face aux stress perçus, même modérés.",regulation:["Techniques de respiration lente pour moduler la réponse","Limiter strictement la caféine et les stimulants","Créer des environnements de récupération calmes et prévisibles"]}]}
 }
 
-// PMP
-function calcPMP(answers, questions) {
-  const dims = {}
-  questions.forEach(q => {
-    const val = answers[q.id]
-    if (!val) return
-    if (!dims[q.dimension]) dims[q.dimension] = { total: 0, count: 0 }
-    dims[q.dimension].total += val
-    dims[q.dimension].count++
-  })
-  const scores = {}
-  const dimensions = []
-  const dimColors = { 'Activation':'#2f4a8a','Attention':'#5a3a8a','Régulation':'#1a6a5a','Engagement':'#8a4a2f','Confiance':'#2f6a8a','Résilience':'#6a2f8a','Cognition':'#4a6a2f','Motricité':'#8a2f5a' }
-  Object.keys(dims).forEach(d => {
-    const pct = Math.round((dims[d].total / (dims[d].count * 5)) * 100)
-    scores[d] = pct
-    dimensions.push({ label: d, value: pct, color: dimColors[d] || '#1B3A6B' })
-  })
-  const globalScore = dimensions.length > 0 ? Math.round(dimensions.reduce((a, d) => a + d.value, 0) / dimensions.length) : 0
-  const sorted = [...dimensions].sort((a, b) => b.value - a.value)
-  const top = sorted[0]
-  const profiles = { 'Activation':'Compétiteur','Attention':'Concentré','Régulation':'Régulateur','Engagement':'Battant','Confiance':'Leader','Résilience':'Résilient','Cognition':'Stratège','Motricité':'Technicien' }
-  const profilLabel = profiles[top?.label] || 'Performeur'
-  const labels = globalScore >= 91 ? ['Profil d\'élite','#1a4a2a'] : globalScore >= 76 ? ['Profil performant','#1a3a6a'] : globalScore >= 61 ? ['Profil confirmé','#2a4a8a'] : globalScore >= 41 ? ['Profil en développement','#6a4a1a'] : ['Profil en construction','#6a1a1a']
-  return {
-    globalScore, profilCode: 'PMP', profilLabel,
-    strength: top ? 'Votre dimension la plus développée est ' + top.label + ' (' + top.value + '%). C\'est votre ressource mentale principale.' : '',
-    weakness: sorted[sorted.length-1] ? sorted[sorted.length-1].label + ' est votre axe de progression prioritaire.' : '',
-    tool: 'Consultez votre radar mental pour identifier les 3 dimensions à travailler en priorité.',
-    scores, dimensions
-  }
-}
-
-// MPA
-function calcMPA(answers, questions) {
-  const counts = { SR:{s:0,total:0}, CI:{s:0,total:0}, LH:{s:0,total:0}, StF:{s:0,total:0} }
-  questions.forEach(q => {
-    const v = answers[q.id]
-    if (!v) return
-    counts[q.axe].total++
-    if (v === 'A') counts[q.axe].s++
-  })
-  const scores = {}
-  Object.keys(counts).forEach(axe => {
-    scores[axe] = counts[axe].total > 0 ? Math.round((counts[axe].s / counts[axe].total) * 100) : 50
-  })
-  const SR = scores.SR >= 50 ? 'S' : 'R'
-  const CI = scores.CI >= 50 ? 'C' : 'I'
-  const LH = scores.LH >= 50 ? 'L' : 'H'
-  const StF = scores.StF >= 50 ? 'St' : 'F'
-  const code4 = SR + CI + LH + StF
-  const axeLabels = {SR:{s:'Stimulation externe',r:'Ressource interne'},CI:{s:'Concret',r:'Intuitif'},LH:{s:'Logique',r:'Humain'},StF:{s:'Structure',r:'Fluidité'}}
-  const dims = Object.keys(scores).map(axe => {
-    const score = scores[axe]
-    const dominant = score >= 50 ? axeLabels[axe].s : axeLabels[axe].r
-    const pct = score >= 50 ? score : 100 - score
-    return { label: dominant + ' (' + axe + ')', value: pct, color: '#1a3a6a' }
-  })
-  const intensities = Object.values(scores).map(s => Math.abs(s - 50))
-  const globalScore = Math.min(100, Math.round(50 + intensities.reduce((a, b) => a + b, 0) / 4))
-  return {
-    globalScore, profilCode: code4, profilLabel: 'Profil ' + code4,
-    strength: 'Votre code moteur est ' + code4 + '. Ce profil reflète vos préférences naturelles d\'action.',
-    weakness: 'Certains contextes peuvent ne pas correspondre à votre mode préférentiel d\'action.',
-    tool: 'Utilisez votre code ' + code4 + ' pour adapter votre préparation et votre style de jeu.',
-    scores, dimensions: dims
-  }
-}
-
-// PSYCHO
-function calcPSYCHO(answers, questions) {
-  let combatif=0, expressif=0, analytique=0, absorbant=0, regTotal=0, regCount=0
-  questions.forEach(q => {
-    const ans = answers[q.id]
-    if (ans === undefined) return
-    if (q.type === 'situational') {
-      const opt = q.options[ans]
-      if (!opt) return
-      combatif += opt.scores.combatif || 0
-      expressif += opt.scores.expressif || 0
-      analytique += opt.scores.analytique || 0
-      absorbant += opt.scores.absorbant || 0
-    }
-    if (q.type === 'likert' && q.cat === 'Régulation') {
-      regTotal += ans; regCount++
-    }
-  })
-  const maxSit = questions.filter(q => q.type === 'situational').length * 5
-  const cPct = maxSit > 0 ? Math.round((combatif / maxSit) * 100) : 0
-  const ePct = maxSit > 0 ? Math.round((expressif / maxSit) * 100) : 0
-  const aPct = maxSit > 0 ? Math.round((analytique / maxSit) * 100) : 0
-  const abPct = maxSit > 0 ? Math.round((absorbant / maxSit) * 100) : 0
-  const regScore = regCount > 0 ? Math.round((regTotal / (regCount * 5)) * 100) : 50
-  const typeMap = [{key:'combatif',val:cPct,label:'Combatif 🔥'},{key:'expressif',val:ePct,label:'Expressif 🌟'},{key:'analytique',val:aPct,label:'Analytique 🧠'},{key:'absorbant',val:abPct,label:'Absorbant 🌊'}]
-  const dominant = typeMap.sort((a,b) => b.val - a.val)[0]
-  const globalScore = Math.round((regScore + (100 - Math.abs(cPct - abPct))) / 2)
-  const insights = {
-    combatif: { strength:'La pression vous active et vous propulse.', weakness:'Risque de surchauffe émotionnelle.', tool:'Développez une routine de récupération mentale après chaque compétition.' },
-    expressif: { strength:'Votre authenticité crée des connexions puissantes.', weakness:'Sensibilité aux critiques et au rejet.', tool:'Développez des ressources de régulation interne indépendantes du contexte social.' },
-    analytique: { strength:'Capacité remarquable à prendre du recul.', weakness:'Risque de sur-intellectualiser les émotions.', tool:'Pratiquez une activité corporelle régulière pour reconnecter intellect et corps.' },
-    absorbant: { strength:'Intelligence émotionnelle fine et empathie profonde.', weakness:'Risque d\'être submergé par les émotions extérieures.', tool:'Mettez en place un protocole de régulation émotionnelle d\'urgence.' }
-  }
-  const insight = insights[dominant.key]
-  return {
-    globalScore, profilCode: 'PE-' + dominant.key[0].toUpperCase(), profilLabel: dominant.label,
-    strength: insight.strength, weakness: insight.weakness, tool: insight.tool,
-    scores: { combatif: cPct, expressif: ePct, analytique: aPct, absorbant: abPct, regulation: regScore },
-    dimensions: [
-      { label: 'Combatif', value: cPct, color: '#7a1a1a' },
-      { label: 'Expressif', value: ePct, color: '#1a3a6a' },
-      { label: 'Analytique', value: aPct, color: '#1a4a2a' },
-      { label: 'Absorbant', value: abPct, color: '#4a2a6a' },
-      { label: 'Régulation', value: regScore, color: '#C9A84C' }
-    ]
-  }
-}
+// PROFILS ITCA
+const ITCA_PROFILS=[
+  {code:'ITCA-3',label:'Fonctionnement cognitif atypique probable',alert:true,color:'#5a1a7a',description:"Votre profil présente un niveau élevé de traits associés aux fonctionnements cognitifs atypiques — intensité cognitive, hypersensibilité, variabilité attentionnelle et sentiment de fonctionner différemment. Ces caractéristiques sont fréquemment rencontrées chez les personnes HPI, TDAH ou présentant une combinaison des deux.",sport_impact:"Ces traits peuvent expliquer des performances très élevées dans certaines conditions et des difficultés inexpliquées dans d'autres. L'entraînement standard n'est peut-être pas adapté à votre mode de fonctionnement cognitif.",orientation:"Une consultation avec un neuropsychologue spécialisé dans les fonctionnements atypiques (HPI, TDAH) est fortement recommandée pour obtenir un éclairage précis et adapter votre environnement d'entraînement."},
+  {code:'ITCA-2',label:'Traits cognitifs atypiques présents',alert:false,color:'#3a1a6a',description:"Votre profil révèle la présence significative de traits associés aux fonctionnements cognitifs atypiques. Vous présentez plusieurs caractéristiques qui méritent attention — sans que cela constitue un signal d'alarme.",sport_impact:"Votre mode de fonctionnement peut nécessiter des adaptations spécifiques dans l'entraînement et la préparation mentale pour être pleinement efficace.",orientation:"Un bilan neuropsychologique pourrait apporter des réponses utiles. En attendant, travailler avec un préparateur mental sensibilisé aux fonctionnements atypiques est recommandé."},
+  {code:'ITCA-1',label:'Fonctionnement cognitif dans la norme',alert:false,color:'#1a4a2a',description:"Votre profil ne présente pas de traits particulièrement marqués associés aux fonctionnements cognitifs atypiques. Cela ne signifie pas l'absence de particularités — tout fonctionnement humain est unique.",sport_impact:"Votre mode de fonctionnement cognitif n'est pas un facteur limitant particulier. Les autres dimensions de ce bilan sont plus pertinentes pour orienter votre développement.",orientation:"Concentrez-vous sur les recommandations issues de votre profil émotionnel et neurochimique pour optimiser votre performance mentale."}
+]
 </script>
 
-</body>
-</html>
+</body></html>
