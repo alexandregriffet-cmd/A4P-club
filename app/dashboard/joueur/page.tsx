@@ -15,19 +15,6 @@ const TESTS = [
   { key: 'PSYCHO', label: 'PSYCHO', desc: 'Profil Psycho-émotionnel · 50 questions · Neurochimie + ITCA', color: '#4a1a6a' },
 ]
 
-function topbar(name: string, role: string, onLogout: () => void) {
-  return (
-    <div style={{ background: '#fff', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', position: 'sticky', top: 0, zIndex: 50, gap: 12, flexWrap: 'wrap' }}>
-      <div style={{ fontFamily: 'serif', fontSize: 20, fontWeight: 700, color: '#1B3A6B' }}>A4P · <span style={{ color: '#C9A84C' }}>Diagnostic Club</span></div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{ width: 38, height: 38, borderRadius: 11, background: '#1B3A6B', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 16 }}>{name[0]?.toUpperCase()}</div>
-        <div><div style={{ fontSize: 14, fontWeight: 700, color: '#1a2a4a' }}>{name}</div><div style={{ fontSize: 11, color: '#6c7a99' }}>🎮 Espace Joueur</div></div>
-        <button onClick={onLogout} style={{ padding: '7px 14px', background: 'transparent', border: '1px solid rgba(27,58,107,0.2)', borderRadius: 9, color: '#6c7a99', fontSize: 12, fontWeight: 600 }}>Déconnexion</button>
-      </div>
-    </div>
-  )
-}
-
 export default function DashboardJoueur() {
   const router = useRouter()
   const [clubUser, setClubUser] = useState<ClubUser | null>(null)
@@ -67,20 +54,25 @@ export default function DashboardJoueur() {
   const done = resultats.length
   const moy = done > 0 ? Math.round(resultats.reduce((a, r) => a + (r.score_global || 0), 0) / done) : null
   const colors: Record<string, string> = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
-  const doneTypes = [...new Set(resultats.map(r => r.test_type))]
+  const doneTypes: string[] = resultats.map(r => r.test_type).filter((t): t is string => t !== null && t !== undefined)
 
   return (
     <div style={{ minHeight: '100vh', background: '#f0f4ff' }}>
-      {topbar(name, 'Joueur', logout)}
-      <div style={{ maxWidth: 760, margin: '0 auto', padding: 20 }}>
+      <div style={{ background: '#fff', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', position: 'sticky', top: 0, zIndex: 50, gap: 12, flexWrap: 'wrap' }}>
+        <div style={{ fontFamily: 'serif', fontSize: 20, fontWeight: 700, color: '#1B3A6B' }}>A4P · <span style={{ color: '#C9A84C' }}>Diagnostic Club</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 38, height: 38, borderRadius: 11, background: '#1B3A6B', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 16 }}>{name[0]?.toUpperCase()}</div>
+          <div><div style={{ fontSize: 14, fontWeight: 700, color: '#1a2a4a' }}>{name}</div><div style={{ fontSize: 11, color: '#6c7a99' }}>🎮 Espace Joueur</div></div>
+          <button onClick={logout} style={{ padding: '7px 14px', background: 'transparent', border: '1px solid rgba(27,58,107,0.2)', borderRadius: 9, color: '#6c7a99', fontSize: 12, fontWeight: 600 }}>Déconnexion</button>
+        </div>
+      </div>
 
-        {/* Hero */}
+      <div style={{ maxWidth: 760, margin: '0 auto', padding: 20 }}>
         <div style={{ background: 'linear-gradient(135deg,#1B3A6B,#2E5BA8)', borderRadius: 22, padding: '28px 24px', marginBottom: 20, color: '#fff', textAlign: 'center' }}>
           <div style={{ fontFamily: 'serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Mon tableau de bord</div>
           <p style={{ opacity: 0.8, fontSize: 15 }}>Bonjour {clubUser?.firstname} — prêt pour tes diagnostics ?</p>
         </div>
 
-        {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 18 }}>
           {[
             { num: done, label: 'Tests complétés' },
@@ -95,7 +87,6 @@ export default function DashboardJoueur() {
           ))}
         </div>
 
-        {/* Tests */}
         <div style={{ background: '#fff', borderRadius: 20, padding: 22, marginBottom: 16, boxShadow: '0 3px 12px rgba(0,0,0,0.06)' }}>
           <div style={{ fontSize: 15, fontWeight: 800, color: '#1a2a4a', marginBottom: 14 }}>📊 Mes 4 diagnostics A4P</div>
           {TESTS.map(t => (
@@ -118,7 +109,6 @@ export default function DashboardJoueur() {
           ))}
         </div>
 
-        {/* Résultats */}
         <div style={{ background: '#fff', borderRadius: 20, padding: 22, boxShadow: '0 3px 12px rgba(0,0,0,0.06)' }}>
           <div style={{ fontSize: 15, fontWeight: 800, color: '#1a2a4a', marginBottom: 14 }}>📈 Mes résultats</div>
           {resultats.length === 0 ? (
