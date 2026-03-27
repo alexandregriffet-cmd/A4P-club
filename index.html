@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A4P Diagnostic Club — Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --navy: #0f2244;
+    --navy-mid: #1B3A6B;
+    --navy-light: #2E5BA8;
+    --accent: #4A90D9;
+    --gold: #C9A84C;
+    --gold-light: #E8C56A;
+    --white: #FFFFFF;
+    --gray: rgba(255,255,255,0.5);
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: ‘DM Sans’, sans-serif;
+min-height: 100vh;
+background: var(–navy);
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+position: relative;
+}
+
+/* Background animé */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background:
+radial-gradient(ellipse at 15% 50%, rgba(74,144,217,0.12) 0%, transparent 60%),
+radial-gradient(ellipse at 85% 20%, rgba(201,168,76,0.08) 0%, transparent 50%),
+radial-gradient(ellipse at 50% 90%, rgba(46,91,168,0.15) 0%, transparent 60%),
+linear-gradient(135deg, #0a1628 0%, #0f2244 40%, #1a3560 100%);
+z-index: 0;
+}
+
+/* Particules décoratives */
+.particles {
+position: fixed;
+inset: 0;
+z-index: 0;
+overflow: hidden;
+}
+
+.particle {
+position: absolute;
+border-radius: 50%;
+background: rgba(201,168,76,0.15);
+animation: float linear infinite;
+}
+
+@keyframes float {
+0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+10% { opacity: 1; }
+90% { opacity: 1; }
+100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+}
+
+.card {
+position: relative;
+z-index: 10;
+width: 100%;
+max-width: 440px;
+margin: 20px;
+background: rgba(255,255,255,0.04);
+border: 1px solid rgba(255,255,255,0.1);
+border-radius: 28px;
+padding: 48px 40px;
+backdrop-filter: blur(20px);
+box-shadow:
+0 40px 80px rgba(0,0,0,0.4),
+inset 0 1px 0 rgba(255,255,255,0.08);
+animation: slideUp 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.logo-wrap {
+text-align: center;
+margin-bottom: 36px;
+}
+
+.logo-img {
+width: 90px;
+height: 90px;
+border-radius: 20px;
+object-fit: cover;
+margin-bottom: 16px;
+box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
+
+.logo-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 13px;
+letter-spacing: 0.4em;
+color: var(–accent);
+text-transform: uppercase;
+margin-bottom: 6px;
+}
+
+.logo-brand {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 26px;
+font-weight: 700;
+color: var(–white);
+line-height: 1.2;
+}
+
+.logo-brand span { color: var(–gold); }
+
+.divider {
+height: 1px;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+margin-bottom: 32px;
+}
+
+.form-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px;
+font-weight: 600;
+color: var(–white);
+text-align: center;
+margin-bottom: 28px;
+}
+
+.field {
+margin-bottom: 16px;
+}
+
+.field label {
+display: block;
+font-size: 11px;
+font-weight: 600;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: rgba(255,255,255,0.5);
+margin-bottom: 8px;
+}
+
+.field input {
+width: 100%;
+padding: 14px 18px;
+background: rgba(255,255,255,0.06);
+border: 1px solid rgba(255,255,255,0.12);
+border-radius: 12px;
+color: var(–white);
+font-family: ‘DM Sans’, sans-serif;
+font-size: 15px;
+outline: none;
+transition: all 0.3s ease;
+}
+
+.field input::placeholder { color: rgba(255,255,255,0.25); }
+
+.field input:focus {
+border-color: var(–accent);
+background: rgba(74,144,217,0.08);
+box-shadow: 0 0 0 3px rgba(74,144,217,0.15);
+}
+
+.btn-login {
+width: 100%;
+padding: 16px;
+margin-top: 8px;
+background: linear-gradient(135deg, var(–navy-light), var(–accent));
+color: white;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 16px;
+font-weight: 700;
+border: none;
+border-radius: 14px;
+cursor: pointer;
+transition: all 0.3s ease;
+letter-spacing: 0.03em;
+position: relative;
+overflow: hidden;
+}
+
+.btn-login::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+opacity: 0;
+transition: opacity 0.3s;
+}
+
+.btn-login:hover::before { opacity: 1; }
+
+.btn-login:hover {
+transform: translateY(-2px);
+box-shadow: 0 12px 40px rgba(74,144,217,0.4);
+}
+
+.btn-login:active { transform: translateY(0); }
+
+.btn-login:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+transform: none;
+}
+
+.error-msg {
+background: rgba(248,113,113,0.12);
+border: 1px solid rgba(248,113,113,0.3);
+border-radius: 12px;
+padding: 12px 16px;
+color: #fca5a5;
+font-size: 14px;
+text-align: center;
+margin-top: 14px;
+display: none;
+animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+0%,100% { transform: translateX(0); }
+25% { transform: translateX(-6px); }
+75% { transform: translateX(6px); }
+}
+
+.loading-dots {
+display: inline-flex;
+gap: 4px;
+align-items: center;
+}
+
+.loading-dots span {
+width: 6px; height: 6px;
+border-radius: 50%;
+background: white;
+animation: bounce 0.6s infinite alternate;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes bounce {
+from { opacity: 0.4; transform: translateY(0); }
+to { opacity: 1; transform: translateY(-4px); }
+}
+
+/* Indicateur de rôle */
+.role-badge {
+display: none;
+text-align: center;
+margin-top: 20px;
+padding: 12px 20px;
+border-radius: 12px;
+font-size: 14px;
+font-weight: 600;
+animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: scale(0.95); }
+to { opacity: 1; transform: scale(1); }
+}
+
+.role-admin { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); color: var(–gold); }
+.role-coach { background: rgba(74,144,217,0.15); border: 1px solid rgba(74,144,217,0.4); color: var(–accent); }
+.role-dirigeant { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
+.role-joueur { background: rgba(192,132,252,0.12); border: 1px solid rgba(192,132,252,0.3); color: #c084fc; }
+
+.footer-txt {
+text-align: center;
+margin-top: 28px;
+font-size: 11px;
+color: rgba(255,255,255,0.2);
+letter-spacing: 0.08em;
+}
+
+/* DASHBOARDS (cachés au départ) */
+.dashboard {
+display: none;
+position: fixed;
+inset: 0;
+z-index: 100;
+background: #f0f4ff;
+overflow-y: auto;
+animation: fadeIn 0.4s ease;
+}
+
+.dash-header {
+padding: 20px 24px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 12px;
+}
+
+.dash-logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px;
+font-weight: 700;
+color: #1B3A6B;
+}
+
+.dash-logo span { color: #C9A84C; }
+
+.dash-user {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.dash-avatar {
+width: 40px; height: 40px;
+border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 18px;
+font-weight: 800;
+color: white;
+}
+
+.dash-name { font-size: 14px; font-weight: 700; color: #1a2a4a; }
+.dash-role { font-size: 12px; color: #6c7a99; }
+
+.btn-logout {
+padding: 8px 16px;
+background: transparent;
+border: 1px solid rgba(27,58,107,0.2);
+border-radius: 10px;
+color: #6c7a99;
+font-size: 13px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.btn-logout:hover { background: #1B3A6B; color: white; border-color: #1B3A6B; }
+
+.dash-body { padding: 0 24px 40px; max-width: 900px; margin: 0 auto; }
+
+.dash-hero {
+border-radius: 24px;
+padding: 32px;
+margin-bottom: 24px;
+color: white;
+text-align: center;
+}
+
+.dash-hero h1 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 32px;
+font-weight: 700;
+margin-bottom: 8px;
+}
+
+.dash-hero p { opacity: 0.8; font-size: 16px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+
+@media (max-width: 600px) {
+.grid-2 { grid-template-columns: 1fr; }
+.grid-4 { grid-template-columns: repeat(2,1fr); }
+.card { padding: 32px 24px; }
+}
+
+.stat-card {
+background: white;
+border-radius: 18px;
+padding: 20px;
+text-align: center;
+box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.stat-num {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 36px;
+font-weight: 700;
+color: #1B3A6B;
+line-height: 1;
+margin-bottom: 4px;
+}
+
+.stat-label { font-size: 12px; color: #6c7a99; font-weight: 600; letter-spacing: 0.05em; }
+
+.section-card {
+background: white;
+border-radius: 20px;
+padding: 24px;
+margin-bottom: 16px;
+box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.section-title {
+font-size: 16px;
+font-weight: 800;
+color: #1a2a4a;
+margin-bottom: 16px;
+}
+
+.test-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 14px 16px;
+border-radius: 14px;
+margin-bottom: 10px;
+border: 1px solid #e8edf5;
+background: #f8faff;
+flex-wrap: wrap;
+gap: 10px;
+}
+
+.test-name { font-weight: 800; color: #1a2a4a; font-size: 15px; }
+.test-desc { font-size: 12px; color: #6c7a99; margin-top: 2px; }
+
+.badge-dispo {
+background: #dcfce7;
+color: #16a34a;
+border-radius: 20px;
+padding: 5px 12px;
+font-size: 12px;
+font-weight: 700;
+}
+
+.btn-test {
+padding: 10px 20px;
+border-radius: 12px;
+border: none;
+background: #1B3A6B;
+color: white;
+font-weight: 700;
+font-size: 14px;
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.btn-test:hover { background: #2E5BA8; transform: translateY(-1px); }
+
+.player-row {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 12px 16px;
+border-radius: 14px;
+background: #f8faff;
+margin-bottom: 8px;
+flex-wrap: wrap;
+}
+
+.player-avatar {
+width: 36px; height: 36px;
+border-radius: 10px;
+background: #1B3A6B;
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 800;
+font-size: 14px;
+flex-shrink: 0;
+}
+
+.player-name { font-weight: 700; color: #1a2a4a; font-size: 14px; }
+.player-score { font-size: 12px; color: #6c7a99; }
+
+.score-bar-wrap { flex: 1; min-width: 80px; }
+.score-bar { height: 6px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #2E5BA8, #4A90D9); }
+
+.score-val { font-size: 13px; font-weight: 800; color: #1B3A6B; min-width: 40px; text-align: right; }
+
+.btn-pdf {
+padding: 7px 14px;
+border-radius: 10px;
+border: 1px solid #C9A84C;
+background: transparent;
+color: #C9A84C;
+font-size: 12px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.btn-pdf:hover { background: #C9A84C; color: white; }
+
+.empty-state {
+text-align: center;
+padding: 32px;
+color: #a0aec0;
+font-size: 14px;
+}
+
+.loading-overlay {
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 40px;
+gap: 8px;
+color: #6c7a99;
+font-size: 14px;
+}
+</style>
+
+</head>
+<body>
+
+<!-- PARTICULES -->
+
+<div class="particles" id="particles"></div>
+
+<!-- ═══ PAGE LOGIN ═══ -->
+
+<div class="card" id="login-page">
+  <div class="logo-wrap">
+    <img src="https://alexandregriffet-cmd.github.io/Test-performance-mental-A4P/IMG_1572.jpeg"
+         class="logo-img" alt="A4P"
+         onerror="this.style.display='none'" />
+    <div class="logo-title">Académie de Performances</div>
+    <div class="logo-brand">A4P · <span>Diagnostic Club</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="form-title">Connexion à votre espace</div>
+
+  <div class="field">
+    <label>Adresse email</label>
+    <input type="email" id="email" placeholder="votre@email.com" autocomplete="email" />
+  </div>
+
+  <div class="field">
+    <label>Mot de passe</label>
+    <input type="password" id="password" placeholder="••••••••••" autocomplete="current-password" />
+  </div>
+
+  <button class="btn-login" id="btn-login" onclick="login()">
+    Se connecter →
+  </button>
+
+  <div class="error-msg" id="error-msg">Email ou mot de passe incorrect.</div>
+
+  <div class="role-badge" id="role-badge"></div>
+
+  <div class="footer-brand" style="text-align:center;margin-top:28px;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;">
+    ACADÉMIE DE PERFORMANCES · A4P<br>Plateforme Club Sécurisée
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD JOUEUR ═══ -->
+
+<div class="dashboard" id="dash-joueur">
+  <div class="dash-header" style="background:white;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+    <div class="dash-logo">A4P · <span>Diagnostic Club</span></div>
+    <div class="dash-user">
+      <div class="dash-avatar" style="background:#1B3A6B;" id="j-avatar">J</div>
+      <div>
+        <div class="dash-name" id="j-name">Joueur</div>
+        <div class="dash-role">🎮 Espace Joueur</div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-hero" style="background:linear-gradient(135deg,#1B3A6B,#2E5BA8);">
+      <h1>Mon tableau de bord</h1>
+      <p id="j-welcome">Bienvenue sur votre espace diagnostic</p>
+    </div>
+    <div class="grid-4">
+      <div class="stat-card"><div class="stat-num" id="j-tests-done">0</div><div class="stat-label">Tests complétés</div></div>
+      <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Tests disponibles</div></div>
+      <div class="stat-card"><div class="stat-num" id="j-score-moy">—</div><div class="stat-label">Score moyen</div></div>
+      <div class="stat-card"><div class="stat-num" id="j-equipe-name" style="font-size:14px;padding-top:8px;">—</div><div class="stat-label">Mon équipe</div></div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">📊 Mes 4 diagnostics A4P</div>
+      <div class="test-item">
+        <div><div class="test-name">PMP</div><div class="test-desc">Profil Mental de Performance · 120 questions</div></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="badge-dispo">✅ Disponible</span>
+          <button class="btn-test" onclick="goToTest('PMP')">Démarrer →</button>
+        </div>
+      </div>
+      <div class="test-item">
+        <div><div class="test-name">MPA</div><div class="test-desc">Mode Préférentiel d'Action · 100 questions</div></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="badge-dispo">✅ Disponible</span>
+          <button class="btn-test" onclick="goToTest('MPA')">Démarrer →</button>
+        </div>
+      </div>
+      <div class="test-item">
+        <div><div class="test-name">CMP</div><div class="test-desc">Compétences Mentales de Performance · 30 situations</div></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="badge-dispo">✅ Disponible</span>
+          <button class="btn-test" onclick="goToTest('CMP')">Démarrer →</button>
+        </div>
+      </div>
+      <div class="test-item">
+        <div><div class="test-name">PSYCHO</div><div class="test-desc">Profil Psycho-émotionnel · 50 questions</div></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="badge-dispo">✅ Disponible</span>
+          <button class="btn-test" onclick="goToTest('PSYCHO')">Démarrer →</button>
+        </div>
+      </div>
+    </div>
+    <div class="section-card" id="j-resultats-section">
+      <div class="section-title">📈 Mes résultats</div>
+      <div id="j-resultats-list"><div class="empty-state">Aucun test complété pour l'instant.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD COACH ═══ -->
+
+<div class="dashboard" id="dash-coach">
+  <div class="dash-header" style="background:white;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+    <div class="dash-logo">A4P · <span>Diagnostic Club</span></div>
+    <div class="dash-user">
+      <div class="dash-avatar" style="background:#2E5BA8;" id="c-avatar">C</div>
+      <div>
+        <div class="dash-name" id="c-name">Coach</div>
+        <div class="dash-role">👨‍💼 Espace Coach</div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-hero" style="background:linear-gradient(135deg,#2E5BA8,#4A90D9);">
+      <h1 id="c-equipe-title">Mon équipe</h1>
+      <p>Suivi des diagnostics mentaux de vos joueurs</p>
+    </div>
+    <div class="grid-4">
+      <div class="stat-card"><div class="stat-num" id="c-nb-joueurs">0</div><div class="stat-label">Joueurs</div></div>
+      <div class="stat-card"><div class="stat-num" id="c-tests-passes">0</div><div class="stat-label">Tests passés</div></div>
+      <div class="stat-card"><div class="stat-num" id="c-score-equipe">—</div><div class="stat-label">Score moyen équipe</div></div>
+      <div class="stat-card"><div class="stat-num" id="c-completion">0%</div><div class="stat-label">Taux de complétion</div></div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">👥 Mes joueurs — Résultats individuels</div>
+      <div id="c-joueurs-list"><div class="loading-overlay">⏳ Chargement...</div></div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">📊 Moyenne équipe par dimension</div>
+      <div id="c-moyennes-list"><div class="empty-state">En attente des résultats de l'équipe.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD DIRIGEANT ═══ -->
+
+<div class="dashboard" id="dash-dirigeant">
+  <div class="dash-header" style="background:white;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+    <div class="dash-logo">A4P · <span>Diagnostic Club</span></div>
+    <div class="dash-user">
+      <div class="dash-avatar" style="background:#1a6a5a;" id="d-avatar">D</div>
+      <div>
+        <div class="dash-name" id="d-name">Dirigeant</div>
+        <div class="dash-role">🏛️ Espace Dirigeant</div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-hero" style="background:linear-gradient(135deg,#1a4a2a,#1a6a5a);">
+      <h1 id="d-club-title">Mon club</h1>
+      <p>Vue globale de toutes vos équipes</p>
+    </div>
+    <div class="grid-4">
+      <div class="stat-card"><div class="stat-num" id="d-nb-equipes">0</div><div class="stat-label">Équipes</div></div>
+      <div class="stat-card"><div class="stat-num" id="d-nb-joueurs">0</div><div class="stat-label">Joueurs</div></div>
+      <div class="stat-card"><div class="stat-num" id="d-tests-passes">0</div><div class="stat-label">Tests complétés</div></div>
+      <div class="stat-card"><div class="stat-num" id="d-score-club">—</div><div class="stat-label">Score moyen club</div></div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">🏆 Mes équipes</div>
+      <div id="d-equipes-list"><div class="loading-overlay">⏳ Chargement...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ADMIN ═══ -->
+
+<div class="dashboard" id="dash-admin">
+  <div class="dash-header" style="background:linear-gradient(135deg,#0f2244,#1B3A6B);box-shadow:0 2px 20px rgba(0,0,0,0.3);">
+    <div class="dash-logo" style="color:white;">A4P · <span>Admin</span></div>
+    <div class="dash-user">
+      <div class="dash-avatar" style="background:linear-gradient(135deg,#C9A84C,#E8C56A);" id="a-avatar">A</div>
+      <div>
+        <div class="dash-name" style="color:white;" id="a-name">Alexandre Griffet</div>
+        <div class="dash-role" style="color:rgba(255,255,255,0.6);">👑 Administrateur A4P</div>
+      </div>
+      <button class="btn-logout" onclick="logout()" style="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.7);">Déconnexion</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-hero" style="background:linear-gradient(135deg,#0f2244,#1B3A6B);border:1px solid rgba(201,168,76,0.3);">
+      <div style="font-size:13px;letter-spacing:0.3em;color:#C9A84C;margin-bottom:8px;">TABLEAU DE BORD ADMINISTRATEUR</div>
+      <h1>Vue globale A4P</h1>
+      <p>Tous les clubs · Toutes les équipes · Tous les joueurs</p>
+    </div>
+    <div class="grid-4">
+      <div class="stat-card"><div class="stat-num" id="a-nb-clubs" style="color:#C9A84C;">0</div><div class="stat-label">Clubs</div></div>
+      <div class="stat-card"><div class="stat-num" id="a-nb-equipes" style="color:#C9A84C;">0</div><div class="stat-label">Équipes</div></div>
+      <div class="stat-card"><div class="stat-num" id="a-nb-joueurs" style="color:#C9A84C;">0</div><div class="stat-label">Joueurs</div></div>
+      <div class="stat-card"><div class="stat-num" id="a-nb-tests" style="color:#C9A84C;">0</div><div class="stat-label">Tests passés</div></div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">📋 Tous les résultats — Export PDF</div>
+      <div id="a-resultats-list"><div class="loading-overlay">⏳ Chargement de tous les résultats...</div></div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">👥 Tous les utilisateurs</div>
+      <div id="a-users-list"><div class="loading-overlay">⏳ Chargement...</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ SUPABASE INIT ═══
+const { createClient } = supabase
+const sb = createClient(
+  'https://uambqnxbjgukcqbrlops.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhbWJxbnhiamd1a2NxYnJsb3BzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODE5NjksImV4cCI6MjA5MDE1Nzk2OX0.NhIi_oM7-uivanX5lekkby88t8redOnqxQjhXHRv5J4'
+)
+
+let currentUser = null
+
+// ═══ PARTICULES ═══
+function createParticles() {
+  const container = document.getElementById('particles')
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div')
+    p.className = 'particle'
+    const size = Math.random() * 6 + 2
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      animation-duration:${Math.random()*15+10}s;
+      animation-delay:${Math.random()*10}s;
+      opacity:${Math.random()*0.4+0.1};
+    `
+    container.appendChild(p)
+  }
+}
+createParticles()
+
+// ═══ LOGIN ═══
+document.getElementById('password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login()
+})
+
+async function login() {
+  const email = document.getElementById('email').value.trim().toLowerCase()
+  const password = document.getElementById('password').value.trim()
+  const btn = document.getElementById('btn-login')
+  const errEl = document.getElementById('error-msg')
+  const badgeEl = document.getElementById('role-badge')
+
+  if (!email || !password) {
+    showError('Veuillez remplir tous les champs.')
+    return
+  }
+
+  btn.disabled = true
+  btn.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>'
+  errEl.style.display = 'none'
+  badgeEl.style.display = 'none'
+
+  try {
+    const { data, error } = await sb
+      .from('utilisateurs')
+      .select('*')
+      .eq('email', email)
+      .eq('mot_de_passe', password)
+      .eq('actif', true)
+      .single()
+
+    if (error || !data) {
+      showError('Email ou mot de passe incorrect.')
+      btn.disabled = false
+      btn.innerHTML = 'Se connecter →'
+      return
+    }
+
+    currentUser = data
+
+    // Afficher badge rôle
+    const roleLabels = {
+      admin: { label: '👑 Administrateur A4P', cls: 'role-admin' },
+      dirigeant: { label: '🏛️ Dirigeant Club', cls: 'role-dirigeant' },
+      coach: { label: '👨‍💼 Coach', cls: 'role-coach' },
+      joueur: { label: '🎮 Joueur', cls: 'role-joueur' }
+    }
+    const roleInfo = roleLabels[data.role]
+    badgeEl.className = `role-badge ${roleInfo.cls}`
+    badgeEl.textContent = `Connecté · ${roleInfo.label}`
+    badgeEl.style.display = 'block'
+
+    btn.innerHTML = '✅ Connexion réussie'
+
+    setTimeout(() => {
+      document.getElementById('login-page').style.display = 'none'
+      loadDashboard(data)
+    }, 800)
+
+  } catch (e) {
+    showError('Erreur de connexion. Réessayez.')
+    btn.disabled = false
+    btn.innerHTML = 'Se connecter →'
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg')
+  el.textContent = msg
+  el.style.display = 'block'
+}
+
+// ═══ LOGOUT ═══
+function logout() {
+  currentUser = null
+  document.querySelectorAll('.dashboard').forEach(d => d.style.display = 'none')
+  document.getElementById('login-page').style.display = 'block'
+  document.getElementById('email').value = ''
+  document.getElementById('password').value = ''
+  document.getElementById('btn-login').disabled = false
+  document.getElementById('btn-login').innerHTML = 'Se connecter →'
+  document.getElementById('error-msg').style.display = 'none'
+  document.getElementById('role-badge').style.display = 'none'
+}
+
+// ═══ CHARGEMENT DASHBOARD ═══
+async function loadDashboard(user) {
+  const dash = document.getElementById(`dash-${user.role}`)
+  dash.style.display = 'block'
+  document.body.style.background = '#f0f4ff'
+  document.body.style.alignItems = 'flex-start'
+
+  if (user.role === 'joueur') await loadDashJoueur(user)
+  if (user.role === 'coach') await loadDashCoach(user)
+  if (user.role === 'dirigeant') await loadDashDirigeant(user)
+  if (user.role === 'admin') await loadDashAdmin(user)
+}
+
+// ═══ DASHBOARD JOUEUR ═══
+async function loadDashJoueur(user) {
+  document.getElementById('j-avatar').textContent = user.prenom[0].toUpperCase()
+  document.getElementById('j-name').textContent = `${user.prenom} ${user.nom}`
+  document.getElementById('j-welcome').textContent = `Bonjour ${user.prenom} — prêt pour tes diagnostics ?`
+
+  // Récupérer résultats
+  const { data: resultats } = await sb
+    .from('resultats')
+    .select('*')
+    .eq('utilisateur_id', user.id)
+    .order('completed_at', { ascending: false })
+
+  const done = resultats?.length || 0
+  document.getElementById('j-tests-done').textContent = done
+
+  if (done > 0) {
+    const moyScore = Math.round(resultats.reduce((a, r) => a + (r.score_global || 0), 0) / done)
+    document.getElementById('j-score-moy').textContent = moyScore + '%'
+
+    const listEl = document.getElementById('j-resultats-list')
+    listEl.innerHTML = resultats.map(r => `
+      <div class="player-row">
+        <div style="flex:1">
+          <div class="player-name">${r.test_type} — ${r.profil_label || 'Résultat'}</div>
+          <div class="player-score">${new Date(r.completed_at).toLocaleDateString('fr-FR')} · Score : ${r.score_global || '—'}%</div>
+        </div>
+        <button class="btn-pdf" onclick="exportPDF('${r.id}')">📄 PDF</button>
+      </div>
+    `).join('')
+  }
+
+  // Équipe
+  if (user.equipe_id) {
+    const { data: eq } = await sb.from('equipes').select('nom').eq('id', user.equipe_id).single()
+    if (eq) document.getElementById('j-equipe-name').textContent = eq.nom
+  }
+}
+
+// ═══ DASHBOARD COACH ═══
+async function loadDashCoach(user) {
+  document.getElementById('c-avatar').textContent = user.prenom[0].toUpperCase()
+  document.getElementById('c-name').textContent = `${user.prenom} ${user.nom}`
+
+  if (!user.equipe_id) return
+
+  const { data: equipe } = await sb.from('equipes').select('nom').eq('id', user.equipe_id).single()
+  if (equipe) document.getElementById('c-equipe-title').textContent = equipe.nom
+
+  // Joueurs de l'équipe
+  const { data: joueurs } = await sb
+    .from('utilisateurs')
+    .select('*')
+    .eq('equipe_id', user.equipe_id)
+    .eq('role', 'joueur')
+
+  document.getElementById('c-nb-joueurs').textContent = joueurs?.length || 0
+
+  // Résultats de tous les joueurs
+  const joueurIds = joueurs?.map(j => j.id) || []
+  let tousResultats = []
+  if (joueurIds.length > 0) {
+    const { data: res } = await sb
+      .from('resultats')
+      .select('*')
+      .in('utilisateur_id', joueurIds)
+    tousResultats = res || []
+  }
+
+  document.getElementById('c-tests-passes').textContent = tousResultats.length
+
+  const joueursAvecTests = [...new Set(tousResultats.map(r => r.utilisateur_id))].length
+  const completion = joueurs?.length > 0 ? Math.round((joueursAvecTests / joueurs.length) * 100) : 0
+  document.getElementById('c-completion').textContent = completion + '%'
+
+  if (tousResultats.length > 0) {
+    const moy = Math.round(tousResultats.reduce((a, r) => a + (r.score_global || 0), 0) / tousResultats.length)
+    document.getElementById('c-score-equipe').textContent = moy + '%'
+  }
+
+  // Afficher joueurs
+  const listEl = document.getElementById('c-joueurs-list')
+  if (!joueurs || joueurs.length === 0) {
+    listEl.innerHTML = '<div class="empty-state">Aucun joueur dans cette équipe.</div>'
+    return
+  }
+
+  listEl.innerHTML = joueurs.map(j => {
+    const jRes = tousResultats.filter(r => r.utilisateur_id === j.id)
+    const moy = jRes.length > 0 ? Math.round(jRes.reduce((a, r) => a + (r.score_global || 0), 0) / jRes.length) : null
+    return `
+      <div class="player-row">
+        <div class="player-avatar">${j.prenom[0].toUpperCase()}</div>
+        <div style="flex:1;min-width:100px;">
+          <div class="player-name">${j.prenom} ${j.nom}</div>
+          <div class="player-score">${jRes.length} test(s) complété(s)</div>
+        </div>
+        ${moy !== null ? `
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:${moy}%"></div></div>
+          </div>
+          <div class="score-val">${moy}%</div>
+        ` : '<div style="font-size:12px;color:#a0aec0;">Pas encore de test</div>'}
+        ${jRes.length > 0 ? `<button class="btn-pdf" onclick="voirJoueur('${j.id}','${j.prenom} ${j.nom}')">Voir →</button>` : ''}
+      </div>
+    `
+  }).join('')
+}
+
+// ═══ DASHBOARD DIRIGEANT ═══
+async function loadDashDirigeant(user) {
+  document.getElementById('d-avatar').textContent = user.prenom[0].toUpperCase()
+  document.getElementById('d-name').textContent = `${user.prenom} ${user.nom}`
+
+  if (!user.club_id) return
+
+  const { data: club } = await sb.from('clubs').select('nom').eq('id', user.club_id).single()
+  if (club) document.getElementById('d-club-title').textContent = club.nom
+
+  const { data: equipes } = await sb.from('equipes').select('*').eq('club_id', user.club_id)
+  document.getElementById('d-nb-equipes').textContent = equipes?.length || 0
+
+  const { data: joueurs } = await sb.from('utilisateurs').select('*').eq('club_id', user.club_id).eq('role', 'joueur')
+  document.getElementById('d-nb-joueurs').textContent = joueurs?.length || 0
+
+  const joueurIds = joueurs?.map(j => j.id) || []
+  let tousResultats = []
+  if (joueurIds.length > 0) {
+    const { data: res } = await sb.from('resultats').select('*').in('utilisateur_id', joueurIds)
+    tousResultats = res || []
+  }
+  document.getElementById('d-tests-passes').textContent = tousResultats.length
+
+  if (tousResultats.length > 0) {
+    const moy = Math.round(tousResultats.reduce((a, r) => a + (r.score_global || 0), 0) / tousResultats.length)
+    document.getElementById('d-score-club').textContent = moy + '%'
+  }
+
+  // Afficher équipes
+  const listEl = document.getElementById('d-equipes-list')
+  if (!equipes || equipes.length === 0) {
+    listEl.innerHTML = '<div class="empty-state">Aucune équipe dans ce club.</div>'
+    return
+  }
+
+  listEl.innerHTML = equipes.map(eq => {
+    const joueursEq = joueurs?.filter(j => j.equipe_id === eq.id) || []
+    const resEq = tousResultats.filter(r => joueursEq.some(j => j.id === r.utilisateur_id))
+    const moyEq = resEq.length > 0 ? Math.round(resEq.reduce((a, r) => a + (r.score_global || 0), 0) / resEq.length) : null
+    return `
+      <div class="player-row">
+        <div class="player-avatar" style="background:#1a6a5a;">${eq.nom[0].toUpperCase()}</div>
+        <div style="flex:1">
+          <div class="player-name">${eq.nom}</div>
+          <div class="player-score">${joueursEq.length} joueur(s) · ${resEq.length} test(s)</div>
+        </div>
+        ${moyEq !== null ? `
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:${moyEq}%;background:linear-gradient(90deg,#1a6a5a,#4ade80)"></div></div>
+          </div>
+          <div class="score-val" style="color:#1a6a5a;">${moyEq}%</div>
+        ` : '<div style="font-size:12px;color:#a0aec0;">Aucun résultat</div>'}
+      </div>
+    `
+  }).join('')
+}
+
+// ═══ DASHBOARD ADMIN ═══
+async function loadDashAdmin(user) {
+  document.getElementById('a-avatar').textContent = 'A'
+  document.getElementById('a-name').textContent = `${user.prenom} ${user.nom}`
+
+  const [{ data: clubs }, { data: equipes }, { data: joueurs }, { data: resultats }, { data: allUsers }] = await Promise.all([
+    sb.from('clubs').select('*'),
+    sb.from('equipes').select('*'),
+    sb.from('utilisateurs').select('*').eq('role', 'joueur'),
+    sb.from('resultats').select('*, utilisateurs(prenom, nom, email)').order('completed_at', { ascending: false }),
+    sb.from('utilisateurs').select('*').neq('role', 'admin').order('created_at', { ascending: false })
+  ])
+
+  document.getElementById('a-nb-clubs').textContent = clubs?.length || 0
+  document.getElementById('a-nb-equipes').textContent = equipes?.length || 0
+  document.getElementById('a-nb-joueurs').textContent = joueurs?.length || 0
+  document.getElementById('a-nb-tests').textContent = resultats?.length || 0
+
+  // Résultats
+  const resEl = document.getElementById('a-resultats-list')
+  if (!resultats || resultats.length === 0) {
+    resEl.innerHTML = '<div class="empty-state">Aucun test complété pour l\'instant.</div>'
+  } else {
+    resEl.innerHTML = resultats.map(r => `
+      <div class="player-row">
+        <div class="player-avatar" style="background:#C9A84C;color:#0f2244;">
+          ${r.utilisateurs ? r.utilisateurs.prenom[0].toUpperCase() : '?'}
+        </div>
+        <div style="flex:1">
+          <div class="player-name">${r.utilisateurs ? `${r.utilisateurs.prenom} ${r.utilisateurs.nom}` : 'Inconnu'}</div>
+          <div class="player-score">${r.test_type} · ${r.profil_label || '—'} · ${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div>
+        </div>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:linear-gradient(90deg,#C9A84C,#E8C56A)"></div></div>
+        </div>
+        <div class="score-val" style="color:#C9A84C;">${r.score_global || '—'}%</div>
+        <button class="btn-pdf" onclick="exportResultatPDF('${r.id}')">📄 PDF</button>
+      </div>
+    `).join('')
+  }
+
+  // Tous les utilisateurs
+  const usersEl = document.getElementById('a-users-list')
+  if (!allUsers || allUsers.length === 0) {
+    usersEl.innerHTML = '<div class="empty-state">Aucun utilisateur.</div>'
+  } else {
+    const roleColors = { dirigeant: '#1a6a5a', coach: '#2E5BA8', joueur: '#5a3a8a' }
+    const roleEmojis = { dirigeant: '🏛️', coach: '👨‍💼', joueur: '🎮' }
+    usersEl.innerHTML = allUsers.map(u => `
+      <div class="player-row">
+        <div class="player-avatar" style="background:${roleColors[u.role]||'#1B3A6B'};">
+          ${u.prenom[0].toUpperCase()}
+        </div>
+        <div style="flex:1">
+          <div class="player-name">${u.prenom} ${u.nom}</div>
+          <div class="player-score">${roleEmojis[u.role]||''} ${u.role} · ${u.email}</div>
+        </div>
+        <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:${roleColors[u.role]||'#1B3A6B'}22;color:${roleColors[u.role]||'#1B3A6B'};font-weight:700;">
+          ${u.role}
+        </span>
+      </div>
+    `).join('')
+  }
+}
+
+// ═══ ACTIONS ═══
+function goToTest(type) {
+  alert(`Le test ${type} sera disponible dans la prochaine version.\n\nCette page de login est l'étape 1 — les tests s'intègreront ici.`)
+}
+
+function voirJoueur(id, nom) {
+  alert(`Détail des résultats de ${nom} — disponible dans la prochaine version.`)
+}
+
+function exportPDF(id) {
+  alert(`Export PDF du résultat ${id} — disponible dans la prochaine version.`)
+}
+
+function exportResultatPDF(id) {
+  alert(`Export PDF admin du résultat ${id} — disponible dans la prochaine version.`)
+}
+</script>
+
+</body>
+</html>
