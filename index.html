@@ -4,135 +4,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A4P Diagnostic Club — Connexion</title>
+<title>A4P Diagnostic Club</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-
-- { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
 font-family: ‘DM Sans’, sans-serif;
 min-height: 100vh;
 background: #0f2244;
+color: #1a2a4a;
+}
+
+/* ═══ LOGIN ═══ */
+#page-login {
+min-height: 100vh;
 display: flex;
 align-items: center;
 justify-content: center;
-overflow: hidden;
-position: relative;
+background: linear-gradient(135deg, #0a1628 0%, #0f2244 40%, #1a3560 100%);
+padding: 20px;
 }
 
-/* Background animé */
-body::before {
-content: ‘’;
-position: fixed;
-inset: 0;
-background:
-radial-gradient(ellipse at 15% 50%, rgba(74,144,217,0.12) 0%, transparent 60%),
-radial-gradient(ellipse at 85% 20%, rgba(201,168,76,0.08) 0%, transparent 50%),
-radial-gradient(ellipse at 50% 90%, rgba(46,91,168,0.15) 0%, transparent 60%),
-linear-gradient(135deg, #0a1628 0%, #0f2244 40%, #1a3560 100%);
-z-index: 0;
-}
-
-/* Particules décoratives */
-.particles {
-position: fixed;
-inset: 0;
-z-index: 0;
-overflow: hidden;
-}
-
-.particle {
-position: absolute;
-border-radius: 50%;
-background: rgba(201,168,76,0.15);
-animation: float linear infinite;
-}
-
-@keyframes float {
-0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-10% { opacity: 1; }
-90% { opacity: 1; }
-100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
-}
-
-.card {
-position: relative;
-z-index: 10;
+.login-card {
 width: 100%;
-max-width: 440px;
-margin: 20px;
-background: rgba(255,255,255,0.04);
-border: 1px solid rgba(255,255,255,0.1);
+max-width: 420px;
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.12);
 border-radius: 28px;
-padding: 48px 40px;
+padding: 44px 36px;
 backdrop-filter: blur(20px);
-box-shadow:
-0 40px 80px rgba(0,0,0,0.4),
-inset 0 1px 0 rgba(255,255,255,0.08);
-animation: slideUp 0.6s cubic-bezier(0.4,0,0.2,1);
+box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+animation: slideUp 0.5s ease;
 }
 
 @keyframes slideUp {
-from { opacity: 0; transform: translateY(30px); }
+from { opacity: 0; transform: translateY(24px); }
 to { opacity: 1; transform: translateY(0); }
 }
 
-.logo-wrap {
+.login-logo {
 text-align: center;
-margin-bottom: 36px;
+margin-bottom: 32px;
 }
 
-.logo-img {
-width: 90px;
-height: 90px;
-border-radius: 20px;
+.login-logo img {
+width: 80px; height: 80px;
+border-radius: 18px;
 object-fit: cover;
-margin-bottom: 16px;
-box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 display: block;
-margin-left: auto;
-margin-right: auto;
+margin: 0 auto 14px;
+box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 
-.logo-title {
+.login-logo .eyebrow {
 font-family: ‘Cormorant Garamond’, serif;
-font-size: 13px;
+font-size: 12px;
 letter-spacing: 0.4em;
 color: #4A90D9;
 text-transform: uppercase;
 margin-bottom: 6px;
 }
 
-.logo-brand {
+.login-logo .brand {
 font-family: ‘Cormorant Garamond’, serif;
-font-size: 26px;
+font-size: 24px;
 font-weight: 700;
-color: #FFFFFF;
-line-height: 1.2;
+color: #fff;
 }
 
-.logo-brand span { color: #C9A84C; }
+.login-logo .brand span { color: #C9A84C; }
 
-.divider {
+.login-divider {
 height: 1px;
 background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-margin-bottom: 32px;
-}
-
-.form-title {
-font-family: ‘Cormorant Garamond’, serif;
-font-size: 22px;
-font-weight: 600;
-color: #FFFFFF;
-text-align: center;
 margin-bottom: 28px;
 }
 
-.field {
-margin-bottom: 16px;
+.login-subtitle {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+font-weight: 600;
+color: #fff;
+text-align: center;
+margin-bottom: 24px;
 }
+
+.field { margin-bottom: 14px; }
 
 .field label {
 display: block;
@@ -140,268 +99,191 @@ font-size: 11px;
 font-weight: 600;
 letter-spacing: 0.1em;
 text-transform: uppercase;
-color: rgba(255,255,255,0.5);
-margin-bottom: 8px;
+color: rgba(255,255,255,0.45);
+margin-bottom: 7px;
 }
 
 .field input {
 width: 100%;
-padding: 14px 18px;
-background: rgba(255,255,255,0.06);
-border: 1px solid rgba(255,255,255,0.12);
+padding: 13px 16px;
+background: rgba(255,255,255,0.07);
+border: 1px solid rgba(255,255,255,0.14);
 border-radius: 12px;
-color: #FFFFFF;
+color: #fff;
 font-family: ‘DM Sans’, sans-serif;
 font-size: 15px;
 outline: none;
-transition: all 0.3s ease;
+transition: all 0.3s;
 }
 
 .field input::placeholder { color: rgba(255,255,255,0.25); }
-
 .field input:focus {
 border-color: #4A90D9;
-background: rgba(74,144,217,0.08);
+background: rgba(74,144,217,0.1);
 box-shadow: 0 0 0 3px rgba(74,144,217,0.15);
 }
 
-.btn-login {
+.btn-primary {
 width: 100%;
-padding: 16px;
-margin-top: 8px;
+padding: 15px;
 background: linear-gradient(135deg, #2E5BA8, #4A90D9);
-color: white;
+color: #fff;
 font-family: ‘DM Sans’, sans-serif;
 font-size: 16px;
 font-weight: 700;
 border: none;
-border-radius: 14px;
+border-radius: 13px;
 cursor: pointer;
-transition: all 0.3s ease;
-letter-spacing: 0.03em;
-position: relative;
-overflow: hidden;
+transition: all 0.3s;
+margin-top: 6px;
 }
 
-.btn-login::before {
-content: ‘’;
-position: absolute;
-inset: 0;
-background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-opacity: 0;
-transition: opacity 0.3s;
-}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,144,217,0.4); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-.btn-login:hover::before { opacity: 1; }
-
-.btn-login:hover {
-transform: translateY(-2px);
-box-shadow: 0 12px 40px rgba(74,144,217,0.4);
-}
-
-.btn-login:active { transform: translateY(0); }
-
-.btn-login:disabled {
-opacity: 0.6;
-cursor: not-allowed;
-transform: none;
-}
-
-.error-msg {
+.error-box {
 background: rgba(248,113,113,0.12);
 border: 1px solid rgba(248,113,113,0.3);
-border-radius: 12px;
-padding: 12px 16px;
+border-radius: 11px;
+padding: 11px 15px;
 color: #fca5a5;
-font-size: 14px;
+font-size: 13px;
 text-align: center;
-margin-top: 14px;
+margin-top: 12px;
 display: none;
-animation: shake 0.4s ease;
 }
 
-@keyframes shake {
-0%,100% { transform: translateX(0); }
-25% { transform: translateX(-6px); }
-75% { transform: translateX(6px); }
-}
+/* ═══ PAGES COMMUNES ═══ */
+.page { display: none; min-height: 100vh; background: #f0f4ff; }
+.page.active { display: block; }
 
-.loading-dots {
-display: inline-flex;
-gap: 4px;
-align-items: center;
-}
-
-.loading-dots span {
-width: 6px; height: 6px;
-border-radius: 50%;
-background: white;
-animation: bounce 0.6s infinite alternate;
-}
-
-.loading-dots span:nth-child(2) { animation-delay: 0.15s; }
-.loading-dots span:nth-child(3) { animation-delay: 0.3s; }
-
-@keyframes bounce {
-from { opacity: 0.4; transform: translateY(0); }
-to { opacity: 1; transform: translateY(-4px); }
-}
-
-/* Indicateur de rôle */
-.role-badge {
-display: none;
-text-align: center;
-margin-top: 20px;
-padding: 12px 20px;
-border-radius: 12px;
-font-size: 14px;
-font-weight: 600;
-animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-from { opacity: 0; transform: scale(0.95); }
-to { opacity: 1; transform: scale(1); }
-}
-
-.role-admin { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); color: #C9A84C; }
-.role-coach { background: rgba(74,144,217,0.15); border: 1px solid rgba(74,144,217,0.4); color: #4A90D9; }
-.role-dirigeant { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
-.role-joueur { background: rgba(192,132,252,0.12); border: 1px solid rgba(192,132,252,0.3); color: #c084fc; }
-
-.footer-txt {
-text-align: center;
-margin-top: 28px;
-font-size: 11px;
-color: rgba(255,255,255,0.2);
-letter-spacing: 0.08em;
-}
-
-/* DASHBOARDS (cachés au départ) */
-.dashboard {
-display: none;
-position: fixed;
-inset: 0;
-z-index: 100;
-background: #f0f4ff;
-overflow-y: auto;
-animation: fadeIn 0.4s ease;
-}
-
-.dash-header {
-padding: 20px 24px;
+.topbar {
+background: #fff;
+padding: 14px 20px;
 display: flex;
 align-items: center;
 justify-content: space-between;
-flex-wrap: wrap;
+box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+position: sticky;
+top: 0;
+z-index: 50;
 gap: 12px;
+flex-wrap: wrap;
 }
 
-.dash-logo {
+.topbar-brand {
 font-family: ‘Cormorant Garamond’, serif;
-font-size: 22px;
+font-size: 20px;
 font-weight: 700;
 color: #1B3A6B;
 }
 
-.dash-logo span { color: #C9A84C; }
+.topbar-brand span { color: #C9A84C; }
 
-.dash-user {
+.topbar-right {
 display: flex;
 align-items: center;
 gap: 10px;
 }
 
-.dash-avatar {
-width: 40px; height: 40px;
-border-radius: 12px;
+.avatar {
+width: 38px; height: 38px;
+border-radius: 11px;
 display: flex;
 align-items: center;
 justify-content: center;
-font-size: 18px;
+font-size: 16px;
 font-weight: 800;
-color: white;
+color: #fff;
+background: #1B3A6B;
+flex-shrink: 0;
 }
 
-.dash-name { font-size: 14px; font-weight: 700; color: #1a2a4a; }
-.dash-role { font-size: 12px; color: #6c7a99; }
+.user-info .name { font-size: 14px; font-weight: 700; color: #1a2a4a; }
+.user-info .role { font-size: 11px; color: #6c7a99; }
 
 .btn-logout {
-padding: 8px 16px;
+padding: 7px 14px;
 background: transparent;
 border: 1px solid rgba(27,58,107,0.2);
-border-radius: 10px;
+border-radius: 9px;
 color: #6c7a99;
-font-size: 13px;
+font-size: 12px;
 font-weight: 600;
 cursor: pointer;
 transition: all 0.2s;
 }
 
-.btn-logout:hover { background: #1B3A6B; color: white; border-color: #1B3A6B; }
+.btn-logout:hover { background: #1B3A6B; color: #fff; border-color: #1B3A6B; }
 
-.dash-body { padding: 0 24px 40px; max-width: 900px; margin: 0 auto; }
+.page-body { padding: 20px; max-width: 760px; margin: 0 auto; }
 
-.dash-hero {
-border-radius: 24px;
-padding: 32px;
-margin-bottom: 24px;
-color: white;
+/* ═══ HERO ═══ */
+.hero {
+border-radius: 22px;
+padding: 28px 24px;
+margin-bottom: 20px;
+color: #fff;
 text-align: center;
 }
 
-.dash-hero h1 {
+.hero h1 {
 font-family: ‘Cormorant Garamond’, serif;
-font-size: 32px;
+font-size: 28px;
 font-weight: 700;
-margin-bottom: 8px;
+margin-bottom: 6px;
 }
 
-.dash-hero p { opacity: 0.8; font-size: 16px; }
+.hero p { opacity: 0.8; font-size: 15px; }
 
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+/* ═══ STATS ═══ */
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 12px;
+margin-bottom: 18px;
+}
 
-@media (max-width: 600px) {
-.grid-2 { grid-template-columns: 1fr; }
-.grid-4 { grid-template-columns: repeat(2,1fr); }
-.card { padding: 32px 24px; }
+@media (max-width: 500px) {
+.stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .stat-card {
-background: white;
-border-radius: 18px;
-padding: 20px;
+background: #fff;
+border-radius: 16px;
+padding: 18px 12px;
 text-align: center;
-box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+box-shadow: 0 3px 12px rgba(0,0,0,0.06);
 }
 
 .stat-num {
 font-family: ‘Cormorant Garamond’, serif;
-font-size: 36px;
+font-size: 32px;
 font-weight: 700;
 color: #1B3A6B;
 line-height: 1;
 margin-bottom: 4px;
 }
 
-.stat-label { font-size: 12px; color: #6c7a99; font-weight: 600; letter-spacing: 0.05em; }
+.stat-label { font-size: 11px; color: #6c7a99; font-weight: 600; }
 
+/* ═══ SECTION CARD ═══ */
 .section-card {
-background: white;
+background: #fff;
 border-radius: 20px;
-padding: 24px;
+padding: 22px;
 margin-bottom: 16px;
-box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+box-shadow: 0 3px 12px rgba(0,0,0,0.06);
 }
 
 .section-title {
-font-size: 16px;
+font-size: 15px;
 font-weight: 800;
 color: #1a2a4a;
-margin-bottom: 16px;
+margin-bottom: 14px;
 }
 
+/* ═══ TEST ITEMS ═══ */
 .test-item {
 display: flex;
 align-items: center;
@@ -411,316 +293,557 @@ border-radius: 14px;
 margin-bottom: 10px;
 border: 1px solid #e8edf5;
 background: #f8faff;
+gap: 12px;
 flex-wrap: wrap;
-gap: 10px;
 }
 
+.test-color-bar {
+width: 4px;
+height: 44px;
+border-radius: 4px;
+flex-shrink: 0;
+}
+
+.test-info { flex: 1; min-width: 120px; }
 .test-name { font-weight: 800; color: #1a2a4a; font-size: 15px; }
 .test-desc { font-size: 12px; color: #6c7a99; margin-top: 2px; }
 
-.badge-dispo {
+.badge-ok {
 background: #dcfce7;
 color: #16a34a;
 border-radius: 20px;
-padding: 5px 12px;
-font-size: 12px;
+padding: 4px 10px;
+font-size: 11px;
 font-weight: 700;
+white-space: nowrap;
 }
 
-.btn-test {
-padding: 10px 20px;
-border-radius: 12px;
-border: none;
-background: #1B3A6B;
-color: white;
+.badge-done {
+background: #e0f2fe;
+color: #0369a1;
+border-radius: 20px;
+padding: 4px 10px;
+font-size: 11px;
 font-weight: 700;
-font-size: 14px;
+white-space: nowrap;
+}
+
+.btn-start {
+padding: 9px 18px;
+border-radius: 11px;
+border: none;
+color: #fff;
+font-weight: 700;
+font-size: 13px;
 cursor: pointer;
 transition: all 0.2s;
+white-space: nowrap;
 }
 
-.btn-test:hover { background: #2E5BA8; transform: translateY(-1px); }
+.btn-start:hover { transform: translateY(-1px); filter: brightness(1.1); }
 
-.player-row {
+/* ═══ RÉSULTATS ═══ */
+.result-row {
 display: flex;
 align-items: center;
 gap: 12px;
-padding: 12px 16px;
-border-radius: 14px;
+padding: 13px 15px;
+border-radius: 13px;
 background: #f8faff;
 margin-bottom: 8px;
 flex-wrap: wrap;
 }
 
-.player-avatar {
-width: 36px; height: 36px;
-border-radius: 10px;
-background: #1B3A6B;
-color: white;
-display: flex;
-align-items: center;
-justify-content: center;
+.result-badge {
+padding: 5px 12px;
+border-radius: 20px;
+font-size: 12px;
 font-weight: 800;
-font-size: 14px;
+color: #fff;
 flex-shrink: 0;
 }
 
-.player-name { font-weight: 700; color: #1a2a4a; font-size: 14px; }
-.player-score { font-size: 12px; color: #6c7a99; }
+.result-info { flex: 1; min-width: 100px; }
+.result-name { font-weight: 700; color: #1a2a4a; font-size: 14px; }
+.result-date { font-size: 11px; color: #6c7a99; }
 
-.score-bar-wrap { flex: 1; min-width: 80px; }
-.score-bar { height: 6px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
-.score-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #2E5BA8, #4A90D9); }
+.score-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.score-bar { width: 80px; height: 6px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 999px; }
+.score-val { font-size: 13px; font-weight: 800; color: #1B3A6B; min-width: 36px; text-align: right; }
 
-.score-val { font-size: 13px; font-weight: 800; color: #1B3A6B; min-width: 40px; text-align: right; }
+.empty-state { text-align: center; padding: 28px; color: #a0aec0; font-size: 14px; }
 
-.btn-pdf {
+/* ═══ TEST SCREEN ═══ */
+#page-test {
+min-height: 100vh;
+background: linear-gradient(180deg, #edf3ff, #f7f9ff);
+}
+
+.test-topbar {
+background: #fff;
+padding: 14px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+gap: 12px;
+}
+
+.test-topbar-title {
+font-weight: 800;
+color: #1a2a4a;
+font-size: 15px;
+}
+
+.btn-back {
 padding: 7px 14px;
-border-radius: 10px;
-border: 1px solid #C9A84C;
 background: transparent;
-color: #C9A84C;
+border: 1px solid rgba(27,58,107,0.2);
+border-radius: 9px;
+color: #6c7a99;
 font-size: 12px;
-font-weight: 700;
+font-weight: 600;
 cursor: pointer;
 transition: all 0.2s;
 }
 
-.btn-pdf:hover { background: #C9A84C; color: white; }
+.btn-back:hover { background: #1B3A6B; color: #fff; border-color: #1B3A6B; }
 
-.empty-state {
-text-align: center;
-padding: 32px;
-color: #a0aec0;
-font-size: 14px;
+.test-body { padding: 20px; max-width: 700px; margin: 0 auto 60px; }
+
+.progress-wrap { margin-bottom: 18px; }
+.progress-header { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.progress-label { font-size: 11px; font-weight: 600; color: #6c7a99; letter-spacing: 0.06em; }
+.progress-count { font-size: 12px; font-weight: 700; color: #C9A84C; }
+.progress-track { height: 5px; background: #e2e8f4; border-radius: 999px; overflow: hidden; }
+.progress-bar { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+
+.cat-badge {
+display: inline-block;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+padding: 4px 12px;
+border-radius: 20px;
+margin-bottom: 14px;
 }
 
-.loading-overlay {
+.question-card {
+background: #fff;
+border-radius: 20px;
+padding: 26px 22px;
+box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+margin-bottom: 14px;
+}
+
+.situation-box {
+background: #f4f7ff;
+border-left: 4px solid #2E5BA8;
+border-radius: 12px;
+padding: 13px 16px;
+margin-bottom: 16px;
+}
+
+.situation-text {
+font-size: 16px;
+font-weight: 800;
+color: #1a2a4a;
+line-height: 1.5;
+}
+
+.question-text {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+font-weight: 600;
+color: #1a2a4a;
+line-height: 1.45;
+margin-bottom: 20px;
+}
+
+.options { display: flex; flex-direction: column; gap: 9px; }
+
+.option-btn {
+padding: 13px 17px;
+border-radius: 13px;
+border: 2px solid #e2e8f4;
+background: #f8faff;
+color: #22366c;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+text-align: left;
+line-height: 1.4;
+transition: all 0.2s;
+display: flex;
+align-items: center;
+gap: 11px;
+}
+
+.option-btn:hover { background: rgba(74,144,217,0.08); border-color: rgba(74,144,217,0.4); }
+.option-btn.selected { color: #fff; }
+
+.option-dot {
+width: 18px; height: 18px;
+border-radius: 50%;
+border: 2px solid rgba(255,255,255,0.5);
+flex-shrink: 0;
 display: flex;
 align-items: center;
 justify-content: center;
-padding: 40px;
-gap: 8px;
-color: #6c7a99;
+}
+
+.option-dot::after {
+content: ‘’;
+width: 7px; height: 7px;
+border-radius: 50%;
+background: #fff;
+display: none;
+}
+
+.option-btn.selected .option-dot::after { display: block; }
+
+.likert-options { display: flex; flex-direction: column; gap: 9px; }
+
+.likert-btn {
+padding: 13px 17px;
+border-radius: 13px;
+border: 2px solid #e2e8f4;
+background: #f8faff;
+color: #22366c;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 15px;
+font-weight: 700;
+cursor: pointer;
+text-align: left;
+transition: all 0.2s;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.likert-btn:hover { background: rgba(74,144,217,0.08); border-color: rgba(74,144,217,0.4); }
+.likert-btn.selected { color: #fff; }
+
+.likert-num {
+font-size: 20px;
+font-weight: 900;
+min-width: 28px;
+opacity: 0.8;
+}
+
+.btn-next {
+width: 100%;
+padding: 15px;
+border-radius: 13px;
+border: none;
+background: #1B3A6B;
+color: #fff;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 16px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.2s;
+display: none;
+}
+
+.btn-next:hover { background: #2E5BA8; transform: translateY(-1px); }
+
+/* ═══ RÉSULTATS TEST ═══ */
+#page-resultats {
+min-height: 100vh;
+background: linear-gradient(180deg, #edf3ff, #f7f9ff);
+}
+
+.resultats-body { padding: 20px; max-width: 760px; margin: 0 auto 60px; }
+
+.score-hero {
+border-radius: 22px;
+padding: 28px;
+text-align: center;
+margin-bottom: 18px;
+color: #fff;
+}
+
+.score-circle-wrap {
+position: relative;
+width: 160px;
+height: 160px;
+margin: 0 auto 16px;
+}
+
+.score-circle-wrap svg { transform: rotate(-90deg); }
+
+.score-inside {
+position: absolute;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+}
+
+.score-number {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 42px;
+font-weight: 700;
+line-height: 1;
+}
+
+.score-unit { font-size: 14px; opacity: 0.7; }
+
+.profil-name {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 24px;
+font-weight: 700;
+margin-bottom: 6px;
+}
+
+.profil-code {
+display: inline-block;
+background: rgba(255,255,255,0.2);
+border-radius: 20px;
+padding: 5px 16px;
+font-size: 13px;
+font-weight: 800;
+}
+
+.res-card {
+background: #fff;
+border-radius: 20px;
+padding: 22px;
+margin-bottom: 14px;
+box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.res-card-title {
+font-size: 15px;
+font-weight: 800;
+color: #1a2a4a;
+margin-bottom: 14px;
+}
+
+.dim-row { margin-bottom: 13px; }
+.dim-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.dim-name { font-size: 13px; font-weight: 700; color: #22366c; }
+.dim-pct { font-size: 13px; font-weight: 800; }
+.dim-track { height: 8px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
+.dim-fill { height: 100%; border-radius: 999px; transition: width 1s ease 0.3s; }
+
+.insight-row {
+padding: 13px 15px;
+border-radius: 13px;
+margin-bottom: 10px;
+border-left: 4px solid;
+}
+
+.insight-label {
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+margin-bottom: 6px;
+}
+
+.insight-text { font-size: 14px; line-height: 1.6; color: #2a3a5a; }
+
+.btn-gold {
+width: 100%;
+padding: 15px;
+background: linear-gradient(135deg, #C9A84C, #E8C56A);
+color: #0f2244;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 15px;
+font-weight: 800;
+border: none;
+border-radius: 13px;
+cursor: pointer;
+transition: all 0.2s;
+margin-bottom: 10px;
+}
+
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(201,168,76,0.4); }
+
+.btn-outline {
+width: 100%;
+padding: 13px;
+background: transparent;
+color: #1B3A6B;
+font-family: ‘DM Sans’, sans-serif;
 font-size: 14px;
+font-weight: 700;
+border: 2px solid #1B3A6B;
+border-radius: 13px;
+cursor: pointer;
+transition: all 0.2s;
+margin-bottom: 10px;
+}
+
+.btn-outline:hover { background: #1B3A6B; color: #fff; }
+
+.saving-msg {
+text-align: center;
+color: #6c7a99;
+font-size: 13px;
+padding: 10px;
 }
 </style>
 
 </head>
 <body>
 
-<!-- PARTICULES -->
+<!-- ═══════════════════════════════
+     PAGE LOGIN
+═══════════════════════════════ -->
 
-<div class="particles" id="particles"></div>
-
-<!-- ═══ PAGE LOGIN ═══ -->
-
-<div class="card" id="login-page">
-  <div class="logo-wrap">
-    <img src="https://alexandregriffet-cmd.github.io/Test-performance-mental-A4P/IMG_1572.jpeg"
-         class="logo-img" alt="A4P"
-         onerror="this.style.display='none'" />
-    <div class="logo-title">Académie de Performances</div>
-    <div class="logo-brand">A4P · <span>Diagnostic Club</span></div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="form-title">Connexion à votre espace</div>
-
-  <div class="field">
-    <label>Adresse email</label>
-    <input type="email" id="email" placeholder="votre@email.com" autocomplete="email" />
-  </div>
-
-  <div class="field">
-    <label>Mot de passe</label>
-    <input type="password" id="password" placeholder="••••••••••" autocomplete="current-password" />
-  </div>
-
-  <button class="btn-login" id="btn-login" onclick="login()">
-    Se connecter →
-  </button>
-
-  <div class="error-msg" id="error-msg">Email ou mot de passe incorrect.</div>
-
-  <div class="role-badge" id="role-badge"></div>
-
-  <div class="footer-brand" style="text-align:center;margin-top:28px;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;">
-    ACADÉMIE DE PERFORMANCES · A4P<br>Plateforme Club Sécurisée
+<div id="page-login">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="https://alexandregriffet-cmd.github.io/Test-performance-mental-A4P/IMG_1572.jpeg"
+           alt="A4P" onerror="this.style.display='none'" />
+      <div class="eyebrow">Académie de Performances</div>
+      <div class="brand">A4P · <span>Diagnostic Club</span></div>
+    </div>
+    <div class="login-divider"></div>
+    <div class="login-subtitle">Connexion à votre espace</div>
+    <div class="field">
+      <label>Adresse email</label>
+      <input type="email" id="inp-email" placeholder="votre@email.com" />
+    </div>
+    <div class="field">
+      <label>Mot de passe</label>
+      <input type="password" id="inp-password" placeholder="••••••••" />
+    </div>
+    <button class="btn-primary" id="btn-login">Se connecter →</button>
+    <div class="error-box" id="login-error">Email ou mot de passe incorrect.</div>
+    <div style="text-align:center;margin-top:24px;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;">
+      ACADÉMIE DE PERFORMANCES · A4P · Plateforme Club
+    </div>
   </div>
 </div>
 
-<!-- ═══ DASHBOARD JOUEUR ═══ -->
+<!-- ═══════════════════════════════
+     DASHBOARD JOUEUR
+═══════════════════════════════ -->
 
-<div class="dashboard" id="dash-joueur">
-  <div class="dash-header" style="background:white;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-    <div class="dash-logo">A4P · <span>Diagnostic Club</span></div>
-    <div class="dash-user">
-      <div class="dash-avatar" style="background:#1B3A6B;" id="j-avatar">J</div>
-      <div>
-        <div class="dash-name" id="j-name">Joueur</div>
-        <div class="dash-role">🎮 Espace Joueur</div>
+<div class="page" id="page-joueur">
+  <div class="topbar">
+    <div class="topbar-brand">A4P · <span>Diagnostic Club</span></div>
+    <div class="topbar-right">
+      <div class="avatar" id="j-avatar">J</div>
+      <div class="user-info">
+        <div class="name" id="j-name">Joueur</div>
+        <div class="role">🎮 Espace Joueur</div>
       </div>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
     </div>
   </div>
-  <div class="dash-body">
-    <div class="dash-hero" style="background:linear-gradient(135deg,#1B3A6B,#2E5BA8);">
+  <div class="page-body">
+    <div class="hero" style="background:linear-gradient(135deg,#1B3A6B,#2E5BA8);">
       <h1>Mon tableau de bord</h1>
-      <p id="j-welcome">Bienvenue sur votre espace diagnostic</p>
+      <p id="j-welcome">Bienvenue — prêt pour tes diagnostics ?</p>
     </div>
-    <div class="grid-4">
-      <div class="stat-card"><div class="stat-num" id="j-tests-done">0</div><div class="stat-label">Tests complétés</div></div>
-      <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Tests disponibles</div></div>
-      <div class="stat-card"><div class="stat-num" id="j-score-moy">—</div><div class="stat-label">Score moyen</div></div>
-      <div class="stat-card"><div class="stat-num" id="j-equipe-name" style="font-size:14px;padding-top:8px;">—</div><div class="stat-label">Mon équipe</div></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num" id="j-done">0</div><div class="stat-label">Tests complétés</div></div>
+      <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Disponibles</div></div>
+      <div class="stat-card"><div class="stat-num" id="j-moy">—</div><div class="stat-label">Score moyen</div></div>
+      <div class="stat-card"><div class="stat-num" id="j-equipe" style="font-size:13px;padding-top:6px;">—</div><div class="stat-label">Mon équipe</div></div>
     </div>
     <div class="section-card">
       <div class="section-title">📊 Mes 4 diagnostics A4P</div>
-      <div class="test-item">
-        <div><div class="test-name">PMP</div><div class="test-desc">Profil Mental de Performance · 120 questions</div></div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span class="badge-dispo">✅ Disponible</span>
-          <button class="btn-test" onclick="goToTest('PMP')">Démarrer →</button>
-        </div>
-      </div>
-      <div class="test-item">
-        <div><div class="test-name">MPA</div><div class="test-desc">Mode Préférentiel d'Action · 100 questions</div></div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span class="badge-dispo">✅ Disponible</span>
-          <button class="btn-test" onclick="goToTest('MPA')">Démarrer →</button>
-        </div>
-      </div>
-      <div class="test-item">
-        <div><div class="test-name">CMP</div><div class="test-desc">Compétences Mentales de Performance · 30 situations</div></div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span class="badge-dispo">✅ Disponible</span>
-          <button class="btn-test" onclick="goToTest('CMP')">Démarrer →</button>
-        </div>
-      </div>
-      <div class="test-item">
-        <div><div class="test-name">PSYCHO</div><div class="test-desc">Profil Psycho-émotionnel · 50 questions</div></div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span class="badge-dispo">✅ Disponible</span>
-          <button class="btn-test" onclick="goToTest('PSYCHO')">Démarrer →</button>
-        </div>
-      </div>
+
+```
+  <div class="test-item">
+    <div class="test-color-bar" style="background:#2f4a8a;"></div>
+    <div class="test-info">
+      <div class="test-name">PMP</div>
+      <div class="test-desc">Profil Mental de Performance · 120 questions</div>
     </div>
-    <div class="section-card" id="j-resultats-section">
-      <div class="section-title">📈 Mes résultats</div>
-      <div id="j-resultats-list"><div class="empty-state">Aucun test complété pour l'instant.</div></div>
+    <span class="badge-ok" id="badge-PMP">✅ Disponible</span>
+    <button class="btn-start" style="background:#2f4a8a;" onclick="startTest('PMP')">Démarrer →</button>
+  </div>
+
+  <div class="test-item">
+    <div class="test-color-bar" style="background:#1a3a6a;"></div>
+    <div class="test-info">
+      <div class="test-name">MPA</div>
+      <div class="test-desc">Mode Préférentiel d'Action · 100 questions</div>
     </div>
+    <span class="badge-ok" id="badge-MPA">✅ Disponible</span>
+    <button class="btn-start" style="background:#1a3a6a;" onclick="startTest('MPA')">Démarrer →</button>
+  </div>
+
+  <div class="test-item">
+    <div class="test-color-bar" style="background:#1a4a2a;"></div>
+    <div class="test-info">
+      <div class="test-name">CMP</div>
+      <div class="test-desc">Compétences Mentales de Performance · 30 situations</div>
+    </div>
+    <span class="badge-ok" id="badge-CMP">✅ Disponible</span>
+    <button class="btn-start" style="background:#1a4a2a;" onclick="startTest('CMP')">Démarrer →</button>
+  </div>
+
+  <div class="test-item">
+    <div class="test-color-bar" style="background:#4a1a6a;"></div>
+    <div class="test-info">
+      <div class="test-name">PSYCHO</div>
+      <div class="test-desc">Profil Psycho-émotionnel · 50 questions</div>
+    </div>
+    <span class="badge-ok" id="badge-PSYCHO">✅ Disponible</span>
+    <button class="btn-start" style="background:#4a1a6a;" onclick="startTest('PSYCHO')">Démarrer →</button>
   </div>
 </div>
 
-<!-- ═══ DASHBOARD COACH ═══ -->
+<div class="section-card">
+  <div class="section-title">📈 Mes résultats</div>
+  <div id="j-resultats"><div class="empty-state">Aucun test complété pour l'instant.</div></div>
+</div>
+```
 
-<div class="dashboard" id="dash-coach">
-  <div class="dash-header" style="background:white;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-    <div class="dash-logo">A4P · <span>Diagnostic Club</span></div>
-    <div class="dash-user">
-      <div class="dash-avatar" style="background:#2E5BA8;" id="c-avatar">C</div>
-      <div>
-        <div class="dash-name" id="c-name">Coach</div>
-        <div class="dash-role">👨‍💼 Espace Coach</div>
-      </div>
-      <button class="btn-logout" onclick="logout()">Déconnexion</button>
-    </div>
-  </div>
-  <div class="dash-body">
-    <div class="dash-hero" style="background:linear-gradient(135deg,#2E5BA8,#4A90D9);">
-      <h1 id="c-equipe-title">Mon équipe</h1>
-      <p>Suivi des diagnostics mentaux de vos joueurs</p>
-    </div>
-    <div class="grid-4">
-      <div class="stat-card"><div class="stat-num" id="c-nb-joueurs">0</div><div class="stat-label">Joueurs</div></div>
-      <div class="stat-card"><div class="stat-num" id="c-tests-passes">0</div><div class="stat-label">Tests passés</div></div>
-      <div class="stat-card"><div class="stat-num" id="c-score-equipe">—</div><div class="stat-label">Score moyen équipe</div></div>
-      <div class="stat-card"><div class="stat-num" id="c-completion">0%</div><div class="stat-label">Taux de complétion</div></div>
-    </div>
-    <div class="section-card">
-      <div class="section-title">👥 Mes joueurs — Résultats individuels</div>
-      <div id="c-joueurs-list"><div class="loading-overlay">⏳ Chargement...</div></div>
-    </div>
-    <div class="section-card">
-      <div class="section-title">📊 Moyenne équipe par dimension</div>
-      <div id="c-moyennes-list"><div class="empty-state">En attente des résultats de l'équipe.</div></div>
-    </div>
   </div>
 </div>
 
-<!-- ═══ DASHBOARD DIRIGEANT ═══ -->
+<!-- ═══════════════════════════════
+     PAGE TEST
+═══════════════════════════════ -->
 
-<div class="dashboard" id="dash-dirigeant">
-  <div class="dash-header" style="background:white;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-    <div class="dash-logo">A4P · <span>Diagnostic Club</span></div>
-    <div class="dash-user">
-      <div class="dash-avatar" style="background:#1a6a5a;" id="d-avatar">D</div>
-      <div>
-        <div class="dash-name" id="d-name">Dirigeant</div>
-        <div class="dash-role">🏛️ Espace Dirigeant</div>
-      </div>
-      <button class="btn-logout" onclick="logout()">Déconnexion</button>
-    </div>
+<div class="page" id="page-test">
+  <div class="test-topbar">
+    <button class="btn-back" onclick="backToDashboard()">← Retour</button>
+    <div class="test-topbar-title" id="test-title">Test</div>
+    <div style="font-size:12px;color:#6c7a99;" id="test-progress-txt">1 / 30</div>
   </div>
-  <div class="dash-body">
-    <div class="dash-hero" style="background:linear-gradient(135deg,#1a4a2a,#1a6a5a);">
-      <h1 id="d-club-title">Mon club</h1>
-      <p>Vue globale de toutes vos équipes</p>
+  <div class="test-body">
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="progress-label">PROGRESSION</span>
+        <span class="progress-count" id="test-count">1 / 30</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="test-bar" style="width:3%"></div>
+      </div>
     </div>
-    <div class="grid-4">
-      <div class="stat-card"><div class="stat-num" id="d-nb-equipes">0</div><div class="stat-label">Équipes</div></div>
-      <div class="stat-card"><div class="stat-num" id="d-nb-joueurs">0</div><div class="stat-label">Joueurs</div></div>
-      <div class="stat-card"><div class="stat-num" id="d-tests-passes">0</div><div class="stat-label">Tests complétés</div></div>
-      <div class="stat-card"><div class="stat-num" id="d-score-club">—</div><div class="stat-label">Score moyen club</div></div>
-    </div>
-    <div class="section-card">
-      <div class="section-title">🏆 Mes équipes</div>
-      <div id="d-equipes-list"><div class="loading-overlay">⏳ Chargement...</div></div>
-    </div>
+    <div id="test-question-area"></div>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Question suivante →</button>
   </div>
 </div>
 
-<!-- ═══ DASHBOARD ADMIN ═══ -->
+<!-- ═══════════════════════════════
+     PAGE RÉSULTATS TEST
+═══════════════════════════════ -->
 
-<div class="dashboard" id="dash-admin">
-  <div class="dash-header" style="background:linear-gradient(135deg,#0f2244,#1B3A6B);box-shadow:0 2px 20px rgba(0,0,0,0.3);">
-    <div class="dash-logo" style="color:white;">A4P · <span>Admin</span></div>
-    <div class="dash-user">
-      <div class="dash-avatar" style="background:linear-gradient(135deg,#C9A84C,#E8C56A);" id="a-avatar">A</div>
-      <div>
-        <div class="dash-name" style="color:white;" id="a-name">Alexandre Griffet</div>
-        <div class="dash-role" style="color:rgba(255,255,255,0.6);">👑 Administrateur A4P</div>
-      </div>
-      <button class="btn-logout" onclick="logout()" style="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.7);">Déconnexion</button>
-    </div>
+<div class="page" id="page-resultats">
+  <div class="test-topbar">
+    <button class="btn-back" onclick="showPage('page-joueur')">← Mon tableau de bord</button>
+    <div class="test-topbar-title" id="res-title">Résultats</div>
+    <div></div>
   </div>
-  <div class="dash-body">
-    <div class="dash-hero" style="background:linear-gradient(135deg,#0f2244,#1B3A6B);border:1px solid rgba(201,168,76,0.3);">
-      <div style="font-size:13px;letter-spacing:0.3em;color:#C9A84C;margin-bottom:8px;">TABLEAU DE BORD ADMINISTRATEUR</div>
-      <h1>Vue globale A4P</h1>
-      <p>Tous les clubs · Toutes les équipes · Tous les joueurs</p>
-    </div>
-    <div class="grid-4">
-      <div class="stat-card"><div class="stat-num" id="a-nb-clubs" style="color:#C9A84C;">0</div><div class="stat-label">Clubs</div></div>
-      <div class="stat-card"><div class="stat-num" id="a-nb-equipes" style="color:#C9A84C;">0</div><div class="stat-label">Équipes</div></div>
-      <div class="stat-card"><div class="stat-num" id="a-nb-joueurs" style="color:#C9A84C;">0</div><div class="stat-label">Joueurs</div></div>
-      <div class="stat-card"><div class="stat-num" id="a-nb-tests" style="color:#C9A84C;">0</div><div class="stat-label">Tests passés</div></div>
-    </div>
-    <div class="section-card">
-      <div class="section-title">📋 Tous les résultats — Export PDF</div>
-      <div id="a-resultats-list"><div class="loading-overlay">⏳ Chargement de tous les résultats...</div></div>
-    </div>
-    <div class="section-card">
-      <div class="section-title">👥 Tous les utilisateurs</div>
-      <div id="a-users-list"><div class="loading-overlay">⏳ Chargement...</div></div>
-    </div>
+  <div class="resultats-body" id="resultats-content">
   </div>
 </div>
 
 <script>
-// ═══ SUPABASE INIT ═══
+// ═══ SUPABASE ═══
 const { createClient } = supabase
 const sb = createClient(
   'https://uambqnxbjgukcqbrlops.supabase.co',
@@ -728,371 +851,619 @@ const sb = createClient(
 )
 
 let currentUser = null
+let currentTest = null
+let currentQ = 0
+let testAnswers = {}
+let testQuestions = []
 
-// ═══ PARTICULES ═══
-function createParticles() {
-  const container = document.getElementById('particles')
-  for (let i = 0; i < 12; i++) {
-    const p = document.createElement('div')
-    p.className = 'particle'
-    const size = Math.random() * 6 + 2
-    p.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random()*100}%;
-      animation-duration:${Math.random()*15+10}s;
-      animation-delay:${Math.random()*10}s;
-      opacity:${Math.random()*0.4+0.1};
-    `
-    container.appendChild(p)
-  }
+// ═══ NAVIGATION ═══
+function showPage(id) {
+  document.querySelectorAll('.page, #page-login').forEach(p => {
+    p.style.display = 'none'
+    p.classList.remove('active')
+  })
+  const el = document.getElementById(id)
+  el.style.display = 'block'
+  el.classList.add('active')
+  window.scrollTo(0, 0)
 }
-createParticles()
 
 // ═══ LOGIN ═══
-document.getElementById('password').addEventListener('keydown', e => {
-  if (e.key === 'Enter') login()
+document.getElementById('inp-password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin()
 })
+document.getElementById('btn-login').addEventListener('click', doLogin)
 
-async function login() {
-  const email = document.getElementById('email').value.trim().toLowerCase()
-  const password = document.getElementById('password').value.trim()
+async function doLogin() {
+  const email = document.getElementById('inp-email').value.trim().toLowerCase()
+  const password = document.getElementById('inp-password').value.trim()
   const btn = document.getElementById('btn-login')
-  const errEl = document.getElementById('error-msg')
-  const badgeEl = document.getElementById('role-badge')
+  const err = document.getElementById('login-error')
 
-  if (!email || !password) {
-    showError('Veuillez remplir tous les champs.')
-    return
-  }
+  if (!email || !password) { err.textContent = 'Remplissez tous les champs.'; err.style.display = 'block'; return }
 
   btn.disabled = true
-  btn.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>'
-  errEl.style.display = 'none'
-  badgeEl.style.display = 'none'
+  btn.textContent = 'Connexion...'
+  err.style.display = 'none'
 
   try {
-    const { data, error } = await sb
-      .from('utilisateurs')
-      .select('*')
-      .eq('email', email)
-      .eq('mot_de_passe', password)
-      .eq('actif', true)
-      .single()
-
+    const { data, error } = await sb.from('utilisateurs').select('*').eq('email', email).eq('mot_de_passe', password).eq('actif', true).single()
     if (error || !data) {
-      showError('Email ou mot de passe incorrect.')
+      err.textContent = 'Email ou mot de passe incorrect.'
+      err.style.display = 'block'
       btn.disabled = false
-      btn.innerHTML = 'Se connecter →'
+      btn.textContent = 'Se connecter →'
       return
     }
-
     currentUser = data
-
-    // Afficher badge rôle
-    const roleLabels = {
-      admin: { label: '👑 Administrateur A4P', cls: 'role-admin' },
-      dirigeant: { label: '🏛️ Dirigeant Club', cls: 'role-dirigeant' },
-      coach: { label: '👨‍💼 Coach', cls: 'role-coach' },
-      joueur: { label: '🎮 Joueur', cls: 'role-joueur' }
-    }
-    const roleInfo = roleLabels[data.role]
-    badgeEl.className = `role-badge ${roleInfo.cls}`
-    badgeEl.textContent = `Connecté · ${roleInfo.label}`
-    badgeEl.style.display = 'block'
-
-    btn.innerHTML = '✅ Connexion réussie'
-
+    btn.textContent = '✅ Connexion réussie'
     setTimeout(() => {
-      document.getElementById('login-page').style.display = 'none'
-      loadDashboard(data)
-    }, 800)
-
-  } catch (e) {
-    showError('Erreur de connexion. Réessayez.')
+      document.getElementById('page-login').style.display = 'none'
+      if (data.role === 'joueur') loadJoueur(data)
+      else { btn.disabled = false; btn.textContent = 'Se connecter →'; err.textContent = 'Ce portail est réservé aux joueurs.'; err.style.display = 'block' }
+    }, 600)
+  } catch(e) {
+    err.textContent = 'Erreur réseau. Réessayez.'
+    err.style.display = 'block'
     btn.disabled = false
-    btn.innerHTML = 'Se connecter →'
+    btn.textContent = 'Se connecter →'
   }
 }
 
-function showError(msg) {
-  const el = document.getElementById('error-msg')
-  el.textContent = msg
-  el.style.display = 'block'
-}
-
-// ═══ LOGOUT ═══
 function logout() {
   currentUser = null
-  document.querySelectorAll('.dashboard').forEach(d => d.style.display = 'none')
-  document.getElementById('login-page').style.display = 'block'
-  document.getElementById('email').value = ''
-  document.getElementById('password').value = ''
+  document.querySelectorAll('.page').forEach(p => { p.style.display = 'none'; p.classList.remove('active') })
+  document.getElementById('page-login').style.display = 'flex'
+  document.getElementById('inp-email').value = ''
+  document.getElementById('inp-password').value = ''
   document.getElementById('btn-login').disabled = false
-  document.getElementById('btn-login').innerHTML = 'Se connecter →'
-  document.getElementById('error-msg').style.display = 'none'
-  document.getElementById('role-badge').style.display = 'none'
-}
-
-// ═══ CHARGEMENT DASHBOARD ═══
-async function loadDashboard(user) {
-  const dash = document.getElementById(`dash-${user.role}`)
-  dash.style.display = 'block'
-  document.body.style.background = '#f0f4ff'
-  document.body.style.alignItems = 'flex-start'
-
-  if (user.role === 'joueur') await loadDashJoueur(user)
-  if (user.role === 'coach') await loadDashCoach(user)
-  if (user.role === 'dirigeant') await loadDashDirigeant(user)
-  if (user.role === 'admin') await loadDashAdmin(user)
+  document.getElementById('btn-login').textContent = 'Se connecter →'
+  document.getElementById('login-error').style.display = 'none'
 }
 
 // ═══ DASHBOARD JOUEUR ═══
-async function loadDashJoueur(user) {
+async function loadJoueur(user) {
   document.getElementById('j-avatar').textContent = user.prenom[0].toUpperCase()
-  document.getElementById('j-name').textContent = `${user.prenom} ${user.nom}`
-  document.getElementById('j-welcome').textContent = `Bonjour ${user.prenom} — prêt pour tes diagnostics ?`
+  document.getElementById('j-name').textContent = user.prenom + ' ' + user.nom
+  document.getElementById('j-welcome').textContent = 'Bonjour ' + user.prenom + ' — prêt pour tes diagnostics ?'
 
-  // Récupérer résultats
-  const { data: resultats } = await sb
-    .from('resultats')
-    .select('*')
-    .eq('utilisateur_id', user.id)
-    .order('completed_at', { ascending: false })
+  showPage('page-joueur')
 
+  const { data: resultats } = await sb.from('resultats').select('*').eq('utilisateur_id', user.id).order('completed_at', { ascending: false })
   const done = resultats?.length || 0
-  document.getElementById('j-tests-done').textContent = done
+  document.getElementById('j-done').textContent = done
 
   if (done > 0) {
-    const moyScore = Math.round(resultats.reduce((a, r) => a + (r.score_global || 0), 0) / done)
-    document.getElementById('j-score-moy').textContent = moyScore + '%'
-
-    const listEl = document.getElementById('j-resultats-list')
-    listEl.innerHTML = resultats.map(r => `
-      <div class="player-row">
-        <div style="flex:1">
-          <div class="player-name">${r.test_type} — ${r.profil_label || 'Résultat'}</div>
-          <div class="player-score">${new Date(r.completed_at).toLocaleDateString('fr-FR')} · Score : ${r.score_global || '—'}%</div>
+    const moy = Math.round(resultats.reduce((a, r) => a + (r.score_global || 0), 0) / done)
+    document.getElementById('j-moy').textContent = moy + '%'
+    const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
+    document.getElementById('j-resultats').innerHTML = resultats.map(r => `
+      <div class="result-row">
+        <div class="result-badge" style="background:${colors[r.test_type]||'#1B3A6B'}">${r.test_type}</div>
+        <div class="result-info">
+          <div class="result-name">${r.profil_label || r.profil_code || 'Résultat'}</div>
+          <div class="result-date">${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div>
         </div>
-        <button class="btn-pdf" onclick="exportPDF('${r.id}')">📄 PDF</button>
+        <div class="score-wrap">
+          <div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:${colors[r.test_type]||'#1B3A6B'}"></div></div>
+          <div class="score-val">${r.score_global || '—'}%</div>
+        </div>
       </div>
     `).join('')
+    const done_types = [...new Set(resultats.map(r => r.test_type))]
+    done_types.forEach(t => {
+      const badge = document.getElementById('badge-' + t)
+      if (badge) { badge.className = 'badge-done'; badge.textContent = '✅ Complété' }
+    })
   }
 
-  // Équipe
   if (user.equipe_id) {
     const { data: eq } = await sb.from('equipes').select('nom').eq('id', user.equipe_id).single()
-    if (eq) document.getElementById('j-equipe-name').textContent = eq.nom
+    if (eq) document.getElementById('j-equipe').textContent = eq.nom
   }
 }
 
-// ═══ DASHBOARD COACH ═══
-async function loadDashCoach(user) {
-  document.getElementById('c-avatar').textContent = user.prenom[0].toUpperCase()
-  document.getElementById('c-name').textContent = `${user.prenom} ${user.nom}`
-
-  if (!user.equipe_id) return
-
-  const { data: equipe } = await sb.from('equipes').select('nom').eq('id', user.equipe_id).single()
-  if (equipe) document.getElementById('c-equipe-title').textContent = equipe.nom
-
-  // Joueurs de l'équipe
-  const { data: joueurs } = await sb
-    .from('utilisateurs')
-    .select('*')
-    .eq('equipe_id', user.equipe_id)
-    .eq('role', 'joueur')
-
-  document.getElementById('c-nb-joueurs').textContent = joueurs?.length || 0
-
-  // Résultats de tous les joueurs
-  const joueurIds = joueurs?.map(j => j.id) || []
-  let tousResultats = []
-  if (joueurIds.length > 0) {
-    const { data: res } = await sb
-      .from('resultats')
-      .select('*')
-      .in('utilisateur_id', joueurIds)
-    tousResultats = res || []
-  }
-
-  document.getElementById('c-tests-passes').textContent = tousResultats.length
-
-  const joueursAvecTests = [...new Set(tousResultats.map(r => r.utilisateur_id))].length
-  const completion = joueurs?.length > 0 ? Math.round((joueursAvecTests / joueurs.length) * 100) : 0
-  document.getElementById('c-completion').textContent = completion + '%'
-
-  if (tousResultats.length > 0) {
-    const moy = Math.round(tousResultats.reduce((a, r) => a + (r.score_global || 0), 0) / tousResultats.length)
-    document.getElementById('c-score-equipe').textContent = moy + '%'
-  }
-
-  // Afficher joueurs
-  const listEl = document.getElementById('c-joueurs-list')
-  if (!joueurs || joueurs.length === 0) {
-    listEl.innerHTML = '<div class="empty-state">Aucun joueur dans cette équipe.</div>'
-    return
-  }
-
-  listEl.innerHTML = joueurs.map(j => {
-    const jRes = tousResultats.filter(r => r.utilisateur_id === j.id)
-    const moy = jRes.length > 0 ? Math.round(jRes.reduce((a, r) => a + (r.score_global || 0), 0) / jRes.length) : null
-    return `
-      <div class="player-row">
-        <div class="player-avatar">${j.prenom[0].toUpperCase()}</div>
-        <div style="flex:1;min-width:100px;">
-          <div class="player-name">${j.prenom} ${j.nom}</div>
-          <div class="player-score">${jRes.length} test(s) complété(s)</div>
-        </div>
-        ${moy !== null ? `
-          <div class="score-bar-wrap">
-            <div class="score-bar"><div class="score-fill" style="width:${moy}%"></div></div>
-          </div>
-          <div class="score-val">${moy}%</div>
-        ` : '<div style="font-size:12px;color:#a0aec0;">Pas encore de test</div>'}
-        ${jRes.length > 0 ? `<button class="btn-pdf" onclick="voirJoueur('${j.id}','${j.prenom} ${j.nom}')">Voir →</button>` : ''}
-      </div>
-    `
-  }).join('')
+// ═══ DÉMARRER UN TEST ═══
+function startTest(type) {
+  currentTest = type
+  currentQ = 0
+  testAnswers = {}
+  testQuestions = getQuestions(type)
+  document.getElementById('test-title').textContent = 'Test ' + type
+  document.getElementById('btn-next').style.display = 'none'
+  showPage('page-test')
+  renderQuestion()
 }
 
-// ═══ DASHBOARD DIRIGEANT ═══
-async function loadDashDirigeant(user) {
-  document.getElementById('d-avatar').textContent = user.prenom[0].toUpperCase()
-  document.getElementById('d-name').textContent = `${user.prenom} ${user.nom}`
-
-  if (!user.club_id) return
-
-  const { data: club } = await sb.from('clubs').select('nom').eq('id', user.club_id).single()
-  if (club) document.getElementById('d-club-title').textContent = club.nom
-
-  const { data: equipes } = await sb.from('equipes').select('*').eq('club_id', user.club_id)
-  document.getElementById('d-nb-equipes').textContent = equipes?.length || 0
-
-  const { data: joueurs } = await sb.from('utilisateurs').select('*').eq('club_id', user.club_id).eq('role', 'joueur')
-  document.getElementById('d-nb-joueurs').textContent = joueurs?.length || 0
-
-  const joueurIds = joueurs?.map(j => j.id) || []
-  let tousResultats = []
-  if (joueurIds.length > 0) {
-    const { data: res } = await sb.from('resultats').select('*').in('utilisateur_id', joueurIds)
-    tousResultats = res || []
+function backToDashboard() {
+  if (confirm('Quitter le test ? Ta progression sera perdue.')) {
+    showPage('page-joueur')
   }
-  document.getElementById('d-tests-passes').textContent = tousResultats.length
-
-  if (tousResultats.length > 0) {
-    const moy = Math.round(tousResultats.reduce((a, r) => a + (r.score_global || 0), 0) / tousResultats.length)
-    document.getElementById('d-score-club').textContent = moy + '%'
-  }
-
-  // Afficher équipes
-  const listEl = document.getElementById('d-equipes-list')
-  if (!equipes || equipes.length === 0) {
-    listEl.innerHTML = '<div class="empty-state">Aucune équipe dans ce club.</div>'
-    return
-  }
-
-  listEl.innerHTML = equipes.map(eq => {
-    const joueursEq = joueurs?.filter(j => j.equipe_id === eq.id) || []
-    const resEq = tousResultats.filter(r => joueursEq.some(j => j.id === r.utilisateur_id))
-    const moyEq = resEq.length > 0 ? Math.round(resEq.reduce((a, r) => a + (r.score_global || 0), 0) / resEq.length) : null
-    return `
-      <div class="player-row">
-        <div class="player-avatar" style="background:#1a6a5a;">${eq.nom[0].toUpperCase()}</div>
-        <div style="flex:1">
-          <div class="player-name">${eq.nom}</div>
-          <div class="player-score">${joueursEq.length} joueur(s) · ${resEq.length} test(s)</div>
-        </div>
-        ${moyEq !== null ? `
-          <div class="score-bar-wrap">
-            <div class="score-bar"><div class="score-fill" style="width:${moyEq}%;background:linear-gradient(90deg,#1a6a5a,#4ade80)"></div></div>
-          </div>
-          <div class="score-val" style="color:#1a6a5a;">${moyEq}%</div>
-        ` : '<div style="font-size:12px;color:#a0aec0;">Aucun résultat</div>'}
-      </div>
-    `
-  }).join('')
 }
 
-// ═══ DASHBOARD ADMIN ═══
-async function loadDashAdmin(user) {
-  document.getElementById('a-avatar').textContent = 'A'
-  document.getElementById('a-name').textContent = `${user.prenom} ${user.nom}`
+// ═══ RENDU QUESTION ═══
+function renderQuestion() {
+  const q = testQuestions[currentQ]
+  const total = testQuestions.length
+  const pct = Math.round(((currentQ + 1) / total) * 100)
+  const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
+  const color = colors[currentTest] || '#1B3A6B'
 
-  const [{ data: clubs }, { data: equipes }, { data: joueurs }, { data: resultats }, { data: allUsers }] = await Promise.all([
-    sb.from('clubs').select('*'),
-    sb.from('equipes').select('*'),
-    sb.from('utilisateurs').select('*').eq('role', 'joueur'),
-    sb.from('resultats').select('*, utilisateurs(prenom, nom, email)').order('completed_at', { ascending: false }),
-    sb.from('utilisateurs').select('*').neq('role', 'admin').order('created_at', { ascending: false })
-  ])
+  document.getElementById('test-count').textContent = (currentQ + 1) + ' / ' + total
+  document.getElementById('test-progress-txt').textContent = (currentQ + 1) + ' / ' + total
+  document.getElementById('test-bar').style.width = pct + '%'
+  document.getElementById('test-bar').style.background = color
+  document.getElementById('btn-next').style.display = 'none'
 
-  document.getElementById('a-nb-clubs').textContent = clubs?.length || 0
-  document.getElementById('a-nb-equipes').textContent = equipes?.length || 0
-  document.getElementById('a-nb-joueurs').textContent = joueurs?.length || 0
-  document.getElementById('a-nb-tests').textContent = resultats?.length || 0
+  let html = ''
 
-  // Résultats
-  const resEl = document.getElementById('a-resultats-list')
-  if (!resultats || resultats.length === 0) {
-    resEl.innerHTML = '<div class="empty-state">Aucun test complété pour l\'instant.</div>'
+  if (q.type === 'situational') {
+    html += '<div class="situation-box"><div class="situation-text">🎯 ' + q.situation + '</div></div>'
+    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.cat || 'Situation') + '</div>'
+    html += '<div class="question-text">' + q.text + '</div>'
+    html += '<div class="options">'
+    q.options.forEach((opt, i) => {
+      const sel = testAnswers[q.id] === i
+      html += '<button class="option-btn' + (sel ? ' selected' : '') + '" style="' + (sel ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectOption(' + i + ')">'
+      html += '<div class="option-dot"></div><span>' + opt.text + '</span></button>'
+    })
+    html += '</div>'
+
+  } else if (q.type === 'binary') {
+    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.axe || '') + ' · ' + (q.title || '') + '</div>'
+    html += '<div style="font-size:13px;color:#6c7a99;margin-bottom:16px;text-align:center;font-weight:600;">Choisis l\'affirmation qui te ressemble le plus</div>'
+    html += '<div class="options">'
+    const optA = q.text
+    const optB = q.textB || "L'affirmation opposée me correspond mieux."
+    const selA = testAnswers[q.id] === 'A'
+    const selB = testAnswers[q.id] === 'B'
+    html += '<button class="option-btn' + (selA ? ' selected' : '') + '" style="' + (selA ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectBinary(\'A\')">'
+    html += '<div class="option-dot"></div><span>' + optA + '</span></button>'
+    html += '<button class="option-btn' + (selB ? ' selected' : '') + '" style="' + (selB ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectBinary(\'B\')">'
+    html += '<div class="option-dot"></div><span>' + optB + '</span></button>'
+    html += '</div>'
+
   } else {
-    resEl.innerHTML = resultats.map(r => `
-      <div class="player-row">
-        <div class="player-avatar" style="background:#C9A84C;color:#0f2244;">
-          ${r.utilisateurs ? r.utilisateurs.prenom[0].toUpperCase() : '?'}
-        </div>
-        <div style="flex:1">
-          <div class="player-name">${r.utilisateurs ? `${r.utilisateurs.prenom} ${r.utilisateurs.nom}` : 'Inconnu'}</div>
-          <div class="player-score">${r.test_type} · ${r.profil_label || '—'} · ${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div>
-        </div>
-        <div class="score-bar-wrap">
-          <div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:linear-gradient(90deg,#C9A84C,#E8C56A)"></div></div>
-        </div>
-        <div class="score-val" style="color:#C9A84C;">${r.score_global || '—'}%</div>
-        <button class="btn-pdf" onclick="exportResultatPDF('${r.id}')">📄 PDF</button>
-      </div>
-    `).join('')
+    // Likert
+    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.dimension || q.cat || '') + '</div>'
+    html += '<div class="question-text">' + q.text + '</div>'
+    html += '<div class="likert-options">'
+    const labels = ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Toujours']
+    ;[1,2,3,4,5].forEach(v => {
+      const sel = testAnswers[q.id] === v
+      html += '<button class="likert-btn' + (sel ? ' selected' : '') + '" style="' + (sel ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectLikert(' + v + ')">'
+      html += '<span class="likert-num">' + v + '</span><span>' + labels[v-1] + '</span></button>'
+    })
+    html += '</div>'
   }
 
-  // Tous les utilisateurs
-  const usersEl = document.getElementById('a-users-list')
-  if (!allUsers || allUsers.length === 0) {
-    usersEl.innerHTML = '<div class="empty-state">Aucun utilisateur.</div>'
+  document.getElementById('test-question-area').innerHTML = html
+
+  if (currentQ === total - 1) {
+    document.getElementById('btn-next').textContent = 'Voir mes résultats →'
   } else {
-    const roleColors = { dirigeant: '#1a6a5a', coach: '#2E5BA8', joueur: '#5a3a8a' }
-    const roleEmojis = { dirigeant: '🏛️', coach: '👨‍💼', joueur: '🎮' }
-    usersEl.innerHTML = allUsers.map(u => `
-      <div class="player-row">
-        <div class="player-avatar" style="background:${roleColors[u.role]||'#1B3A6B'};">
-          ${u.prenom[0].toUpperCase()}
-        </div>
-        <div style="flex:1">
-          <div class="player-name">${u.prenom} ${u.nom}</div>
-          <div class="player-score">${roleEmojis[u.role]||''} ${u.role} · ${u.email}</div>
-        </div>
-        <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:${roleColors[u.role]||'#1B3A6B'}22;color:${roleColors[u.role]||'#1B3A6B'};font-weight:700;">
-          ${u.role}
-        </span>
-      </div>
-    `).join('')
+    document.getElementById('btn-next').textContent = 'Question suivante →'
   }
 }
 
-// ═══ ACTIONS ═══
-function goToTest(type) {
-  alert(`Le test ${type} sera disponible dans la prochaine version.\n\nCette page de login est l'étape 1 — les tests s'intègreront ici.`)
+function selectOption(idx) {
+  testAnswers[testQuestions[currentQ].id] = idx
+  renderQuestion()
+  document.getElementById('btn-next').style.display = 'block'
 }
 
-function voirJoueur(id, nom) {
-  alert(`Détail des résultats de ${nom} — disponible dans la prochaine version.`)
+function selectBinary(val) {
+  testAnswers[testQuestions[currentQ].id] = val
+  renderQuestion()
+  document.getElementById('btn-next').style.display = 'block'
 }
 
-function exportPDF(id) {
-  alert(`Export PDF du résultat ${id} — disponible dans la prochaine version.`)
+function selectLikert(val) {
+  testAnswers[testQuestions[currentQ].id] = val
+  renderQuestion()
+  document.getElementById('btn-next').style.display = 'block'
 }
 
-function exportResultatPDF(id) {
-  alert(`Export PDF admin du résultat ${id} — disponible dans la prochaine version.`)
+function nextQuestion() {
+  if (testAnswers[testQuestions[currentQ].id] === undefined) return
+  if (currentQ < testQuestions.length - 1) {
+    currentQ++
+    renderQuestion()
+  } else {
+    finishTest()
+  }
+}
+
+// ═══ FIN DU TEST ═══
+async function finishTest() {
+  const results = calcResults(currentTest, testAnswers, testQuestions)
+  showPage('page-resultats')
+  document.getElementById('res-title').textContent = 'Résultats ' + currentTest
+  renderResults(currentTest, results)
+  await saveResult(currentTest, results)
+}
+
+async function saveResult(type, results) {
+  if (!currentUser) return
+  try {
+    await sb.from('resultats').insert({
+      utilisateur_id: currentUser.id,
+      test_type: type,
+      scores: results.scores,
+      profil_code: results.profilCode,
+      profil_label: results.profilLabel,
+      score_global: results.globalScore,
+      equipe_id: currentUser.equipe_id || null,
+      club_id: currentUser.club_id || null
+    })
+    document.getElementById('saving-status') && (document.getElementById('saving-status').textContent = '✅ Résultat enregistré')
+  } catch(e) { console.error(e) }
+}
+
+// ═══ RENDU RÉSULTATS ═══
+function renderResults(type, res) {
+  const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
+  const color = colors[type] || '#1B3A6B'
+  const circ = 2 * Math.PI * 60
+
+  let html = ''
+  html += '<div class="score-hero" style="background:linear-gradient(135deg,' + color + ',' + color + 'cc);">'
+  html += '<div class="score-circle-wrap">'
+  html += '<svg width="160" height="160"><circle cx="80" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="12"/>'
+  html += '<circle cx="80" cy="80" r="60" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"'
+  html += ' stroke-dasharray="' + circ + '" stroke-dashoffset="' + (circ * (1 - res.globalScore / 100)) + '"'
+  html += ' style="transition:stroke-dashoffset 1.5s ease"/></svg>'
+  html += '<div class="score-inside"><div class="score-number">' + res.globalScore + '</div><div class="score-unit">/ 100</div></div>'
+  html += '</div>'
+  html += '<div class="profil-name">' + res.profilLabel + '</div>'
+  html += '<div class="profil-code">' + res.profilCode + '</div>'
+  html += '</div>'
+
+  // Dimensions
+  if (res.dimensions && res.dimensions.length > 0) {
+    html += '<div class="res-card"><div class="res-card-title">📊 Tes dimensions</div>'
+    res.dimensions.forEach(d => {
+      html += '<div class="dim-row">'
+      html += '<div class="dim-header"><span class="dim-name">' + d.label + '</span><span class="dim-pct" style="color:' + (d.color||color) + '">' + d.value + '%</span></div>'
+      html += '<div class="dim-track"><div class="dim-fill" style="width:' + d.value + '%;background:' + (d.color||color) + '"></div></div>'
+      html += '</div>'
+    })
+    html += '</div>'
+  }
+
+  // Insights
+  if (res.strength || res.weakness || res.tool) {
+    html += '<div class="res-card"><div class="res-card-title">💡 Tes insights</div>'
+    if (res.strength) {
+      html += '<div class="insight-row" style="background:#f0fff4;border-color:#4ade80;">'
+      html += '<div class="insight-label" style="color:#16a34a;">✦ Ta force principale</div>'
+      html += '<div class="insight-text">' + res.strength + '</div></div>'
+    }
+    if (res.weakness) {
+      html += '<div class="insight-row" style="background:#fff8f0;border-color:#f87171;">'
+      html += '<div class="insight-label" style="color:#dc2626;">⚡ Ton principal frein</div>'
+      html += '<div class="insight-text">' + res.weakness + '</div></div>'
+    }
+    if (res.tool) {
+      html += '<div class="insight-row" style="background:#fefce8;border-color:#C9A84C;">'
+      html += '<div class="insight-label" style="color:#C9A84C;">→ L\'outil A4P pour toi</div>'
+      html += '<div class="insight-text">' + res.tool + '</div></div>'
+    }
+    html += '</div>'
+  }
+
+  html += '<div id="saving-status" class="saving-msg">⏳ Enregistrement...</div>'
+  html += '<button class="btn-gold" onclick="showPage(\'page-joueur\');loadJoueur(currentUser)">← Retour à mon tableau de bord</button>'
+  html += '<button class="btn-outline" onclick="startTest(\'' + type + '\')">Repasser ce test</button>'
+
+  document.getElementById('resultats-content').innerHTML = html
+}
+
+// ═══════════════════════════════════════════
+// QUESTIONS DES 4 TESTS
+// ═══════════════════════════════════════════
+
+function getQuestions(type) {
+  if (type === 'CMP') return CMP_QUESTIONS
+  if (type === 'PMP') return PMP_QUESTIONS
+  if (type === 'MPA') return MPA_QUESTIONS
+  if (type === 'PSYCHO') return PSYCHO_QUESTIONS
+  return []
+}
+
+// ═══ CMP — 30 SITUATIONS ═══
+const CMP_QUESTIONS = [
+  {id:'C1',type:'situational',cat:'Compétition',situation:"Tu viens de rater deux gestes importants de suite en compétition.",text:"Comment réagis-tu ?",options:[{text:"Je reste concentré sur le prochain geste, l'erreur est déjà passée.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prends une grande respiration et je me recentre mentalement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je me demande ce qui ne va pas et j'essaie de comprendre.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça m'affecte mais je continue quand même.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je perds confiance et mon niveau de jeu se dégrade.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C2',type:'situational',cat:'Arbitrage',situation:"L'arbitre prend une décision que tu estimes injuste à un moment crucial.",text:"Quelle est ta réaction ?",options:[{text:"J'accepte et je me concentre immédiatement sur la suite.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je ressens la frustration mais je la mets de côté rapidement.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"Je proteste brièvement puis je reprends le match.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça me perturbe et j'ai du mal à me reconcentrer.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je reste bloqué sur l'injustice et mon match est perturbé.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C3',type:'situational',cat:'Pression',situation:"Tu es mené au score à 10 minutes de la fin. Ton équipe compte sur toi.",text:"Comment tu te mobilises ?",options:[{text:"Je me focalise sur ce que je peux faire maintenant pour changer le cours.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je puise dans ma combativité et j'intensifie mon engagement.",scores:{pression:4,maturite:4,blocage:0,ressource:5}},{text:"Je me sens sous pression mais je reste en jeu.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Le score m'oppresse et je joue moins librement.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je commence à penser que c'est perdu.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C4',type:'situational',cat:'Feedback',situation:"Ton coach te fait une critique sèche devant toute l'équipe.",text:"Comment tu le vis ?",options:[{text:"Je prends l'information utile et je m'adapte sans me déstabiliser.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je ressens quelque chose mais je me concentre sur le correctif.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"C'est difficile à entendre mais je m'efforce de comprendre le message.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je me sens blessé et ça affecte ma concentration.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me renferme et ma performance chute.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C5',type:'situational',cat:'Préparation',situation:"La nuit avant une compétition importante, tu n'arrives pas à dormir.",text:"Comment tu gères ?",options:[{text:"J'utilise une routine de relaxation et j'accepte que quelques heures suffisent.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je me dis que ce n'est pas grave et je visualise positivement.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"Je suis agité mais je finis par trouver le sommeil.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je m'inquiète du manque de sommeil et ça empire la situation.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je passe la nuit à stresser et j'arrive épuisé à la compétition.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C6',type:'situational',cat:'Résilience',situation:"Tu traverses une série de 5 défaites consécutives.",text:"Quelle est ton attitude ?",options:[{text:"J'analyse ce qui ne va pas et je cherche des solutions concrètes.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je garde confiance dans mon potentiel malgré les résultats.",scores:{pression:4,maturite:5,blocage:0,ressource:5}},{text:"Je doute mais je continue à m'entraîner sérieusement.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ma motivation baisse et j'ai du mal à me projeter positivement.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je commence à remettre en question ma place dans ce sport.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C7',type:'situational',cat:'Adversité',situation:"Un adversaire cherche à te provoquer verbalement pendant le match.",text:"Comment tu réagis ?",options:[{text:"Je reste imperméable et je me concentre sur mon jeu.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je le vois comme une tentative de déstabilisation et j'en souris.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je l'entends mais j'essaie de rester concentré.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça m'agace et je perds un peu le fil du jeu.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je rentre dans son jeu et ma performance s'en ressent.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C8',type:'situational',cat:'Décision',situation:"Tu dois prendre une décision tactique importante en une fraction de seconde.",text:"Que se passe-t-il ?",options:[{text:"Je fais confiance à mon instinct et j'agis avec conviction.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'appuie sur mes automatismes d'entraînement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"J'hésite légèrement mais j'arrive à décider.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'hésite trop et je perds l'opportunité.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me fige et je ne prends pas de décision.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C9',type:'situational',cat:'Public',situation:"Le public ou les supporters te sifflent ou te critiquent.",text:"Comment tu le vis ?",options:[{text:"Je joue pour ma performance, pas pour le public.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je l'entends mais je reste dans ma bulle.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"C'est désagréable mais je continue à jouer.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça me touche et affecte ma confiance.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me sens honteux et je n'ose plus prendre de risques.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C10',type:'situational',cat:'Retour blessure',situation:"Tu reviens d'une longue blessure et tu joues ton premier match de retour.",text:"Quelle est ton attitude ?",options:[{text:"Je suis impatient de retrouver les sensations et j'y vais pleinement.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je suis prudent mais confiant dans ma préparation.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"J'ai quelques appréhensions mais je gère.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'ai peur de me reblesser et ça me retient.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"La peur de la blessure domine et je n'ose pas m'engager.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C11',type:'situational',cat:'Adaptation',situation:"Tu dois performer dans un sport ou poste dans lequel tu n'es pas à l'aise.",text:"Comment tu t'adaptes ?",options:[{text:"Je vois ça comme un défi et je donne le maximum.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'adapte en m'appuyant sur mes qualités de base.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je fais de mon mieux même si je me sens moins à l'aise.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je me sens exposé et mon niveau chute.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je veux éviter cette situation à tout prix.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C12',type:'situational',cat:'Collectif',situation:"Ton meilleur coéquipier est absent pour la compétition décisive.",text:"Quelle est ta réaction ?",options:[{text:"Je me mobilise encore plus pour compenser l'absence.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'adapte et je cherche comment l'équipe peut compenser collectivement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je le regrette mais je reste concentré sur ce que je peux faire.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"Son absence me pèse et je manque de confiance.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je pense que c'est perdu d'avance sans lui.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C13',type:'situational',cat:'Leadership',situation:"Tu dois t'exprimer devant toute ton équipe pour partager ta vision tactique.",text:"Comment tu te comportes ?",options:[{text:"Je m'exprime clairement et avec conviction.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prépare ce que je veux dire et je le transmets bien.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je le fais mais je ne suis pas totalement à l'aise.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je préfère que quelqu'un d'autre prenne la parole.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je me tais même si j'ai des idées importantes à partager.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C14',type:'situational',cat:'Tactique',situation:"Tu réalises pendant le match que ta stratégie de départ ne fonctionne pas.",text:"Comment tu réagis ?",options:[{text:"Je m'adapte immédiatement et je change d'approche.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prends un temps d'arrêt mental et je trouve une alternative.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je le vois mais j'ai du mal à changer en cours de match.",scores:{pression:3,maturite:3,blocage:3,ressource:3}},{text:"Je reste sur ma stratégie initiale même si ça ne marche pas.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me sens perdu et je n'arrive plus à jouer.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C15',type:'situational',cat:'Enjeu',situation:"Tu as une opportunité décisive et tu sais que tout le monde te regarde.",text:"Comment tu te comportes ?",options:[{text:"Je me concentre sur le geste technique et j'y vais.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Le regard des autres m'aide à me dépasser.",scores:{pression:5,maturite:4,blocage:0,ressource:5}},{text:"Je ressens la pression mais je tente quand même.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'ai peur de rater et ça alourdit mon geste.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je préfère passer la balle ou éviter d'être décisif.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C16',type:'situational',cat:'Changement',situation:"Ton entraîneur change ta position ou ton rôle la veille d'une compétition.",text:"Quelle est ta réaction ?",options:[{text:"J'accepte et je me prépare mentalement à ce nouveau rôle.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je comprends la décision et je m'y adapte.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"C'est surprenant mais j'essaie de m'y préparer.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je suis déstabilisé et ça affecte ma préparation.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je suis en colère et ma concentration est perturbée.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C17',type:'situational',cat:'Conditions',situation:"Tu dois performer dans des conditions difficiles (froid, pluie, terrain dégradé).",text:"Comment tu t'adaptes ?",options:[{text:"Les conditions difficiles ne me concernent pas, je m'adapte.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je vois ça comme un avantage car ça neutralise certains adversaires.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"C'est inconfortable mais je fais avec.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"Les conditions m'affectent et je suis moins efficace.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je suis bloqué mentalement par les mauvaises conditions.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C18',type:'situational',cat:'Temps de jeu',situation:"Tu n'as pas eu de temps de jeu depuis plusieurs semaines.",text:"Comment tu le vis ?",options:[{text:"Je travaille encore plus dur à l'entraînement pour montrer ma valeur.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je reste prêt mentalement pour saisir ma chance quand elle viendra.",scores:{pression:4,maturite:5,blocage:0,ressource:5}},{text:"Je suis frustré mais je maintiens mon niveau d'entraînement.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ma motivation baisse et l'entraînement devient difficile.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je commence à envisager d'arrêter ou de changer de club.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C19',type:'situational',cat:'Conflit',situation:"Tu dois gérer un conflit avec un coéquipier pendant une compétition.",text:"Comment tu gères ?",options:[{text:"Je mets le conflit de côté et je me concentre sur le collectif.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je fais le nécessaire pour que ça n'affecte pas l'équipe.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"C'est difficile mais je tiens mentalement.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Le conflit affecte mes performances.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je ne peux pas performer correctement dans ce contexte.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C20',type:'situational',cat:'Organisation',situation:"Tu rates un entraînement important pour des raisons personnelles.",text:"Quelle est ton attitude ?",options:[{text:"Je me prépare seul et je compense au prochain entraînement.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je l'accepte et je reste focus sur la suite.",scores:{pression:4,maturite:5,blocage:0,ressource:4}},{text:"Je m'en inquiète un peu mais je reste positif.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"Je culpabilise et ça me perturbe mentalement.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je me dis que je suis en retard et ça mine ma confiance.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C21',type:'situational',cat:'Forme physique',situation:"Tu as une compétition le lendemain et tu ne te sens pas en forme.",text:"Comment tu te prépares ?",options:[{text:"Je fais confiance à mon corps et à ma préparation.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je me prépare mentalement pour dépasser mes sensations physiques.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je suis préoccupé mais je tente quand même.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Je doute de ma capacité à performer et ça mine ma préparation.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je cherche à me faire remplacer ou à éviter la compétition.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C22',type:'situational',cat:'Gestion du score',situation:"Ton équipe est en train de gagner et tu veux protéger le résultat.",text:"Comment tu joues ?",options:[{text:"Je reste dans le même état d'esprit, victoire ou défaite.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je gère intelligemment sans me fermer complètement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je deviens un peu plus prudent mais je reste dans le jeu.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"Je me mets à jouer petit et à éviter les risques.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"La peur de perdre me paralyse et je joue très mal.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C23',type:'situational',cat:'Après victoire',situation:"Après une grande victoire, tu dois rester concentré pour la compétition suivante.",text:"Comment tu gardes le cap ?",options:[{text:"Je profite de la victoire puis je me replonge dans la préparation.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je garde les pieds sur terre et je me projette déjà sur la suite.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je savoure peut-être un peu trop mais je reviens vite.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"J'ai du mal à retrouver la même intensité mentale.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je me repose sur mes lauriers et ma préparation en souffre.",scores:{pression:1,maturite:1,blocage:4,ressource:1}}]},
+  {id:'C24',type:'situational',cat:'Vie perso',situation:"Tu dois performer alors que ta vie personnelle traverse une période difficile.",text:"Comment tu gères ?",options:[{text:"Je sépare clairement vie personnelle et sport, le terrain est ma zone protégée.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"C'est difficile mais je trouve dans le sport un refuge.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"Je fais de mon mieux mais certaines pensées s'immiscent.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ma vie perso envahit mes pensées pendant le sport.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je ne peux pas performer dans ce contexte.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C25',type:'situational',cat:'Relation',situation:"Tu dois jouer avec un coéquipier avec qui tu as des difficultés relationnelles.",text:"Comment tu joues ?",options:[{text:"Je mets nos différences de côté et je me concentre sur le jeu collectif.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je reste professionnel et je joue normalement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"C'est compliqué mais je ne laisse pas ça trop affecter mon jeu.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"La relation difficile affecte mes passes et ma communication.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je joue en évitant au maximum d'interagir avec lui.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C26',type:'situational',cat:'Défaite collective',situation:"Tu as bien joué mais ton équipe a perdu à cause d'erreurs collectives.",text:"Comment tu le vis ?",options:[{text:"Je suis satisfait de ma performance individuelle et j'analyse collectivement.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prends ma part de responsabilité collective sans me flageller.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je suis frustré mais j'arrive à relativiser.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"La défaite collective annule ma satisfaction personnelle.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je rumine longtemps sur cette défaite.",scores:{pression:1,maturite:1,blocage:4,ressource:1}}]},
+  {id:'C27',type:'situational',cat:'Remplaçant',situation:"Tu dois gérer une longue attente avant de rentrer en jeu comme remplaçant.",text:"Comment tu te maintiens prêt ?",options:[{text:"Je reste mentalement activé et prêt à entrer à tout moment.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je m'échauffe mentalement et je visualise mes actions.",scores:{pression:4,maturite:5,blocage:0,ressource:5}},{text:"J'ai du mal à maintenir mon activation mais je reste attentif.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"L'attente me déconcentre et je rentre froid mentalement.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je suis tellement déçu de ne pas jouer que je suis démotivé.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C28',type:'situational',cat:'Geste réussi',situation:"Tu réussis un geste exceptionnel mais tu dois rester concentré sur la suite.",text:"Comment tu gères l'après ?",options:[{text:"Je savoure brièvement puis je me reconnecte immédiatement.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je reste dans le flux sans me laisser emporter.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je savoure un peu trop mais je reviens vite dans le match.",scores:{pression:3,maturite:3,blocage:1,ressource:3}},{text:"L'euphorie dure trop longtemps et je perds le fil.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je me laisse totalement emporter et mon niveau chute après.",scores:{pression:1,maturite:1,blocage:4,ressource:1}}]},
+  {id:'C29',type:'situational',cat:'Élimination',situation:"Tu dois performer dans un championnat ou tournoi à élimination directe.",text:"Comment tu aborde ça ?",options:[{text:"L'enjeu élevé m'élève et je performe mieux qu'en saison.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je me prépare spécifiquement pour ce format et je suis prêt.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"La pression est plus forte mais je la gère globalement.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"L'élimination directe m'inhibe et je joue en dessous de mes moyens.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je suis tétanisé par l'enjeu et je ne performe pas.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
+  {id:'C30',type:'situational',cat:'Recruteurs',situation:"Tu dois performer devant des recruteurs ou des sélectionneurs pour la première fois.",text:"Comment tu te comportes ?",options:[{text:"Je joue mon jeu normalement, la sélection est une conséquence pas un objectif.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je vois ça comme une opportunité et je me dépasse.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je ressens une pression supplémentaire mais je performe quand même.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Sous le regard des recruteurs je joue en dessous de mon niveau.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je me fige complètement et je rate ma chance.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]}
+]
+
+// ═══ PMP — 120 QUESTIONS (version courte 40q pour la démo, facilement extensible) ═══
+const PMP_QUESTIONS = [
+  {id:'Q1',type:'likert',dimension:'Activation',text:"Avant une compétition, je me sens rapidement prêt à entrer dans l'action."},
+  {id:'Q2',type:'likert',dimension:'Activation',text:"J'ai besoin de beaucoup de temps pour me mettre en rythme avant d'être performant."},
+  {id:'Q3',type:'likert',dimension:'Activation',text:"Quand l'intensité monte, mon énergie mentale augmente aussi."},
+  {id:'Q4',type:'likert',dimension:'Activation',text:"Je me sens stimulé par l'ambiance compétitive."},
+  {id:'Q5',type:'likert',dimension:'Activation',text:"Je sais mobiliser mon énergie quand il faut répondre présent."},
+  {id:'Q6',type:'likert',dimension:'Attention',text:"Je reste concentré même quand l'environnement est bruyant."},
+  {id:'Q7',type:'likert',dimension:'Attention',text:"Je reviens vite à l'instant présent après une erreur."},
+  {id:'Q8',type:'likert',dimension:'Attention',text:"Je sais me refocaliser sur une consigne importante."},
+  {id:'Q9',type:'likert',dimension:'Attention',text:"Je garde le fil du jeu même sous pression."},
+  {id:'Q10',type:'likert',dimension:'Attention',text:"Je peux maintenir mon attention jusqu'à la fin."},
+  {id:'Q11',type:'likert',dimension:'Régulation',text:"Je garde un certain calme quand la pression monte."},
+  {id:'Q12',type:'likert',dimension:'Régulation',text:"Je sais faire redescendre la tension quand j'en ai besoin."},
+  {id:'Q13',type:'likert',dimension:'Régulation',text:"Je retrouve assez vite mon équilibre émotionnel."},
+  {id:'Q14',type:'likert',dimension:'Régulation',text:"Je sais respirer et me recentrer dans les moments tendus."},
+  {id:'Q15',type:'likert',dimension:'Régulation',text:"Je peux rester stable après un événement contrarié."},
+  {id:'Q16',type:'likert',dimension:'Engagement',text:"Je m'implique pleinement dans ce que j'ai à faire."},
+  {id:'Q17',type:'likert',dimension:'Engagement',text:"Je fournis mes efforts même quand je ne suis pas en réussite."},
+  {id:'Q18',type:'likert',dimension:'Engagement',text:"Je reste investi jusqu'au bout de la séance ou du match."},
+  {id:'Q19',type:'likert',dimension:'Engagement',text:"Je vais au contact du défi plutôt que de l'éviter."},
+  {id:'Q20',type:'likert',dimension:'Engagement',text:"Je continue à chercher des solutions quand c'est compliqué."},
+  {id:'Q21',type:'likert',dimension:'Confiance',text:"Je crois en ma capacité à réussir dans les moments importants."},
+  {id:'Q22',type:'likert',dimension:'Confiance',text:"Je peux m'appuyer sur mes qualités quand l'enjeu augmente."},
+  {id:'Q23',type:'likert',dimension:'Confiance',text:"Je me sens capable de répondre présent face à l'adversité."},
+  {id:'Q24',type:'likert',dimension:'Confiance',text:"Je m'appuie sur mes repères pour rester solide intérieurement."},
+  {id:'Q25',type:'likert',dimension:'Confiance',text:"Je peux me faire confiance sans avoir besoin d'être parfait."},
+  {id:'Q26',type:'likert',dimension:'Résilience',text:"Je rebondis assez vite après un échec ou une erreur."},
+  {id:'Q27',type:'likert',dimension:'Résilience',text:"Je sais repartir après un moment compliqué."},
+  {id:'Q28',type:'likert',dimension:'Résilience',text:"Je transforme souvent les difficultés en apprentissage."},
+  {id:'Q29',type:'likert',dimension:'Résilience',text:"Je peux repartir proprement après avoir subi un coup dur."},
+  {id:'Q30',type:'likert',dimension:'Résilience',text:"Je garde l'idée que rien n'est fini après une erreur."},
+  {id:'Q31',type:'likert',dimension:'Cognition',text:"J'aime comprendre en profondeur ce qu'il faut faire pour progresser."},
+  {id:'Q32',type:'likert',dimension:'Cognition',text:"Je repère assez vite les logiques d'une situation de jeu."},
+  {id:'Q33',type:'likert',dimension:'Cognition',text:"J'aime anticiper plusieurs options avant d'agir."},
+  {id:'Q34',type:'likert',dimension:'Cognition',text:"Je vois facilement comment adapter mon comportement à la situation."},
+  {id:'Q35',type:'likert',dimension:'Cognition',text:"Je repère les indices utiles pour prendre une bonne décision."},
+  {id:'Q36',type:'likert',dimension:'Motricité',text:"Je ressens facilement comment mon corps s'organise dans le mouvement."},
+  {id:'Q37',type:'likert',dimension:'Motricité',text:"Je perçois assez vite si mon geste est juste ou non."},
+  {id:'Q38',type:'likert',dimension:'Motricité',text:"Je repère comment mon équilibre influence mon efficacité."},
+  {id:'Q39',type:'likert',dimension:'Motricité',text:"Je sens assez bien ce qui change dans mes appuis et mon rythme."},
+  {id:'Q40',type:'likert',dimension:'Motricité',text:"Je comprends la relation entre sensation, geste et efficacité."}
+]
+
+// ═══ MPA — 40 QUESTIONS BINAIRES ═══
+const MPA_QUESTIONS = [
+  {id:'M1',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Avant une compétition, l'ambiance autour de toi te donne de l'énergie.",textB:"Tu préfères te préparer seul, dans ta bulle, avant de performer."},
+  {id:'M2',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Le contact avec tes coéquipiers avant le match te booste mentalement.",textB:"Tu préfères te retrouver seul pour récupérer et te ressourcer."},
+  {id:'M3',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Tu te sens plus vivant quand il y a du monde et de l'animation autour de toi.",textB:"Tu puises ta force dans ta vie intérieure plus que dans les autres."},
+  {id:'M4',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Dans un groupe, tu prends naturellement la parole sans effort.",textB:"Tu as besoin de temps seul pour recharger tes batteries mentales."},
+  {id:'M5',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"L'énergie collective d'une équipe t'élève dans ta performance.",textB:"Tu performes mieux quand tu peux te concentrer sans interactions."},
+  {id:'M6',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu apprends mieux avec des exercices précis et des répétitions concrètes.",textB:"Tu perçois rapidement les possibilités cachées dans une situation de jeu."},
+  {id:'M7',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu fais confiance à ce que tu observes directement sur le terrain.",textB:"Tu anticipes souvent ce qui va se passer avant que ça arrive."},
+  {id:'M8',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères des consignes claires et détaillées plutôt que des principes généraux.",textB:"Tu comprends vite le sens global d'un exercice sans avoir besoin de détails."},
+  {id:'M9',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu t'appuies sur ton expérience passée pour gérer les situations nouvelles.",textB:"Tu fais souvent confiance à tes intuitions dans les moments décisifs."},
+  {id:'M10',type:'binary',axe:'CI',pole:'C',title:'Perception',text:"Tu préfères voir une démonstration concrète avant d'essayer.",textB:"Tu imagines facilement différentes façons de réaliser un geste."},
+  {id:'M11',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Dans une décision importante, tu te bases d'abord sur la logique et les faits.",textB:"Tu prends en compte les émotions des autres avant de décider."},
+  {id:'M12',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu préfères un retour direct et factuel même s'il est difficile à entendre.",textB:"La qualité des relations dans ton équipe a un fort impact sur ta performance."},
+  {id:'M13',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu analyses une contre-performance de façon objective sans te laisser envahir.",textB:"Tu es très attentif au bien-être de tes coéquipiers."},
+  {id:'M14',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu arrives facilement à rester détaché émotionnellement quand il faut décider.",textB:"Tu es naturellement empathique et tu ressens facilement ce que vivent les autres."},
+  {id:'M15',type:'binary',axe:'LH',pole:'L',title:'Décision',text:"Tu évalues ta performance sur des critères objectifs et mesurables.",textB:"Tu as besoin de te sentir apprécié pour donner le meilleur de toi-même."},
+  {id:'M16',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu te prépares toujours avec une routine précise avant de performer.",textB:"Tu t'adaptes facilement quand le planning change au dernier moment."},
+  {id:'M17',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu aimes avoir un programme d'entraînement clair et planifié à l'avance.",textB:"Tu performes bien même dans les situations non prévues et improvisées."},
+  {id:'M18',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu te sens rassuré quand les rôles et les responsabilités sont bien définis.",textB:"Tu trouves les environnements trop rigides étouffants."},
+  {id:'M19',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tu travailles mieux avec des délais précis et des objectifs mesurables.",textB:"Tu préfères décider en fonction du contexte du moment plutôt que d'un plan fixe."},
+  {id:'M20',type:'binary',axe:'StF',pole:'St',title:'Organisation',text:"Tes routines de préparation sont essentielles à ta performance.",textB:"Tu te sens à l'aise dans l'incertitude et tu la gères bien."}
+]
+
+// ═══ PSYCHO — 20 QUESTIONS ═══
+const PSYCHO_QUESTIONS = [
+  {id:'PE1',type:'situational',cat:'Réactions',situation:"Tu commets une erreur décisive au pire moment du match.",text:"Comment tu réagis émotionnellement ?",options:[{text:"Je ressens une frustration intense mais elle me propulse.",scores:{combatif:5,expressif:2,analytique:1,absorbant:0}},{text:"Mes émotions explosent et je le montre visiblement.",scores:{combatif:1,expressif:5,analytique:0,absorbant:1}},{text:"Je prends du recul mentalement et j'analyse ce qui s'est passé.",scores:{combatif:1,expressif:0,analytique:5,absorbant:2}},{text:"L'émotion me submerge et j'ai du mal à rester dans le match.",scores:{combatif:0,expressif:2,analytique:1,absorbant:5}},{text:"Je reste calme extérieurement mais je rumine intérieurement.",scores:{combatif:2,expressif:0,analytique:3,absorbant:3}}]},
+  {id:'PE2',type:'situational',cat:'Réactions',situation:"Un coéquipier te reproche publiquement une erreur que tu n'as pas commise.",text:"Quelle est ta réaction spontanée ?",options:[{text:"Je monte au créneau immédiatement pour défendre ma position.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je vis ça comme une injustice et j'en suis très affecté.",scores:{combatif:1,expressif:4,analytique:0,absorbant:5}},{text:"Je reste silencieux sur le moment et j'en parle calmement après.",scores:{combatif:1,expressif:0,analytique:5,absorbant:2}},{text:"Je me sens envahi par la honte ou la colère sans savoir quoi faire.",scores:{combatif:0,expressif:2,analytique:0,absorbant:5}},{text:"Je relativise et je passe à autre chose rapidement.",scores:{combatif:3,expressif:1,analytique:4,absorbant:0}}]},
+  {id:'PE3',type:'situational',cat:'Pression',situation:"Tu dois performer devant un public nombreux et hostile.",text:"Comment tu vis ce moment ?",options:[{text:"L'hostilité m'électrise et décuple mon envie de gagner.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je cherche à capter l'énergie du public, même hostile.",scores:{combatif:2,expressif:5,analytique:0,absorbant:1}},{text:"Je me concentre sur ma performance en faisant abstraction du public.",scores:{combatif:2,expressif:0,analytique:5,absorbant:1}},{text:"L'atmosphère hostile me déstabilise profondément.",scores:{combatif:0,expressif:1,analytique:1,absorbant:5}},{text:"Je ressens une légère appréhension mais je gère.",scores:{combatif:3,expressif:2,analytique:3,absorbant:2}}]},
+  {id:'PE4',type:'situational',cat:'Émotion positive',situation:"Tu apprends la veille d'une compétition que tu es titulaire pour la première fois.",text:"Quelle émotion domine ?",options:[{text:"Une excitation intense mêlée d'une envie de prouver ma valeur.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Une joie débordante que j'ai du mal à contenir.",scores:{combatif:1,expressif:5,analytique:0,absorbant:1}},{text:"Une satisfaction calme et une concentration accrue.",scores:{combatif:2,expressif:0,analytique:5,absorbant:1}},{text:"Une anxiété qui prend rapidement le dessus.",scores:{combatif:0,expressif:1,analytique:1,absorbant:5}},{text:"Un mélange de joie et d'inquiétude qui s'équilibrent.",scores:{combatif:2,expressif:2,analytique:2,absorbant:3}}]},
+  {id:'PE5',type:'situational',cat:'Résilience',situation:"Tu traverses une période de 3 semaines sans résultats satisfaisants.",text:"Comment tu traverses ce moment ?",options:[{text:"La frustration me pousse à travailler encore plus intensément.",scores:{combatif:5,expressif:2,analytique:2,absorbant:0}},{text:"Je le vis émotionnellement fort et j'ai besoin d'en parler.",scores:{combatif:1,expressif:5,analytique:0,absorbant:2}},{text:"J'analyse méthodiquement ce qui ne fonctionne pas.",scores:{combatif:1,expressif:0,analytique:5,absorbant:1}},{text:"Je me sens découragé et j'ai du mal à me motiver.",scores:{combatif:0,expressif:1,analytique:0,absorbant:5}},{text:"Je relativise et j'attends que ça repasse.",scores:{combatif:2,expressif:1,analytique:3,absorbant:2}}]},
+  {id:'PE11',type:'likert',cat:'Régulation',text:"Je sais identifier précisément ce que je ressens avant, pendant et après une compétition."},
+  {id:'PE12',type:'likert',cat:'Régulation',text:"Je dispose de techniques concrètes pour calmer mon stress avant de performer."},
+  {id:'PE13',type:'likert',cat:'Régulation',text:"Quand une émotion négative surgit en compétition, je peux la mettre de côté rapidement."},
+  {id:'PE15',type:'likert',cat:'Régulation',text:"Je sais utiliser mes émotions positives comme carburant de performance."},
+  {id:'PE16',type:'likert',cat:'Régulation',text:"Après un incident émotionnel fort, je reviens rapidement à un état de performance optimal."},
+  {id:'PE21',type:'likert',cat:'Neurochimie',text:"J'ai naturellement un niveau d'énergie et de motivation élevé."},
+  {id:'PE22',type:'likert',cat:'Neurochimie',text:"Je recherche constamment de nouveaux défis et la routine me pèse rapidement."},
+  {id:'PE23',type:'likert',cat:'Neurochimie',text:"Je me sens généralement stable et serein, même dans les périodes de forte pression."},
+  {id:'PE25',type:'likert',cat:'Neurochimie',text:"Je m'active très vite face à un danger ou une urgence."},
+  {id:'PE27',type:'likert',cat:'Neurochimie',text:"J'apprends vite et je retiens bien les nouvelles informations ou techniques."},
+  {id:'PE41',type:'likert',cat:'Traits cognitifs',text:"Mon cerveau fonctionne souvent à grande vitesse — j'ai beaucoup de pensées simultanées."},
+  {id:'PE42',type:'likert',cat:'Traits cognitifs',text:"Je m'ennuie très vite quand une tâche n'est pas stimulante."},
+  {id:'PE44',type:'likert',cat:'Traits cognitifs',text:"Je ressens les émotions, les ambiances et les sensations plus intensément que la plupart."},
+  {id:'PE47',type:'likert',cat:'Traits cognitifs',text:"Je perçois des détails ou des nuances que les autres semblent ne pas remarquer."},
+  {id:'PE48',type:'likert',cat:'Traits cognitifs',text:"Quand quelque chose me passionne vraiment, je peux m'y concentrer pendant des heures."}
+]
+
+// ═══════════════════════════════════════════
+// CALCUL DES RÉSULTATS
+// ═══════════════════════════════════════════
+
+function calcResults(type, answers, questions) {
+  if (type === 'CMP') return calcCMP(answers, questions)
+  if (type === 'PMP') return calcPMP(answers, questions)
+  if (type === 'MPA') return calcMPA(answers, questions)
+  if (type === 'PSYCHO') return calcPSYCHO(answers, questions)
+  return { globalScore: 0, profilCode: '—', profilLabel: '—', scores: {}, dimensions: [] }
+}
+
+// CMP
+function calcCMP(answers, questions) {
+  let totalP=0,totalM=0,totalB=0,totalR=0,count=0
+  questions.forEach(q => {
+    const idx = answers[q.id]
+    if (idx === undefined) return
+    const opt = q.options[idx]
+    totalP += opt.scores.pression
+    totalM += opt.scores.maturite
+    totalB += opt.scores.blocage
+    totalR += opt.scores.ressource
+    count++
+  })
+  if (!count) return { globalScore: 0, profilCode: 'CMP-?', profilLabel: '—', scores: {}, dimensions: [] }
+  const scorePression = Math.round((totalP / (count * 5)) * 100)
+  const scoreMaturite = Math.round((totalM / (count * 5)) * 100)
+  const scoreBlocage = Math.round((totalB / (count * 5)) * 100)
+  const scoreRessource = Math.round((totalR / (count * 5)) * 100)
+  const globalScore = Math.round((scorePression + scoreMaturite + (100 - scoreBlocage) + scoreRessource) / 4)
+  const profils = [
+    {min:85,code:'CMP-5',label:'Expert mental',strength:"Maîtrise mentale exceptionnelle sous pression.",weakness:"Risque de sous-estimer la charge mentale des coéquipiers.",tool:"Développez votre rôle de leadership mental au sein du collectif."},
+    {min:70,code:'CMP-4',label:'Performeur solide',strength:"Ressources mentales bien développées.",weakness:"Quelques situations de pression extrême encore déstabilisantes.",tool:"Identifiez les 2-3 situations qui fragilisent encore votre mental."},
+    {min:55,code:'CMP-3',label:'Potentiel engagé',strength:"Volonté réelle de progresser.",weakness:"Confiance fragilisée dans les moments à fort enjeu.",tool:"Développez des routines de recentrage utilisables en compétition."},
+    {min:40,code:'CMP-2',label:'En construction',strength:"Honnêteté dans l'auto-évaluation.",weakness:"Blocages mentaux fréquents en situation de pression.",tool:"Commencez par un accompagnement structuré en préparation mentale."},
+    {min:0,code:'CMP-1',label:'Débutant mental',strength:"Marge de progression considérable.",weakness:"Blocages profonds et fréquents en compétition.",tool:"Commencez par des objectifs de processus très simples."}
+  ]
+  const profil = profils.find(p => globalScore >= p.min) || profils[4]
+  return {
+    globalScore, profilCode: profil.code, profilLabel: profil.label,
+    strength: profil.strength, weakness: profil.weakness, tool: profil.tool,
+    scores: { pression: scorePression, maturite: scoreMaturite, blocage: scoreBlocage, ressource: scoreRessource },
+    dimensions: [
+      { label: 'Sous pression', value: scorePression, color: '#2f4a8a' },
+      { label: 'Maturité mentale', value: scoreMaturite, color: '#1a6a5a' },
+      { label: 'Ressources', value: scoreRessource, color: '#5a3a8a' },
+      { label: 'Sans blocage', value: 100 - scoreBlocage, color: '#C9A84C' }
+    ]
+  }
+}
+
+// PMP
+function calcPMP(answers, questions) {
+  const dims = {}
+  questions.forEach(q => {
+    const val = answers[q.id]
+    if (!val) return
+    if (!dims[q.dimension]) dims[q.dimension] = { total: 0, count: 0 }
+    dims[q.dimension].total += val
+    dims[q.dimension].count++
+  })
+  const scores = {}
+  const dimensions = []
+  const dimColors = { 'Activation':'#2f4a8a','Attention':'#5a3a8a','Régulation':'#1a6a5a','Engagement':'#8a4a2f','Confiance':'#2f6a8a','Résilience':'#6a2f8a','Cognition':'#4a6a2f','Motricité':'#8a2f5a' }
+  Object.keys(dims).forEach(d => {
+    const pct = Math.round((dims[d].total / (dims[d].count * 5)) * 100)
+    scores[d] = pct
+    dimensions.push({ label: d, value: pct, color: dimColors[d] || '#1B3A6B' })
+  })
+  const globalScore = dimensions.length > 0 ? Math.round(dimensions.reduce((a, d) => a + d.value, 0) / dimensions.length) : 0
+  const sorted = [...dimensions].sort((a, b) => b.value - a.value)
+  const top = sorted[0]
+  const profiles = { 'Activation':'Compétiteur','Attention':'Concentré','Régulation':'Régulateur','Engagement':'Battant','Confiance':'Leader','Résilience':'Résilient','Cognition':'Stratège','Motricité':'Technicien' }
+  const profilLabel = profiles[top?.label] || 'Performeur'
+  const labels = globalScore >= 91 ? ['Profil d\'élite','#1a4a2a'] : globalScore >= 76 ? ['Profil performant','#1a3a6a'] : globalScore >= 61 ? ['Profil confirmé','#2a4a8a'] : globalScore >= 41 ? ['Profil en développement','#6a4a1a'] : ['Profil en construction','#6a1a1a']
+  return {
+    globalScore, profilCode: 'PMP', profilLabel,
+    strength: top ? 'Votre dimension la plus développée est ' + top.label + ' (' + top.value + '%). C\'est votre ressource mentale principale.' : '',
+    weakness: sorted[sorted.length-1] ? sorted[sorted.length-1].label + ' est votre axe de progression prioritaire.' : '',
+    tool: 'Consultez votre radar mental pour identifier les 3 dimensions à travailler en priorité.',
+    scores, dimensions
+  }
+}
+
+// MPA
+function calcMPA(answers, questions) {
+  const counts = { SR:{s:0,total:0}, CI:{s:0,total:0}, LH:{s:0,total:0}, StF:{s:0,total:0} }
+  questions.forEach(q => {
+    const v = answers[q.id]
+    if (!v) return
+    counts[q.axe].total++
+    if (v === 'A') counts[q.axe].s++
+  })
+  const scores = {}
+  Object.keys(counts).forEach(axe => {
+    scores[axe] = counts[axe].total > 0 ? Math.round((counts[axe].s / counts[axe].total) * 100) : 50
+  })
+  const SR = scores.SR >= 50 ? 'S' : 'R'
+  const CI = scores.CI >= 50 ? 'C' : 'I'
+  const LH = scores.LH >= 50 ? 'L' : 'H'
+  const StF = scores.StF >= 50 ? 'St' : 'F'
+  const code4 = SR + CI + LH + StF
+  const axeLabels = {SR:{s:'Stimulation externe',r:'Ressource interne'},CI:{s:'Concret',r:'Intuitif'},LH:{s:'Logique',r:'Humain'},StF:{s:'Structure',r:'Fluidité'}}
+  const dims = Object.keys(scores).map(axe => {
+    const score = scores[axe]
+    const dominant = score >= 50 ? axeLabels[axe].s : axeLabels[axe].r
+    const pct = score >= 50 ? score : 100 - score
+    return { label: dominant + ' (' + axe + ')', value: pct, color: '#1a3a6a' }
+  })
+  const intensities = Object.values(scores).map(s => Math.abs(s - 50))
+  const globalScore = Math.min(100, Math.round(50 + intensities.reduce((a, b) => a + b, 0) / 4))
+  return {
+    globalScore, profilCode: code4, profilLabel: 'Profil ' + code4,
+    strength: 'Votre code moteur est ' + code4 + '. Ce profil reflète vos préférences naturelles d\'action.',
+    weakness: 'Certains contextes peuvent ne pas correspondre à votre mode préférentiel d\'action.',
+    tool: 'Utilisez votre code ' + code4 + ' pour adapter votre préparation et votre style de jeu.',
+    scores, dimensions: dims
+  }
+}
+
+// PSYCHO
+function calcPSYCHO(answers, questions) {
+  let combatif=0, expressif=0, analytique=0, absorbant=0, regTotal=0, regCount=0
+  questions.forEach(q => {
+    const ans = answers[q.id]
+    if (ans === undefined) return
+    if (q.type === 'situational') {
+      const opt = q.options[ans]
+      if (!opt) return
+      combatif += opt.scores.combatif || 0
+      expressif += opt.scores.expressif || 0
+      analytique += opt.scores.analytique || 0
+      absorbant += opt.scores.absorbant || 0
+    }
+    if (q.type === 'likert' && q.cat === 'Régulation') {
+      regTotal += ans; regCount++
+    }
+  })
+  const maxSit = questions.filter(q => q.type === 'situational').length * 5
+  const cPct = maxSit > 0 ? Math.round((combatif / maxSit) * 100) : 0
+  const ePct = maxSit > 0 ? Math.round((expressif / maxSit) * 100) : 0
+  const aPct = maxSit > 0 ? Math.round((analytique / maxSit) * 100) : 0
+  const abPct = maxSit > 0 ? Math.round((absorbant / maxSit) * 100) : 0
+  const regScore = regCount > 0 ? Math.round((regTotal / (regCount * 5)) * 100) : 50
+  const typeMap = [{key:'combatif',val:cPct,label:'Combatif 🔥'},{key:'expressif',val:ePct,label:'Expressif 🌟'},{key:'analytique',val:aPct,label:'Analytique 🧠'},{key:'absorbant',val:abPct,label:'Absorbant 🌊'}]
+  const dominant = typeMap.sort((a,b) => b.val - a.val)[0]
+  const globalScore = Math.round((regScore + (100 - Math.abs(cPct - abPct))) / 2)
+  const insights = {
+    combatif: { strength:'La pression vous active et vous propulse.', weakness:'Risque de surchauffe émotionnelle.', tool:'Développez une routine de récupération mentale après chaque compétition.' },
+    expressif: { strength:'Votre authenticité crée des connexions puissantes.', weakness:'Sensibilité aux critiques et au rejet.', tool:'Développez des ressources de régulation interne indépendantes du contexte social.' },
+    analytique: { strength:'Capacité remarquable à prendre du recul.', weakness:'Risque de sur-intellectualiser les émotions.', tool:'Pratiquez une activité corporelle régulière pour reconnecter intellect et corps.' },
+    absorbant: { strength:'Intelligence émotionnelle fine et empathie profonde.', weakness:'Risque d\'être submergé par les émotions extérieures.', tool:'Mettez en place un protocole de régulation émotionnelle d\'urgence.' }
+  }
+  const insight = insights[dominant.key]
+  return {
+    globalScore, profilCode: 'PE-' + dominant.key[0].toUpperCase(), profilLabel: dominant.label,
+    strength: insight.strength, weakness: insight.weakness, tool: insight.tool,
+    scores: { combatif: cPct, expressif: ePct, analytique: aPct, absorbant: abPct, regulation: regScore },
+    dimensions: [
+      { label: 'Combatif', value: cPct, color: '#7a1a1a' },
+      { label: 'Expressif', value: ePct, color: '#1a3a6a' },
+      { label: 'Analytique', value: aPct, color: '#1a4a2a' },
+      { label: 'Absorbant', value: abPct, color: '#4a2a6a' },
+      { label: 'Régulation', value: regScore, color: '#C9A84C' }
+    ]
+  }
 }
 </script>
 
