@@ -9,170 +9,732 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'DM Sans', sans-serif; min-height: 100vh; background: #0f2244; color: #1a2a4a; }
 
-/* LOGIN */
-#page-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a1628 0%, #0f2244 40%, #1a3560 100%); padding: 20px; }
-.login-card { width: 100%; max-width: 420px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 28px; padding: 44px 36px; backdrop-filter: blur(20px); box-shadow: 0 40px 80px rgba(0,0,0,0.4); animation: slideUp 0.5s ease; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-.login-logo { text-align: center; margin-bottom: 32px; }
-.login-logo img { width: 80px; height: 80px; border-radius: 18px; object-fit: cover; display: block; margin: 0 auto 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-.login-logo .eyebrow { font-family: ‘Cormorant Garamond’, serif; font-size: 12px; letter-spacing: 0.4em; color: #4A90D9; text-transform: uppercase; margin-bottom: 6px; }
-.login-logo .brand { font-family: ‘Cormorant Garamond’, serif; font-size: 24px; font-weight: 700; color: #fff; }
+body {
+font-family: ‘DM Sans’, sans-serif;
+min-height: 100vh;
+background: #0f2244;
+color: #1a2a4a;
+}
+
+/* ═══ LOGIN ═══ */
+#page-login {
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+background: linear-gradient(135deg, #0a1628 0%, #0f2244 40%, #1a3560 100%);
+padding: 20px;
+}
+
+.login-card {
+width: 100%;
+max-width: 420px;
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.12);
+border-radius: 28px;
+padding: 44px 36px;
+backdrop-filter: blur(20px);
+box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(24px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.login-logo {
+text-align: center;
+margin-bottom: 32px;
+}
+
+.login-logo img {
+width: 80px; height: 80px;
+border-radius: 18px;
+object-fit: cover;
+display: block;
+margin: 0 auto 14px;
+box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.login-logo .eyebrow {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 12px;
+letter-spacing: 0.4em;
+color: #4A90D9;
+text-transform: uppercase;
+margin-bottom: 6px;
+}
+
+.login-logo .brand {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 24px;
+font-weight: 700;
+color: #fff;
+}
+
 .login-logo .brand span { color: #C9A84C; }
-.login-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); margin-bottom: 28px; }
-.login-subtitle { font-family: ‘Cormorant Garamond’, serif; font-size: 20px; font-weight: 600; color: #fff; text-align: center; margin-bottom: 24px; }
+
+.login-divider {
+height: 1px;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+margin-bottom: 28px;
+}
+
+.login-subtitle {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+font-weight: 600;
+color: #fff;
+text-align: center;
+margin-bottom: 24px;
+}
+
 .field { margin-bottom: 14px; }
-.field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 7px; }
-.field input { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; color: #fff; font-family: ‘DM Sans’, sans-serif; font-size: 15px; outline: none; transition: all 0.3s; }
+
+.field label {
+display: block;
+font-size: 11px;
+font-weight: 600;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: rgba(255,255,255,0.45);
+margin-bottom: 7px;
+}
+
+.field input {
+width: 100%;
+padding: 13px 16px;
+background: rgba(255,255,255,0.07);
+border: 1px solid rgba(255,255,255,0.14);
+border-radius: 12px;
+color: #fff;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 15px;
+outline: none;
+transition: all 0.3s;
+}
+
 .field input::placeholder { color: rgba(255,255,255,0.25); }
-.field input:focus { border-color: #4A90D9; background: rgba(74,144,217,0.1); box-shadow: 0 0 0 3px rgba(74,144,217,0.15); }
-.btn-primary { width: 100%; padding: 15px; background: linear-gradient(135deg, #2E5BA8, #4A90D9); color: #fff; font-family: ‘DM Sans’, sans-serif; font-size: 16px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; transition: all 0.3s; margin-top: 6px; }
+.field input:focus {
+border-color: #4A90D9;
+background: rgba(74,144,217,0.1);
+box-shadow: 0 0 0 3px rgba(74,144,217,0.15);
+}
+
+.btn-primary {
+width: 100%;
+padding: 15px;
+background: linear-gradient(135deg, #2E5BA8, #4A90D9);
+color: #fff;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 16px;
+font-weight: 700;
+border: none;
+border-radius: 13px;
+cursor: pointer;
+transition: all 0.3s;
+margin-top: 6px;
+}
+
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,144,217,0.4); }
 .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-.error-box { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.3); border-radius: 11px; padding: 11px 15px; color: #fca5a5; font-size: 13px; text-align: center; margin-top: 12px; display: none; }
 
-/* PAGES */
+.error-box {
+background: rgba(248,113,113,0.12);
+border: 1px solid rgba(248,113,113,0.3);
+border-radius: 11px;
+padding: 11px 15px;
+color: #fca5a5;
+font-size: 13px;
+text-align: center;
+margin-top: 12px;
+display: none;
+}
+
+/* ═══ PAGES COMMUNES ═══ */
 .page { display: none; min-height: 100vh; background: #f0f4ff; }
 .page.active { display: block; }
-.topbar { background: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 50; gap: 12px; flex-wrap: wrap; }
-.topbar-brand { font-family: ‘Cormorant Garamond’, serif; font-size: 20px; font-weight: 700; color: #1B3A6B; }
+
+.topbar {
+background: #fff;
+padding: 14px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+position: sticky;
+top: 0;
+z-index: 50;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.topbar-brand {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+font-weight: 700;
+color: #1B3A6B;
+}
+
 .topbar-brand span { color: #C9A84C; }
-.topbar-right { display: flex; align-items: center; gap: 10px; }
-.avatar { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: #fff; background: #1B3A6B; flex-shrink: 0; }
+
+.topbar-right {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.avatar {
+width: 38px; height: 38px;
+border-radius: 11px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 16px;
+font-weight: 800;
+color: #fff;
+background: #1B3A6B;
+flex-shrink: 0;
+}
+
 .user-info .name { font-size: 14px; font-weight: 700; color: #1a2a4a; }
 .user-info .role { font-size: 11px; color: #6c7a99; }
-.btn-logout { padding: 7px 14px; background: transparent; border: 1px solid rgba(27,58,107,0.2); border-radius: 9px; color: #6c7a99; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+
+.btn-logout {
+padding: 7px 14px;
+background: transparent;
+border: 1px solid rgba(27,58,107,0.2);
+border-radius: 9px;
+color: #6c7a99;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+}
+
 .btn-logout:hover { background: #1B3A6B; color: #fff; border-color: #1B3A6B; }
+
 .page-body { padding: 20px; max-width: 760px; margin: 0 auto; }
-.hero { border-radius: 22px; padding: 28px 24px; margin-bottom: 20px; color: #fff; text-align: center; }
-.hero h1 { font-family: ‘Cormorant Garamond’, serif; font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+
+/* ═══ HERO ═══ */
+.hero {
+border-radius: 22px;
+padding: 28px 24px;
+margin-bottom: 20px;
+color: #fff;
+text-align: center;
+}
+
+.hero h1 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 28px;
+font-weight: 700;
+margin-bottom: 6px;
+}
+
 .hero p { opacity: 0.8; font-size: 15px; }
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
-@media (max-width: 500px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-.stat-card { background: #fff; border-radius: 16px; padding: 18px 12px; text-align: center; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
-.stat-num { font-family: ‘Cormorant Garamond’, serif; font-size: 32px; font-weight: 700; color: #1B3A6B; line-height: 1; margin-bottom: 4px; }
+
+/* ═══ STATS ═══ */
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 12px;
+margin-bottom: 18px;
+}
+
+@media (max-width: 500px) {
+.stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stat-card {
+background: #fff;
+border-radius: 16px;
+padding: 18px 12px;
+text-align: center;
+box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.stat-num {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 32px;
+font-weight: 700;
+color: #1B3A6B;
+line-height: 1;
+margin-bottom: 4px;
+}
+
 .stat-label { font-size: 11px; color: #6c7a99; font-weight: 600; }
-.section-card { background: #fff; border-radius: 20px; padding: 22px; margin-bottom: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
-.section-title { font-size: 15px; font-weight: 800; color: #1a2a4a; margin-bottom: 14px; }
-.test-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 14px; margin-bottom: 10px; border: 1px solid #e8edf5; background: #f8faff; gap: 12px; flex-wrap: wrap; }
-.test-color-bar { width: 4px; height: 44px; border-radius: 4px; flex-shrink: 0; }
+
+/* ═══ SECTION CARD ═══ */
+.section-card {
+background: #fff;
+border-radius: 20px;
+padding: 22px;
+margin-bottom: 16px;
+box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.section-title {
+font-size: 15px;
+font-weight: 800;
+color: #1a2a4a;
+margin-bottom: 14px;
+}
+
+/* ═══ TEST ITEMS ═══ */
+.test-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 14px 16px;
+border-radius: 14px;
+margin-bottom: 10px;
+border: 1px solid #e8edf5;
+background: #f8faff;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.test-color-bar {
+width: 4px;
+height: 44px;
+border-radius: 4px;
+flex-shrink: 0;
+}
+
 .test-info { flex: 1; min-width: 120px; }
 .test-name { font-weight: 800; color: #1a2a4a; font-size: 15px; }
 .test-desc { font-size: 12px; color: #6c7a99; margin-top: 2px; }
-.badge-ok { background: #dcfce7; color: #16a34a; border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
-.badge-done { background: #e0f2fe; color: #0369a1; border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
-.btn-start { padding: 9px 18px; border-radius: 11px; border: none; color: #fff; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+
+.badge-ok {
+background: #dcfce7;
+color: #16a34a;
+border-radius: 20px;
+padding: 4px 10px;
+font-size: 11px;
+font-weight: 700;
+white-space: nowrap;
+}
+
+.badge-done {
+background: #e0f2fe;
+color: #0369a1;
+border-radius: 20px;
+padding: 4px 10px;
+font-size: 11px;
+font-weight: 700;
+white-space: nowrap;
+}
+
+.btn-start {
+padding: 9px 18px;
+border-radius: 11px;
+border: none;
+color: #fff;
+font-weight: 700;
+font-size: 13px;
+cursor: pointer;
+transition: all 0.2s;
+white-space: nowrap;
+}
+
 .btn-start:hover { transform: translateY(-1px); filter: brightness(1.1); }
-.result-row { display: flex; align-items: center; gap: 12px; padding: 13px 15px; border-radius: 13px; background: #f8faff; margin-bottom: 8px; flex-wrap: wrap; }
-.result-badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
+
+/* ═══ RÉSULTATS ═══ */
+.result-row {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 13px 15px;
+border-radius: 13px;
+background: #f8faff;
+margin-bottom: 8px;
+flex-wrap: wrap;
+}
+
+.result-badge {
+padding: 5px 12px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 800;
+color: #fff;
+flex-shrink: 0;
+}
+
 .result-info { flex: 1; min-width: 100px; }
 .result-name { font-weight: 700; color: #1a2a4a; font-size: 14px; }
 .result-date { font-size: 11px; color: #6c7a99; }
+
 .score-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .score-bar { width: 80px; height: 6px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
 .score-fill { height: 100%; border-radius: 999px; }
 .score-val { font-size: 13px; font-weight: 800; color: #1B3A6B; min-width: 36px; text-align: right; }
+
 .empty-state { text-align: center; padding: 28px; color: #a0aec0; font-size: 14px; }
 
-/* TEST */
-#page-test { min-height: 100vh; background: linear-gradient(180deg, #edf3ff, #f7f9ff); }
-.test-topbar { background: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.06); gap: 12px; position: sticky; top: 0; z-index: 50; }
-.test-topbar-title { font-weight: 800; color: #1a2a4a; font-size: 15px; }
-.btn-back { padding: 7px 14px; background: transparent; border: 1px solid rgba(27,58,107,0.2); border-radius: 9px; color: #6c7a99; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+/* ═══ TEST SCREEN ═══ */
+#page-test {
+min-height: 100vh;
+background: linear-gradient(180deg, #edf3ff, #f7f9ff);
+}
+
+.test-topbar {
+background: #fff;
+padding: 14px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+gap: 12px;
+}
+
+.test-topbar-title {
+font-weight: 800;
+color: #1a2a4a;
+font-size: 15px;
+}
+
+.btn-back {
+padding: 7px 14px;
+background: transparent;
+border: 1px solid rgba(27,58,107,0.2);
+border-radius: 9px;
+color: #6c7a99;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+}
+
 .btn-back:hover { background: #1B3A6B; color: #fff; border-color: #1B3A6B; }
+
 .test-body { padding: 20px; max-width: 700px; margin: 0 auto 60px; }
+
 .progress-wrap { margin-bottom: 18px; }
 .progress-header { display: flex; justify-content: space-between; margin-bottom: 7px; }
 .progress-label { font-size: 11px; font-weight: 600; color: #6c7a99; letter-spacing: 0.06em; }
 .progress-count { font-size: 12px; font-weight: 700; color: #C9A84C; }
 .progress-track { height: 5px; background: #e2e8f4; border-radius: 999px; overflow: hidden; }
 .progress-bar { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
-.cat-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
-.question-card { background: #fff; border-radius: 20px; padding: 26px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.07); margin-bottom: 14px; }
-.situation-box { background: #f4f7ff; border-left: 4px solid #2E5BA8; border-radius: 12px; padding: 13px 16px; margin-bottom: 16px; }
-.situation-text { font-size: 16px; font-weight: 800; color: #1a2a4a; line-height: 1.5; }
-.question-text { font-family: ‘Cormorant Garamond’, serif; font-size: 20px; font-weight: 600; color: #1a2a4a; line-height: 1.45; margin-bottom: 20px; }
+
+.cat-badge {
+display: inline-block;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+padding: 4px 12px;
+border-radius: 20px;
+margin-bottom: 14px;
+}
+
+.question-card {
+background: #fff;
+border-radius: 20px;
+padding: 26px 22px;
+box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+margin-bottom: 14px;
+}
+
+.situation-box {
+background: #f4f7ff;
+border-left: 4px solid #2E5BA8;
+border-radius: 12px;
+padding: 13px 16px;
+margin-bottom: 16px;
+}
+
+.situation-text {
+font-size: 16px;
+font-weight: 800;
+color: #1a2a4a;
+line-height: 1.5;
+}
+
+.question-text {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+font-weight: 600;
+color: #1a2a4a;
+line-height: 1.45;
+margin-bottom: 20px;
+}
+
 .options { display: flex; flex-direction: column; gap: 9px; }
-.option-btn { padding: 13px 17px; border-radius: 13px; border: 2px solid #e2e8f4; background: #f8faff; color: #22366c; font-family: ‘DM Sans’, sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; text-align: left; line-height: 1.4; transition: all 0.2s; display: flex; align-items: flex-start; gap: 11px; }
+
+.option-btn {
+padding: 13px 17px;
+border-radius: 13px;
+border: 2px solid #e2e8f4;
+background: #f8faff;
+color: #22366c;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+text-align: left;
+line-height: 1.4;
+transition: all 0.2s;
+display: flex;
+align-items: center;
+gap: 11px;
+}
+
 .option-btn:hover { background: rgba(74,144,217,0.08); border-color: rgba(74,144,217,0.4); }
 .option-btn.selected { color: #fff; }
-.option-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
-.option-dot::after { content: ‘’; width: 7px; height: 7px; border-radius: 50%; background: #fff; display: none; }
+
+.option-dot {
+width: 18px; height: 18px;
+border-radius: 50%;
+border: 2px solid rgba(255,255,255,0.5);
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.option-dot::after {
+content: ‘’;
+width: 7px; height: 7px;
+border-radius: 50%;
+background: #fff;
+display: none;
+}
+
 .option-btn.selected .option-dot::after { display: block; }
+
 .likert-options { display: flex; flex-direction: column; gap: 9px; }
-.likert-btn { padding: 13px 17px; border-radius: 13px; border: 2px solid #e2e8f4; background: #f8faff; color: #22366c; font-family: ‘DM Sans’, sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; text-align: left; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
+
+.likert-btn {
+padding: 13px 17px;
+border-radius: 13px;
+border: 2px solid #e2e8f4;
+background: #f8faff;
+color: #22366c;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 15px;
+font-weight: 700;
+cursor: pointer;
+text-align: left;
+transition: all 0.2s;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
 .likert-btn:hover { background: rgba(74,144,217,0.08); border-color: rgba(74,144,217,0.4); }
 .likert-btn.selected { color: #fff; }
-.likert-num { font-size: 20px; font-weight: 900; min-width: 28px; opacity: 0.8; }
-.btn-next { width: 100%; padding: 15px; border-radius: 13px; border: none; background: #1B3A6B; color: #fff; font-family: ‘DM Sans’, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: none; margin-top: 4px; }
+
+.likert-num {
+font-size: 20px;
+font-weight: 900;
+min-width: 28px;
+opacity: 0.8;
+}
+
+.btn-next {
+width: 100%;
+padding: 15px;
+border-radius: 13px;
+border: none;
+background: #1B3A6B;
+color: #fff;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 16px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.2s;
+display: none;
+}
+
 .btn-next:hover { background: #2E5BA8; transform: translateY(-1px); }
 
-/* RÉSULTATS */
-#page-resultats { min-height: 100vh; background: linear-gradient(180deg, #edf3ff, #f7f9ff); }
+/* ═══ RÉSULTATS TEST ═══ */
+#page-resultats {
+min-height: 100vh;
+background: linear-gradient(180deg, #edf3ff, #f7f9ff);
+}
+
 .resultats-body { padding: 20px; max-width: 760px; margin: 0 auto 60px; }
-.score-hero { border-radius: 22px; padding: 28px; text-align: center; margin-bottom: 18px; color: #fff; }
-.score-circle-wrap { position: relative; width: 160px; height: 160px; margin: 0 auto 16px; }
+
+.score-hero {
+border-radius: 22px;
+padding: 28px;
+text-align: center;
+margin-bottom: 18px;
+color: #fff;
+}
+
+.score-circle-wrap {
+position: relative;
+width: 160px;
+height: 160px;
+margin: 0 auto 16px;
+}
+
 .score-circle-wrap svg { transform: rotate(-90deg); }
-.score-inside { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
-.score-number { font-family: ‘Cormorant Garamond’, serif; font-size: 42px; font-weight: 700; line-height: 1; }
+
+.score-inside {
+position: absolute;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+}
+
+.score-number {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 42px;
+font-weight: 700;
+line-height: 1;
+}
+
 .score-unit { font-size: 14px; opacity: 0.7; }
-.profil-name { font-family: ‘Cormorant Garamond’, serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
-.profil-code { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 5px 16px; font-size: 13px; font-weight: 800; }
-.res-card { background: #fff; border-radius: 20px; padding: 22px; margin-bottom: 14px; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
-.res-card-title { font-size: 15px; font-weight: 800; color: #1a2a4a; margin-bottom: 14px; }
+
+.profil-name {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 24px;
+font-weight: 700;
+margin-bottom: 6px;
+}
+
+.profil-code {
+display: inline-block;
+background: rgba(255,255,255,0.2);
+border-radius: 20px;
+padding: 5px 16px;
+font-size: 13px;
+font-weight: 800;
+}
+
+.res-card {
+background: #fff;
+border-radius: 20px;
+padding: 22px;
+margin-bottom: 14px;
+box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.res-card-title {
+font-size: 15px;
+font-weight: 800;
+color: #1a2a4a;
+margin-bottom: 14px;
+}
+
 .dim-row { margin-bottom: 13px; }
 .dim-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
 .dim-name { font-size: 13px; font-weight: 700; color: #22366c; }
 .dim-pct { font-size: 13px; font-weight: 800; }
 .dim-track { height: 8px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
 .dim-fill { height: 100%; border-radius: 999px; transition: width 1s ease 0.3s; }
-.insight-row { padding: 13px 15px; border-radius: 13px; margin-bottom: 10px; border-left: 4px solid; }
-.insight-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+
+.insight-row {
+padding: 13px 15px;
+border-radius: 13px;
+margin-bottom: 10px;
+border-left: 4px solid;
+}
+
+.insight-label {
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+margin-bottom: 6px;
+}
+
 .insight-text { font-size: 14px; line-height: 1.6; color: #2a3a5a; }
-.btn-gold { width: 100%; padding: 15px; background: linear-gradient(135deg, #C9A84C, #E8C56A); color: #0f2244; font-family: ‘DM Sans’, sans-serif; font-size: 15px; font-weight: 800; border: none; border-radius: 13px; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
+
+.btn-gold {
+width: 100%;
+padding: 15px;
+background: linear-gradient(135deg, #C9A84C, #E8C56A);
+color: #0f2244;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 15px;
+font-weight: 800;
+border: none;
+border-radius: 13px;
+cursor: pointer;
+transition: all 0.2s;
+margin-bottom: 10px;
+}
+
 .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(201,168,76,0.4); }
-.btn-outline { width: 100%; padding: 13px; background: transparent; color: #1B3A6B; font-family: ‘DM Sans’, sans-serif; font-size: 14px; font-weight: 700; border: 2px solid #1B3A6B; border-radius: 13px; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
+
+.btn-outline {
+width: 100%;
+padding: 13px;
+background: transparent;
+color: #1B3A6B;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 14px;
+font-weight: 700;
+border: 2px solid #1B3A6B;
+border-radius: 13px;
+cursor: pointer;
+transition: all 0.2s;
+margin-bottom: 10px;
+}
+
 .btn-outline:hover { background: #1B3A6B; color: #fff; }
-.saving-msg { text-align: center; color: #6c7a99; font-size: 13px; padding: 10px; }
-.nt-row { margin-bottom: 14px; background: #f8faff; border-radius: 14px; padding: 14px; }
-.nt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.nt-name { font-weight: 800; font-size: 14px; }
-.nt-status { border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 800; color: #fff; }
-.sport-row { background: #f8faff; border-radius: 13px; padding: 12px 15px; margin-bottom: 8px; border-left: 3px solid #1a3a6a; }
-.sport-text { color: #2a3a5a; font-size: 14px; line-height: 1.5; }
+
+.saving-msg {
+text-align: center;
+color: #6c7a99;
+font-size: 13px;
+padding: 10px;
+}
 </style>
 
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ═══════════════════════════════
+     PAGE LOGIN
+═══════════════════════════════ -->
 
 <div id="page-login">
   <div class="login-card">
     <div class="login-logo">
-      <img src="https://alexandregriffet-cmd.github.io/Test-performance-mental-A4P/IMG_1572.jpeg" alt="A4P" onerror="this.style.display='none'"/>
+      <img src="https://alexandregriffet-cmd.github.io/Test-performance-mental-A4P/IMG_1572.jpeg"
+           alt="A4P" onerror="this.style.display='none'" />
       <div class="eyebrow">Académie de Performances</div>
       <div class="brand">A4P · <span>Diagnostic Club</span></div>
     </div>
     <div class="login-divider"></div>
     <div class="login-subtitle">Connexion à votre espace</div>
-    <div class="field"><label>Adresse email</label><input type="email" id="inp-email" placeholder="votre@email.com"/></div>
-    <div class="field"><label>Mot de passe</label><input type="password" id="inp-password" placeholder="••••••••"/></div>
+    <div class="field">
+      <label>Adresse email</label>
+      <input type="email" id="inp-email" placeholder="votre@email.com" />
+    </div>
+    <div class="field">
+      <label>Mot de passe</label>
+      <input type="password" id="inp-password" placeholder="••••••••" />
+    </div>
     <button class="btn-primary" id="btn-login">Se connecter →</button>
-    <div class="error-box" id="login-error"></div>
-    <div style="text-align:center;margin-top:24px;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;">ACADÉMIE DE PERFORMANCES · A4P · Plateforme Club</div>
+    <div class="error-box" id="login-error">Email ou mot de passe incorrect.</div>
+    <div style="text-align:center;margin-top:24px;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;">
+      ACADÉMIE DE PERFORMANCES · A4P · Plateforme Club
+    </div>
   </div>
 </div>
 
-<!-- DASHBOARD JOUEUR -->
+<!-- ═══════════════════════════════
+     DASHBOARD JOUEUR
+═══════════════════════════════ -->
 
 <div class="page" id="page-joueur">
   <div class="topbar">
     <div class="topbar-brand">A4P · <span>Diagnostic Club</span></div>
     <div class="topbar-right">
       <div class="avatar" id="j-avatar">J</div>
-      <div class="user-info"><div class="name" id="j-name">Joueur</div><div class="role">🎮 Espace Joueur</div></div>
+      <div class="user-info">
+        <div class="name" id="j-name">Joueur</div>
+        <div class="role">🎮 Espace Joueur</div>
+      </div>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
     </div>
   </div>
@@ -189,39 +751,61 @@ body { font-family: 'DM Sans', sans-serif; min-height: 100vh; background: #0f224
     </div>
     <div class="section-card">
       <div class="section-title">📊 Mes 4 diagnostics A4P</div>
-      <div class="test-item">
-        <div class="test-color-bar" style="background:#2f4a8a;"></div>
-        <div class="test-info"><div class="test-name">PMP</div><div class="test-desc">Profil Mental de Performance · 120 questions · 8 dimensions</div></div>
-        <span class="badge-ok" id="badge-PMP">✅ Disponible</span>
-        <button class="btn-start" style="background:#2f4a8a;" onclick="startTest('PMP')">Démarrer →</button>
-      </div>
-      <div class="test-item">
-        <div class="test-color-bar" style="background:#1a3a6a;"></div>
-        <div class="test-info"><div class="test-name">MPA</div><div class="test-desc">Mode Préférentiel d'Action · 100 questions · 4 axes</div></div>
-        <span class="badge-ok" id="badge-MPA">✅ Disponible</span>
-        <button class="btn-start" style="background:#1a3a6a;" onclick="startTest('MPA')">Démarrer →</button>
-      </div>
-      <div class="test-item">
-        <div class="test-color-bar" style="background:#1a4a2a;"></div>
-        <div class="test-info"><div class="test-name">CMP</div><div class="test-desc">Compétences Mentales de Performance · 30 situations</div></div>
-        <span class="badge-ok" id="badge-CMP">✅ Disponible</span>
-        <button class="btn-start" style="background:#1a4a2a;" onclick="startTest('CMP')">Démarrer →</button>
-      </div>
-      <div class="test-item">
-        <div class="test-color-bar" style="background:#4a1a6a;"></div>
-        <div class="test-info"><div class="test-name">PSYCHO</div><div class="test-desc">Profil Psycho-émotionnel · 50 questions · Neurochimie + ITCA</div></div>
-        <span class="badge-ok" id="badge-PSYCHO">✅ Disponible</span>
-        <button class="btn-start" style="background:#4a1a6a;" onclick="startTest('PSYCHO')">Démarrer →</button>
-      </div>
+
+```
+  <div class="test-item">
+    <div class="test-color-bar" style="background:#2f4a8a;"></div>
+    <div class="test-info">
+      <div class="test-name">PMP</div>
+      <div class="test-desc">Profil Mental de Performance · 120 questions</div>
     </div>
-    <div class="section-card">
-      <div class="section-title">📈 Mes résultats</div>
-      <div id="j-resultats"><div class="empty-state">Aucun test complété pour l'instant.</div></div>
+    <span class="badge-ok" id="badge-PMP">✅ Disponible</span>
+    <button class="btn-start" style="background:#2f4a8a;" onclick="startTest('PMP')">Démarrer →</button>
+  </div>
+
+  <div class="test-item">
+    <div class="test-color-bar" style="background:#1a3a6a;"></div>
+    <div class="test-info">
+      <div class="test-name">MPA</div>
+      <div class="test-desc">Mode Préférentiel d'Action · 100 questions</div>
     </div>
+    <span class="badge-ok" id="badge-MPA">✅ Disponible</span>
+    <button class="btn-start" style="background:#1a3a6a;" onclick="startTest('MPA')">Démarrer →</button>
+  </div>
+
+  <div class="test-item">
+    <div class="test-color-bar" style="background:#1a4a2a;"></div>
+    <div class="test-info">
+      <div class="test-name">CMP</div>
+      <div class="test-desc">Compétences Mentales de Performance · 30 situations</div>
+    </div>
+    <span class="badge-ok" id="badge-CMP">✅ Disponible</span>
+    <button class="btn-start" style="background:#1a4a2a;" onclick="startTest('CMP')">Démarrer →</button>
+  </div>
+
+  <div class="test-item">
+    <div class="test-color-bar" style="background:#4a1a6a;"></div>
+    <div class="test-info">
+      <div class="test-name">PSYCHO</div>
+      <div class="test-desc">Profil Psycho-émotionnel · 50 questions</div>
+    </div>
+    <span class="badge-ok" id="badge-PSYCHO">✅ Disponible</span>
+    <button class="btn-start" style="background:#4a1a6a;" onclick="startTest('PSYCHO')">Démarrer →</button>
   </div>
 </div>
 
-<!-- PAGE TEST -->
+<div class="section-card">
+  <div class="section-title">📈 Mes résultats</div>
+  <div id="j-resultats"><div class="empty-state">Aucun test complété pour l'instant.</div></div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PAGE TEST
+═══════════════════════════════ -->
 
 <div class="page" id="page-test">
   <div class="test-topbar">
@@ -231,39 +815,63 @@ body { font-family: 'DM Sans', sans-serif; min-height: 100vh; background: #0f224
   </div>
   <div class="test-body">
     <div class="progress-wrap">
-      <div class="progress-header"><span class="progress-label">PROGRESSION</span><span class="progress-count" id="test-count">1 / 30</span></div>
-      <div class="progress-track"><div class="progress-bar" id="test-bar" style="width:3%"></div></div>
+      <div class="progress-header">
+        <span class="progress-label">PROGRESSION</span>
+        <span class="progress-count" id="test-count">1 / 30</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="test-bar" style="width:3%"></div>
+      </div>
     </div>
     <div id="test-question-area"></div>
     <button class="btn-next" id="btn-next" onclick="nextQuestion()">Question suivante →</button>
   </div>
 </div>
 
-<!-- PAGE RÉSULTATS -->
+<!-- ═══════════════════════════════
+     PAGE RÉSULTATS TEST
+═══════════════════════════════ -->
 
 <div class="page" id="page-resultats">
   <div class="test-topbar">
-    <button class="btn-back" onclick="showPage('page-joueur');loadJoueur(currentUser)">← Mon tableau de bord</button>
+    <button class="btn-back" onclick="showPage('page-joueur')">← Mon tableau de bord</button>
     <div class="test-topbar-title" id="res-title">Résultats</div>
     <div></div>
   </div>
-  <div class="resultats-body" id="resultats-content"></div>
+  <div class="resultats-body" id="resultats-content">
+  </div>
 </div>
 
 <script>
-// SUPABASE
+// ═══ SUPABASE ═══
 const { createClient } = supabase
-const sb = createClient('https://uambqnxbjgukcqbrlops.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhbWJxbnhiamd1a2NxYnJsb3BzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODE5NjksImV4cCI6MjA5MDE1Nzk2OX0.NhIi_oM7-uivanX5lekkby88t8redOnqxQjhXHRv5J4')
+const sb = createClient(
+  'https://uambqnxbjgukcqbrlops.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhbWJxbnhiamd1a2NxYnJsb3BzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODE5NjksImV4cCI6MjA5MDE1Nzk2OX0.NhIi_oM7-uivanX5lekkby88t8redOnqxQjhXHRv5J4'
+)
 
-let currentUser = null, currentTest = null, currentQ = 0, testAnswers = {}, testQuestions = []
+let currentUser = null
+let currentTest = null
+let currentQ = 0
+let testAnswers = {}
+let testQuestions = []
 
+// ═══ NAVIGATION ═══
 function showPage(id) {
-  document.querySelectorAll('.page,#page-login').forEach(p => { p.style.display='none'; p.classList.remove('active') })
+  document.querySelectorAll('.page, #page-login').forEach(p => {
+    p.style.display = 'none'
+    p.classList.remove('active')
+  })
   const el = document.getElementById(id)
-  el.style.display = 'block'; el.classList.add('active'); window.scrollTo(0,0)
+  el.style.display = 'block'
+  el.classList.add('active')
+  window.scrollTo(0, 0)
 }
 
-document.getElementById('inp-password').addEventListener('keydown', e => { if(e.key==='Enter') doLogin() })
+// ═══ LOGIN ═══
+document.getElementById('inp-password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin()
+})
 document.getElementById('btn-login').addEventListener('click', doLogin)
 
 async function doLogin() {
@@ -271,294 +879,302 @@ async function doLogin() {
   const password = document.getElementById('inp-password').value.trim()
   const btn = document.getElementById('btn-login')
   const err = document.getElementById('login-error')
-  if(!email||!password){err.textContent='Remplissez tous les champs.';err.style.display='block';return}
-  btn.disabled=true; btn.textContent='Connexion...'; err.style.display='none'
+
+  if (!email || !password) { err.textContent = 'Remplissez tous les champs.'; err.style.display = 'block'; return }
+
+  btn.disabled = true
+  btn.textContent = 'Connexion...'
+  err.style.display = 'none'
+
   try {
-    const {data,error} = await sb.from('utilisateurs').select('*').eq('email',email).eq('mot_de_passe',password).eq('actif',true).single()
-    if(error||!data){err.textContent='Email ou mot de passe incorrect.';err.style.display='block';btn.disabled=false;btn.textContent='Se connecter →';return}
-    currentUser=data; btn.textContent='✅ Connexion réussie'
-    setTimeout(()=>{document.getElementById('page-login').style.display='none';if(data.role==='joueur')loadJoueur(data);else{err.textContent='Ce portail est réservé aux joueurs.';err.style.display='block';btn.disabled=false;btn.textContent='Se connecter →'}},600)
-  } catch(e){err.textContent='Erreur réseau.';err.style.display='block';btn.disabled=false;btn.textContent='Se connecter →'}
+    const { data, error } = await sb.from('utilisateurs').select('*').eq('email', email).eq('mot_de_passe', password).eq('actif', true).single()
+    if (error || !data) {
+      err.textContent = 'Email ou mot de passe incorrect.'
+      err.style.display = 'block'
+      btn.disabled = false
+      btn.textContent = 'Se connecter →'
+      return
+    }
+    currentUser = data
+    btn.textContent = '✅ Connexion réussie'
+    setTimeout(() => {
+      document.getElementById('page-login').style.display = 'none'
+      if (data.role === 'joueur') loadJoueur(data)
+      else { btn.disabled = false; btn.textContent = 'Se connecter →'; err.textContent = 'Ce portail est réservé aux joueurs.'; err.style.display = 'block' }
+    }, 600)
+  } catch(e) {
+    err.textContent = 'Erreur réseau. Réessayez.'
+    err.style.display = 'block'
+    btn.disabled = false
+    btn.textContent = 'Se connecter →'
+  }
 }
 
 function logout() {
-  currentUser=null
-  document.querySelectorAll('.page').forEach(p=>{p.style.display='none';p.classList.remove('active')})
-  document.getElementById('page-login').style.display='flex'
-  document.getElementById('inp-email').value=''; document.getElementById('inp-password').value=''
-  document.getElementById('btn-login').disabled=false; document.getElementById('btn-login').textContent='Se connecter →'
-  document.getElementById('login-error').style.display='none'
+  currentUser = null
+  document.querySelectorAll('.page').forEach(p => { p.style.display = 'none'; p.classList.remove('active') })
+  document.getElementById('page-login').style.display = 'flex'
+  document.getElementById('inp-email').value = ''
+  document.getElementById('inp-password').value = ''
+  document.getElementById('btn-login').disabled = false
+  document.getElementById('btn-login').textContent = 'Se connecter →'
+  document.getElementById('login-error').style.display = 'none'
 }
 
+// ═══ DASHBOARD JOUEUR ═══
 async function loadJoueur(user) {
-  document.getElementById('j-avatar').textContent=user.prenom[0].toUpperCase()
-  document.getElementById('j-name').textContent=user.prenom+' '+user.nom
-  document.getElementById('j-welcome').textContent='Bonjour '+user.prenom+' — prêt pour tes diagnostics ?'
+  document.getElementById('j-avatar').textContent = user.prenom[0].toUpperCase()
+  document.getElementById('j-name').textContent = user.prenom + ' ' + user.nom
+  document.getElementById('j-welcome').textContent = 'Bonjour ' + user.prenom + ' — prêt pour tes diagnostics ?'
+
   showPage('page-joueur')
-  const {data:resultats} = await sb.from('resultats').select('*').eq('utilisateur_id',user.id).order('completed_at',{ascending:false})
-  const done=resultats?.length||0
-  document.getElementById('j-done').textContent=done
-  if(done>0){
-    const moy=Math.round(resultats.reduce((a,r)=>a+(r.score_global||0),0)/done)
-    document.getElementById('j-moy').textContent=moy+'%'
-    const colors={PMP:'#2f4a8a',MPA:'#1a3a6a',CMP:'#1a4a2a',PSYCHO:'#4a1a6a'}
-    document.getElementById('j-resultats').innerHTML=resultats.map(r=>`
+
+  const { data: resultats } = await sb.from('resultats').select('*').eq('utilisateur_id', user.id).order('completed_at', { ascending: false })
+  const done = resultats?.length || 0
+  document.getElementById('j-done').textContent = done
+
+  if (done > 0) {
+    const moy = Math.round(resultats.reduce((a, r) => a + (r.score_global || 0), 0) / done)
+    document.getElementById('j-moy').textContent = moy + '%'
+    const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
+    document.getElementById('j-resultats').innerHTML = resultats.map(r => `
       <div class="result-row">
         <div class="result-badge" style="background:${colors[r.test_type]||'#1B3A6B'}">${r.test_type}</div>
-        <div class="result-info"><div class="result-name">${r.profil_label||r.profil_code||'Résultat'}</div><div class="result-date">${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div></div>
-        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:${colors[r.test_type]||'#1B3A6B'}"></div></div><div class="score-val">${r.score_global||'—'}%</div></div>
-      </div>`).join('')
-    ;[...new Set(resultats.map(r=>r.test_type))].forEach(t=>{const b=document.getElementById('badge-'+t);if(b){b.className='badge-done';b.textContent='✅ Complété'}})
+        <div class="result-info">
+          <div class="result-name">${r.profil_label || r.profil_code || 'Résultat'}</div>
+          <div class="result-date">${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div>
+        </div>
+        <div class="score-wrap">
+          <div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:${colors[r.test_type]||'#1B3A6B'}"></div></div>
+          <div class="score-val">${r.score_global || '—'}%</div>
+        </div>
+      </div>
+    `).join('')
+    const done_types = [...new Set(resultats.map(r => r.test_type))]
+    done_types.forEach(t => {
+      const badge = document.getElementById('badge-' + t)
+      if (badge) { badge.className = 'badge-done'; badge.textContent = '✅ Complété' }
+    })
   }
-  if(user.equipe_id){const {data:eq}=await sb.from('equipes').select('nom').eq('id',user.equipe_id).single();if(eq)document.getElementById('j-equipe').textContent=eq.nom}
+
+  if (user.equipe_id) {
+    const { data: eq } = await sb.from('equipes').select('nom').eq('id', user.equipe_id).single()
+    if (eq) document.getElementById('j-equipe').textContent = eq.nom
+  }
 }
 
+// ═══ DÉMARRER UN TEST ═══
 function startTest(type) {
-  currentTest=type; currentQ=0; testAnswers={}
-  testQuestions=type==='CMP'?CMP_Q:type==='PMP'?PMP_Q:type==='MPA'?MPA_Q:PSYCHO_Q
-  document.getElementById('test-title').textContent='Test '+type
-  document.getElementById('btn-next').style.display='none'
-  showPage('page-test'); renderQuestion()
+  currentTest = type
+  currentQ = 0
+  testAnswers = {}
+  testQuestions = getQuestions(type)
+  document.getElementById('test-title').textContent = 'Test ' + type
+  document.getElementById('btn-next').style.display = 'none'
+  showPage('page-test')
+  renderQuestion()
 }
 
-function backToDashboard() { if(confirm('Quitter le test ? Ta progression sera perdue.')) showPage('page-joueur') }
+function backToDashboard() {
+  if (confirm('Quitter le test ? Ta progression sera perdue.')) {
+    showPage('page-joueur')
+  }
+}
 
+// ═══ RENDU QUESTION ═══
 function renderQuestion() {
-  const q=testQuestions[currentQ], total=testQuestions.length
-  const pct=Math.round(((currentQ+1)/total)*100)
-  const colors={PMP:'#2f4a8a',MPA:'#1a3a6a',CMP:'#1a4a2a',PSYCHO:'#4a1a6a'}
-  const color=colors[currentTest]||'#1B3A6B'
-  document.getElementById('test-count').textContent=(currentQ+1)+' / '+total
-  document.getElementById('test-progress-txt').textContent=(currentQ+1)+' / '+total
-  document.getElementById('test-bar').style.width=pct+'%'
-  document.getElementById('test-bar').style.background=color
-  document.getElementById('btn-next').style.display='none'
-  let html=''
-  if(q.type==='situational'){
-    html+='<div class="question-card">'
-    html+='<div class="situation-box"><div class="situation-text">🎯 '+q.situation+'</div></div>'
-    html+='<div class="cat-badge" style="background:'+color+'22;color:'+color+';border:1px solid '+color+'44;">'+(q.cat||'Situation')+'</div>'
-    html+='<div style="font-size:14px;font-weight:600;color:#6c7a99;margin-bottom:16px;">'+q.text+'</div>'
-    html+='<div class="options">'
-    q.options.forEach((opt,i)=>{
-      const sel=testAnswers[q.id]===i
-      html+='<button class="option-btn'+(sel?' selected':'')+'" style="'+(sel?'background:'+color+';border-color:'+color:'')+'" onclick="selectOpt('+i+')">'
-      html+='<div class="option-dot"></div><span>'+opt.text+'</span></button>'
+  const q = testQuestions[currentQ]
+  const total = testQuestions.length
+  const pct = Math.round(((currentQ + 1) / total) * 100)
+  const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
+  const color = colors[currentTest] || '#1B3A6B'
+
+  document.getElementById('test-count').textContent = (currentQ + 1) + ' / ' + total
+  document.getElementById('test-progress-txt').textContent = (currentQ + 1) + ' / ' + total
+  document.getElementById('test-bar').style.width = pct + '%'
+  document.getElementById('test-bar').style.background = color
+  document.getElementById('btn-next').style.display = 'none'
+
+  let html = ''
+
+  if (q.type === 'situational') {
+    html += '<div class="situation-box"><div class="situation-text">🎯 ' + q.situation + '</div></div>'
+    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.cat || 'Situation') + '</div>'
+    html += '<div class="question-text">' + q.text + '</div>'
+    html += '<div class="options">'
+    q.options.forEach((opt, i) => {
+      const sel = testAnswers[q.id] === i
+      html += '<button class="option-btn' + (sel ? ' selected' : '') + '" style="' + (sel ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectOption(' + i + ')">'
+      html += '<div class="option-dot"></div><span>' + opt.text + '</span></button>'
     })
-    html+='</div></div>'
-  } else if(q.type==='binary'){
-    html+='<div class="question-card">'
-    html+='<div class="cat-badge" style="background:'+color+'22;color:'+color+';border:1px solid '+color+'44;">'+(q.axe||'')+' · '+(q.title||'')+'</div>'
-    html+='<div style="font-size:13px;color:#6c7a99;margin-bottom:18px;text-align:center;font-weight:600;">Choisis l\'affirmation qui te ressemble le plus naturellement</div>'
-    html+='<div class="options">'
-    const selA=testAnswers[q.id]==='A', selB=testAnswers[q.id]==='B'
-    html+='<button class="option-btn'+(selA?' selected':'')+'" style="'+(selA?'background:'+color+';border-color:'+color:'')+'" onclick="selectBin(\'A\')">'
-    html+='<div class="option-dot"></div><span>'+q.text+'</span></button>'
-    html+='<button class="option-btn'+(selB?' selected':'')+'" style="'+(selB?'background:'+color+';border-color:'+color:'')+'" onclick="selectBin(\'B\')">'
-    html+='<div class="option-dot"></div><span>'+(q.textB||"L'affirmation opposée me correspond mieux.")+'</span></button>'
-    html+='</div></div>'
+    html += '</div>'
+
+  } else if (q.type === 'binary') {
+    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.axe || '') + ' · ' + (q.title || '') + '</div>'
+    html += '<div style="font-size:13px;color:#6c7a99;margin-bottom:16px;text-align:center;font-weight:600;">Choisis l\'affirmation qui te ressemble le plus</div>'
+    html += '<div class="options">'
+    const optA = q.text
+    const optB = q.textB || "L'affirmation opposée me correspond mieux."
+    const selA = testAnswers[q.id] === 'A'
+    const selB = testAnswers[q.id] === 'B'
+    html += '<button class="option-btn' + (selA ? ' selected' : '') + '" style="' + (selA ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectBinary(\'A\')">'
+    html += '<div class="option-dot"></div><span>' + optA + '</span></button>'
+    html += '<button class="option-btn' + (selB ? ' selected' : '') + '" style="' + (selB ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectBinary(\'B\')">'
+    html += '<div class="option-dot"></div><span>' + optB + '</span></button>'
+    html += '</div>'
+
   } else {
-    html+='<div class="question-card">'
-    html+='<div class="cat-badge" style="background:'+color+'22;color:'+color+';border:1px solid '+color+'44;">'+(q.dimension||q.cat||'')+'</div>'
-    html+='<div class="question-text">'+q.text+'</div>'
-    html+='<div class="likert-options">'
-    const labels=['Jamais','Rarement','Parfois','Souvent','Toujours']
-    ;[1,2,3,4,5].forEach(v=>{
-      const sel=testAnswers[q.id]===v
-      html+='<button class="likert-btn'+(sel?' selected':'')+'" style="'+(sel?'background:'+color+';border-color:'+color:'')+'" onclick="selectLik('+v+')">'
-      html+='<span class="likert-num">'+v+'</span><span>'+labels[v-1]+'</span></button>'
+    // Likert
+    html += '<div class="cat-badge" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + (q.dimension || q.cat || '') + '</div>'
+    html += '<div class="question-text">' + q.text + '</div>'
+    html += '<div class="likert-options">'
+    const labels = ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Toujours']
+    ;[1,2,3,4,5].forEach(v => {
+      const sel = testAnswers[q.id] === v
+      html += '<button class="likert-btn' + (sel ? ' selected' : '') + '" style="' + (sel ? 'background:' + color + ';border-color:' + color : '') + '" onclick="selectLikert(' + v + ')">'
+      html += '<span class="likert-num">' + v + '</span><span>' + labels[v-1] + '</span></button>'
     })
-    html+='</div></div>'
+    html += '</div>'
   }
-  document.getElementById('test-question-area').innerHTML=html
-  document.getElementById('btn-next').textContent=currentQ===total-1?'Voir mes résultats →':'Question suivante →'
+
+  document.getElementById('test-question-area').innerHTML = html
+
+  if (currentQ === total - 1) {
+    document.getElementById('btn-next').textContent = 'Voir mes résultats →'
+  } else {
+    document.getElementById('btn-next').textContent = 'Question suivante →'
+  }
 }
 
-function selectOpt(i){testAnswers[testQuestions[currentQ].id]=i;renderQuestion();document.getElementById('btn-next').style.display='block'}
-function selectBin(v){testAnswers[testQuestions[currentQ].id]=v;renderQuestion();document.getElementById('btn-next').style.display='block'}
-function selectLik(v){testAnswers[testQuestions[currentQ].id]=v;renderQuestion();document.getElementById('btn-next').style.display='block'}
-
-function nextQuestion(){
-  if(testAnswers[testQuestions[currentQ].id]===undefined)return
-  if(currentQ<testQuestions.length-1){currentQ++;renderQuestion()}else finishTest()
+function selectOption(idx) {
+  testAnswers[testQuestions[currentQ].id] = idx
+  renderQuestion()
+  document.getElementById('btn-next').style.display = 'block'
 }
 
-async function finishTest(){
-  const results=calcResults(currentTest,testAnswers,testQuestions)
+function selectBinary(val) {
+  testAnswers[testQuestions[currentQ].id] = val
+  renderQuestion()
+  document.getElementById('btn-next').style.display = 'block'
+}
+
+function selectLikert(val) {
+  testAnswers[testQuestions[currentQ].id] = val
+  renderQuestion()
+  document.getElementById('btn-next').style.display = 'block'
+}
+
+function nextQuestion() {
+  if (testAnswers[testQuestions[currentQ].id] === undefined) return
+  if (currentQ < testQuestions.length - 1) {
+    currentQ++
+    renderQuestion()
+  } else {
+    finishTest()
+  }
+}
+
+// ═══ FIN DU TEST ═══
+async function finishTest() {
+  const results = calcResults(currentTest, testAnswers, testQuestions)
   showPage('page-resultats')
-  document.getElementById('res-title').textContent='Résultats '+currentTest
-  renderResults(currentTest,results)
-  await saveResult(currentTest,results)
+  document.getElementById('res-title').textContent = 'Résultats ' + currentTest
+  renderResults(currentTest, results)
+  await saveResult(currentTest, results)
 }
 
-async function saveResult(type,results){
-  if(!currentUser)return
-  try{
-    await sb.from('resultats').insert({utilisateur_id:currentUser.id,test_type:type,scores:results.scores,profil_code:results.profilCode,profil_label:results.profilLabel,score_global:results.globalScore,equipe_id:currentUser.equipe_id||null,club_id:currentUser.club_id||null})
-    const el=document.getElementById('saving-status');if(el)el.textContent='✅ Résultat enregistré dans Supabase'
-  }catch(e){console.error(e)}
-}
-
-function renderResults(type,res){
-  const colors={PMP:'#2f4a8a',MPA:'#1a3a6a',CMP:'#1a4a2a',PSYCHO:'#4a1a6a'}
-  const color=colors[type]||'#1B3A6B'
-  const circ=2*Math.PI*60
-  let html=''
-  html+='<div class="score-hero" style="background:linear-gradient(135deg,'+color+','+color+'bb);">'
-  html+='<div class="score-circle-wrap"><svg width="160" height="160">'
-  html+='<circle cx="80" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="12"/>'
-  html+='<circle cx="80" cy="80" r="60" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+(circ*(1-res.globalScore/100))+'" style="transition:stroke-dashoffset 1.5s ease"/>'
-  html+='</svg><div class="score-inside"><div class="score-number">'+res.globalScore+'</div><div class="score-unit">/ 100</div></div></div>'
-  html+='<div class="profil-name">'+res.profilLabel+'</div>'
-  html+='<div class="profil-code">'+res.profilCode+'</div>'
-  html+='</div>'
-  if(res.dimensions&&res.dimensions.length>0){
-    html+='<div class="res-card"><div class="res-card-title">📊 Tes dimensions</div>'
-    res.dimensions.forEach(d=>{html+='<div class="dim-row"><div class="dim-header"><span class="dim-name">'+d.label+'</span><span class="dim-pct" style="color:'+(d.color||color)+'">'+d.value+'%</span></div><div class="dim-track"><div class="dim-fill" style="width:'+d.value+'%;background:'+(d.color||color)+'"></div></div></div>'})
-    html+='</div>'
-  }
-  if(res.description){html+='<div class="res-card"><div class="res-card-title">🧠 Ton profil</div><p style="color:#2a3a5a;font-size:15px;line-height:1.8;">'+res.description+'</p></div>'}
-  if(res.strength||res.weakness||res.tool){
-    html+='<div class="res-card"><div class="res-card-title">💡 Tes insights</div>'
-    if(res.strength)html+='<div class="insight-row" style="background:#f0fff4;border-color:#4ade80;"><div class="insight-label" style="color:#16a34a;">✦ Ta force principale</div><div class="insight-text">'+res.strength+'</div></div>'
-    if(res.weakness)html+='<div class="insight-row" style="background:#fff8f0;border-color:#f87171;"><div class="insight-label" style="color:#dc2626;">⚡ Ton principal frein</div><div class="insight-text">'+res.weakness+'</div></div>'
-    if(res.tool)html+='<div class="insight-row" style="background:#fefce8;border-color:#C9A84C;"><div class="insight-label" style="color:#C9A84C;">→ L\'outil A4P pour toi</div><div class="insight-text">'+res.tool+'</div></div>'
-    html+='</div>'
-  }
-  if(res.forces&&res.forces.length>0){
-    html+='<div class="res-card"><div class="res-card-title">💚 Tes forces mentales</div>'
-    res.forces.forEach(f=>html+='<div class="insight-row" style="background:#f0fff4;border-color:#4ade80;"><div class="insight-text">✅ '+f+'</div></div>')
-    html+='</div>'
-  }
-  if(res.vigilances&&res.vigilances.length>0){
-    html+='<div class="res-card"><div class="res-card-title">⚠️ Points de vigilance</div>'
-    res.vigilances.forEach(v=>html+='<div class="insight-row" style="background:#fff8f0;border-color:#f87171;"><div class="insight-text">⚠️ '+v+'</div></div>')
-    html+='</div>'
-  }
-  if(res.leviers&&res.leviers.length>0){
-    html+='<div class="res-card"><div class="res-card-title">🚀 Leviers de progression</div>'
-    res.leviers.forEach(l=>html+='<div class="insight-row" style="background:#eef3ff;border-color:#2f4a8a;"><div class="insight-text">→ '+l+'</div></div>')
-    html+='</div>'
-  }
-  if(res.neurochimie&&res.neurochimie.length>0){
-    html+='<div class="res-card"><div class="res-card-title">🧬 Profil neurochimique</div>'
-    res.neurochimie.forEach(nt=>{
-      html+='<div class="nt-row"><div class="nt-header"><span class="nt-name" style="color:'+nt.color+'">'+nt.nt+'</span><span class="nt-status" style="background:'+(nt.statut==='dominant'?'#1a6a5a':'#8a4a2f')+'">'+(nt.statut==='dominant'?'Dominant':'Carence probable')+'</span></div>'
-      html+='<p style="font-size:13px;color:#2a3a5a;margin-bottom:8px;">'+nt.description+'</p>'
-      html+='<ul style="padding-left:16px;color:#4a5a7a;font-size:12px;line-height:1.8;">'+nt.regulation.map(r=>'<li>'+r+'</li>').join('')+'</ul></div>'
+async function saveResult(type, results) {
+  if (!currentUser) return
+  try {
+    await sb.from('resultats').insert({
+      utilisateur_id: currentUser.id,
+      test_type: type,
+      scores: results.scores,
+      profil_code: results.profilCode,
+      profil_label: results.profilLabel,
+      score_global: results.globalScore,
+      equipe_id: currentUser.equipe_id || null,
+      club_id: currentUser.club_id || null
     })
-    html+='</div>'
+    document.getElementById('saving-status') && (document.getElementById('saving-status').textContent = '✅ Résultat enregistré')
+  } catch(e) { console.error(e) }
+}
+
+// ═══ RENDU RÉSULTATS ═══
+function renderResults(type, res) {
+  const colors = { PMP: '#2f4a8a', MPA: '#1a3a6a', CMP: '#1a4a2a', PSYCHO: '#4a1a6a' }
+  const color = colors[type] || '#1B3A6B'
+  const circ = 2 * Math.PI * 60
+
+  let html = ''
+  html += '<div class="score-hero" style="background:linear-gradient(135deg,' + color + ',' + color + 'cc);">'
+  html += '<div class="score-circle-wrap">'
+  html += '<svg width="160" height="160"><circle cx="80" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="12"/>'
+  html += '<circle cx="80" cy="80" r="60" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"'
+  html += ' stroke-dasharray="' + circ + '" stroke-dashoffset="' + (circ * (1 - res.globalScore / 100)) + '"'
+  html += ' style="transition:stroke-dashoffset 1.5s ease"/></svg>'
+  html += '<div class="score-inside"><div class="score-number">' + res.globalScore + '</div><div class="score-unit">/ 100</div></div>'
+  html += '</div>'
+  html += '<div class="profil-name">' + res.profilLabel + '</div>'
+  html += '<div class="profil-code">' + res.profilCode + '</div>'
+  html += '</div>'
+
+  // Dimensions
+  if (res.dimensions && res.dimensions.length > 0) {
+    html += '<div class="res-card"><div class="res-card-title">📊 Tes dimensions</div>'
+    res.dimensions.forEach(d => {
+      html += '<div class="dim-row">'
+      html += '<div class="dim-header"><span class="dim-name">' + d.label + '</span><span class="dim-pct" style="color:' + (d.color||color) + '">' + d.value + '%</span></div>'
+      html += '<div class="dim-track"><div class="dim-fill" style="width:' + d.value + '%;background:' + (d.color||color) + '"></div></div>'
+      html += '</div>'
+    })
+    html += '</div>'
   }
-  if(res.sport&&res.sport.length>0){
-    html+='<div class="res-card"><div class="res-card-title">🏆 Conseils pratiques par sport</div>'
-    res.sport.forEach(s=>html+='<div class="sport-row"><div class="sport-text">'+s+'</div></div>')
-    html+='</div>'
+
+  // Insights
+  if (res.strength || res.weakness || res.tool) {
+    html += '<div class="res-card"><div class="res-card-title">💡 Tes insights</div>'
+    if (res.strength) {
+      html += '<div class="insight-row" style="background:#f0fff4;border-color:#4ade80;">'
+      html += '<div class="insight-label" style="color:#16a34a;">✦ Ta force principale</div>'
+      html += '<div class="insight-text">' + res.strength + '</div></div>'
+    }
+    if (res.weakness) {
+      html += '<div class="insight-row" style="background:#fff8f0;border-color:#f87171;">'
+      html += '<div class="insight-label" style="color:#dc2626;">⚡ Ton principal frein</div>'
+      html += '<div class="insight-text">' + res.weakness + '</div></div>'
+    }
+    if (res.tool) {
+      html += '<div class="insight-row" style="background:#fefce8;border-color:#C9A84C;">'
+      html += '<div class="insight-label" style="color:#C9A84C;">→ L\'outil A4P pour toi</div>'
+      html += '<div class="insight-text">' + res.tool + '</div></div>'
+    }
+    html += '</div>'
   }
-  if(res.itca){
-    html+='<div class="res-card" style="border:'+(res.itca.alert?'2px solid #5a1a7a':'1px solid #e8edf5')+';">'
-    html+='<div class="res-card-title">🧩 ITCA — Inventaire des Traits Cognitifs Atypiques'+(res.itca.alert?' <span style="background:#5a1a7a;color:#fff;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:800;margin-left:8px;">INVESTIGATION RECOMMANDÉE</span>':'')+'</div>'
-    html+='<div style="background:#f8f0ff;border-radius:14px;padding:16px;border-left:4px solid '+res.itca.color+';">'
-    html+='<div style="font-weight:900;color:'+res.itca.color+';font-size:15px;margin-bottom:8px;">'+res.itca.code+' — '+res.itca.label+'</div>'
-    html+='<p style="color:#2a3a5a;font-size:14px;line-height:1.7;margin-bottom:10px;">'+res.itca.description+'</p>'
-    html+='<div style="font-weight:800;color:#4a1a6a;margin-bottom:6px;font-size:13px;">Impact sport :</div>'
-    html+='<p style="color:#2a3a5a;font-size:13px;line-height:1.6;margin-bottom:8px;">'+res.itca.sport_impact+'</p>'
-    html+='<div style="font-weight:800;color:#4a1a6a;margin-bottom:6px;font-size:13px;">Orientation :</div>'
-    html+='<p style="color:#2a3a5a;font-size:13px;line-height:1.6;">'+res.itca.orientation+'</p>'
-    html+='</div></div>'
-  }
-  html+='<div id="saving-status" class="saving-msg">⏳ Enregistrement en cours...</div>'
-  html+='<button class="btn-gold" onclick="showPage(\'page-joueur\');loadJoueur(currentUser)">← Retour à mon tableau de bord</button>'
-  html+='<button class="btn-outline" onclick="startTest(\''+type+'\')">Repasser ce test</button>'
-  document.getElementById('resultats-content').innerHTML=html
+
+  html += '<div id="saving-status" class="saving-msg">⏳ Enregistrement...</div>'
+  html += '<button class="btn-gold" onclick="showPage(\'page-joueur\');loadJoueur(currentUser)">← Retour à mon tableau de bord</button>'
+  html += '<button class="btn-outline" onclick="startTest(\'' + type + '\')">Repasser ce test</button>'
+
+  document.getElementById('resultats-content').innerHTML = html
 }
 
-// CALCUL RÉSULTATS
-function calcResults(type,answers,questions){
-  if(type==='CMP')return calcCMP(answers,questions)
-  if(type==='PMP')return calcPMP(answers,questions)
-  if(type==='MPA')return calcMPA(answers,questions)
-  if(type==='PSYCHO')return calcPSYCHO(answers,questions)
-  return {globalScore:0,profilCode:'—',profilLabel:'—',scores:{},dimensions:[]}
+// ═══════════════════════════════════════════
+// QUESTIONS DES 4 TESTS
+// ═══════════════════════════════════════════
+
+function getQuestions(type) {
+  if (type === 'CMP') return CMP_QUESTIONS
+  if (type === 'PMP') return PMP_QUESTIONS
+  if (type === 'MPA') return MPA_QUESTIONS
+  if (type === 'PSYCHO') return PSYCHO_QUESTIONS
+  return []
 }
 
-function calcCMP(answers,questions){
-  let tP=0,tM=0,tB=0,tR=0,n=0
-  questions.forEach(q=>{const i=answers[q.id];if(i===undefined)return;const o=q.options[i];tP+=o.scores.pression;tM+=o.scores.maturite;tB+=o.scores.blocage;tR+=o.scores.ressource;n++})
-  if(!n)return{globalScore:0,profilCode:'CMP-?',profilLabel:'—',scores:{},dimensions:[]}
-  const sP=Math.round((tP/(n*5))*100),sM=Math.round((tM/(n*5))*100),sB=Math.round((tB/(n*5))*100),sR=Math.round((tR/(n*5))*100)
-  const g=Math.round((sP+sM+(100-sB)+sR)/4)
-  const profils=[
-    {min:85,code:'CMP-5',label:'Expert mental',description:"Votre profil révèle un niveau de maîtrise mentale que l'on rencontre chez les sportifs qui ont travaillé en profondeur leur rapport à la pression, à l'erreur et à l'adversité. Vous ne subissez pas les situations difficiles — vous les traversez avec une lucidité et une stabilité qui vous permettent de rester dans l'action là où d'autres se figent ou se dispersent.",forces:["Capacité à rester dans l'action sous pression maximale","Rebond rapide et constructif après l'erreur ou l'échec","Prise de décision lucide dans les moments décisifs","Stabilité émotionnelle qui soutient le collectif","Indépendance mentale face aux perturbations extérieures"],vigilances:["Risque de sous-estimer la charge mentale des coéquipiers","Exigence élevée envers soi-même pouvant masquer une fatigue profonde","Tendance à gérer seul sans demander de soutien"],leviers:["Développer votre rôle de leadership mental au sein du collectif","Transmettre vos outils mentaux à vos coéquipiers","Continuer à explorer de nouveaux défis pour maintenir votre niveau d'éveil"]},
-    {min:70,code:'CMP-4',label:'Performeur solide',description:"Votre profil est celui d'un sportif qui a construit de vraies fondations mentales. Dans la grande majorité des situations compétitives, vous trouvez les ressources pour rester dans le match, gérer vos émotions et prendre des décisions cohérentes.",forces:["Bonne capacité de régulation émotionnelle dans les situations standard","Engagement constant même dans l'adversité","Aptitude à apprendre de ses erreurs et à rebondir","Adaptabilité solide face aux imprévus"],vigilances:["Certaines situations de pression extrême encore déstabilisantes","Confiance parfois dépendante du contexte ou des résultats récents","Quelques blocages spécifiques à identifier et à travailler"],leviers:["Identifier précisément les 2 ou 3 situations qui fragilisent encore votre mental","Renforcer vos routines de préparation mentale avant la compétition","Développer des outils de recentrage rapide pour les situations inédites"]},
-    {min:55,code:'CMP-3',label:'Potentiel engagé',description:"Votre profil révèle un sportif engagé, qui veut progresser et qui possède des ressources mentales réelles. Vous êtes capable de performances solides dans des contextes favorables, et vous avez conscience de ce qui vous limite.",forces:["Volonté réelle de progresser et de se remettre en question","Conscience claire de ses forces et de ses limites","Capacité à tenir dans l'effort même quand c'est difficile"],vigilances:["Confiance fragilisée dans les moments à fort enjeu","Blocages émotionnels récurrents dans certaines situations précises","Difficulté à s'adapter rapidement quand le contexte change"],leviers:["Développer des routines de recentrage utilisables en compétition","Construire une confiance ancrée sur des preuves concrètes de progression","Travailler l'acceptation de l'imperfection comme levier de performance"]},
-    {min:40,code:'CMP-2',label:'En construction',description:"Votre profil indique que le mental représente actuellement un facteur limitant dans votre performance compétitive. Vous avez des qualités réelles en tant que sportif, mais les situations de pression révèlent des blocages fréquents.",forces:["Honnêteté dans l'auto-évaluation, première condition du progrès","Potentiel de progression important une fois les fondations posées"],vigilances:["Blocages mentaux fréquents en situation de pression","Confiance très dépendante des résultats immédiats","Difficulté à gérer les émotions négatives en compétition"],leviers:["Commencer par un accompagnement structuré en préparation mentale","Mettre en place des routines simples d'activation et de récupération mentale","Développer progressivement la régulation émotionnelle par des exercices quotidiens"]},
-    {min:0,code:'CMP-1',label:'Débutant mental',description:"Votre profil indique que la dimension mentale est aujourd'hui un frein majeur à votre expression compétitive. Les situations de pression génèrent des blocages importants et récurrents. Ce n'est pas une limite définitive — c'est un manque de préparation dans un domaine précis.",forces:["Courage de l'honnêteté dans l'auto-évaluation","Marge de progression considérable dans tous les axes"],vigilances:["Blocages mentaux profonds et fréquents en compétition","Pression compétitive très difficile à gérer actuellement","Confiance très fragile, fortement dépendante du contexte"],leviers:["Commencer par des objectifs de processus très simples et atteignables","S'engager dans un suivi régulier avec un préparateur mental","Développer en priorité la connaissance de soi et la régulation émotionnelle de base"]}
-  ]
-  const p=profils.find(x=>g>=x.min)||profils[4]
-  return{globalScore:g,profilCode:p.code,profilLabel:p.label,description:p.description,forces:p.forces,vigilances:p.vigilances,leviers:p.leviers,scores:{pression:sP,maturite:sM,blocage:sB,ressource:sR},dimensions:[{label:'Sous pression',value:sP,color:'#2f4a8a'},{label:'Maturité mentale',value:sM,color:'#1a6a5a'},{label:'Ressources',value:sR,color:'#5a3a8a'},{label:'Sans blocage',value:100-sB,color:'#C9A84C'}]}
-}
-
-function calcPMP(answers,questions){
-  const dims={}
-  questions.forEach(q=>{const v=answers[q.id];if(!v)return;if(!dims[q.dimension])dims[q.dimension]={total:0,count:0};const score=q.reverse?6-v:v;dims[q.dimension].total+=score;dims[q.dimension].count++})
-  const scores={},dimensions=[]
-  const dc={'Activation':'#2f4a8a','Attention':'#5a3a8a','Régulation':'#1a6a5a','Engagement':'#8a4a2f','Confiance':'#2f6a8a','Résilience':'#6a2f8a','Cognition':'#4a6a2f','Motricité':'#8a2f5a'}
-  const da={'Activation':"Vous vous activez rapidement et transformez la pression en énergie utile.",'Attention':"Vous maintenez votre focus même sous pression et vous reconcentrez rapidement.",'Régulation':"Vous gérez bien vos émotions sous pression et restez stable.",'Engagement':"Votre engagement est constant et fiable même dans l'adversité.",'Confiance':"Vous avez une confiance solide en vos capacités dans les moments importants.",'Résilience':"Vous rebondissez vite après les difficultés et transformez les échecs en apprentissage.",'Cognition':"Vous analysez bien les situations et prenez des décisions éclairées.",'Motricité':"Vous avez une conscience corporelle fine et percevez rapidement les ajustements nécessaires."}
-  const dl={'Activation':"Vous avez besoin de temps pour entrer dans l'action. Travailler vos routines de préparation.",'Attention':"Votre attention peut décrocher dans les moments critiques. Renforcer votre ancrage attentionnel.",'Régulation':"Vos émotions peuvent prendre trop de place. Développer des outils de régulation est essentiel.",'Engagement':"Votre niveau d'implication peut varier. Renforcer votre ancrage motivationnel.",'Confiance':"Votre confiance peut être fragile face aux difficultés. Construire une confiance basée sur les preuves.",'Résilience':"Vous pouvez rester bloqué après un coup dur. Développer votre capacité de rebond.",'Cognition':"Votre lecture du jeu peut manquer de clarté dans l'urgence.",'Motricité':"Votre connexion corps-esprit peut manquer de précision. Développer votre conscience proprioceptive."}
-  Object.keys(dims).forEach(d=>{const p=Math.round((dims[d].total/(dims[d].count*5))*100);scores[d]=p;dimensions.push({label:d,value:p,color:dc[d]||'#1B3A6B'})})
-  const g=dimensions.length>0?Math.round(dimensions.reduce((a,d)=>a+d.value,0)/dimensions.length):0
-  const sorted=[...dimensions].sort((a,b)=>b.value-a.value)
-  const top3=sorted.slice(0,3),low3=sorted.slice(-3)
-  const profiles={'Activation':'Compétiteur','Attention':'Concentré','Régulation':'Régulateur','Engagement':'Battant','Confiance':'Leader','Résilience':'Résilient','Cognition':'Stratège','Motricité':'Technicien'}
-  const pl=profiles[sorted[0]?.label]||'Performeur'
-  const lbls=g>=91?['Profil d\'élite','#1a4a2a']:g>=76?['Profil performant','#1a3a6a']:g>=61?['Profil confirmé','#2a4a8a']:g>=41?['Profil en développement','#6a4a1a']:['Profil en construction','#6a1a1a']
-  const forces=top3.map(d=>da[d.label]||d.label+' bien développé')
-  const leviers=low3.map(d=>(dl[d.label]||d.label)+' ('+d.value+'%)')
-  return{globalScore:g,profilCode:'PMP',profilLabel:pl+' · '+lbls[0],description:"Votre score global de "+g+"/100 reflète votre niveau de performance mentale sur 8 dimensions clés. Votre dimension la plus développée est "+sorted[0]?.label+" ("+sorted[0]?.value+"%). C'est votre ressource mentale principale en compétition.",forces,leviers,scores,dimensions}
-}
-
-function calcMPA(answers,questions){
-  const counts={SR:{s:0,t:0},CI:{s:0,t:0},LH:{s:0,t:0},StF:{s:0,t:0}}
-  questions.forEach(q=>{const v=answers[q.id];if(!v)return;counts[q.axe].t++;if(v==='A')counts[q.axe].s++})
-  const scores={}
-  Object.keys(counts).forEach(a=>{scores[a]=counts[a].t>0?Math.round((counts[a].s/counts[a].t)*100):50})
-  const SR=scores.SR>=50?'S':'R',CI=scores.CI>=50?'C':'I',LH=scores.LH>=50?'L':'H',StF=scores.StF>=50?'St':'F'
-  const code4=SR+CI+LH+StF
-  const profileKey='P'+(scores.SR>=50?0:1)+(scores.CI>=50?0:1)+(scores.LH>=50?0:1)+(scores.StF>=50?0:1)
-  const profil=MPA_PROFILS[profileKey]||MPA_PROFILS['P2121']||Object.values(MPA_PROFILS)[0]
-  const axeL={SR:{s:'Stimulation externe',r:'Ressource interne'},CI:{s:'Concret',r:'Intuitif'},LH:{s:'Logique',r:'Humain'},StF:{s:'Structure',r:'Fluidité'}}
-  const dims=Object.keys(scores).map(a=>{const sc=scores[a];const dom=sc>=50?axeL[a].s:axeL[a].r;const p=sc>=50?sc:100-sc;return{label:dom+' ('+a+')',value:p,color:'#1a3a6a'}})
-  const intensities=Object.values(scores).map(s=>Math.abs(s-50))
-  const g=Math.min(100,Math.round(50+intensities.reduce((a,b)=>a+b,0)/4))
-  return{globalScore:g,profilCode:code4,profilLabel:profil.nom+' · '+code4,description:profil.description,forces:[profil.besoins],vigilances:[profil.risques],leviers:[profil.coaching],sport:profil.sport||[],scores,dimensions:dims}
-}
-
-function calcPSYCHO(answers,questions){
-  let combatif=0,expressif=0,analytique=0,absorbant=0,regT=0,regN=0,itcaT=0,itcaN=0
-  questions.forEach(q=>{
-    const ans=answers[q.id]
-    if(ans===undefined)return
-    if(q.type==='situational'){const o=q.options[ans];if(!o)return;combatif+=o.scores.combatif||0;expressif+=o.scores.expressif||0;analytique+=o.scores.analytique||0;absorbant+=o.scores.absorbant||0}
-    if(q.type==='likert'&&(q.cat==='Régulation'||q.dimension==='regulation')){const s=(q.id==='PE14'||q.id==='PE18')?6-ans:ans;regT+=s;regN++}
-    if(q.type==='likert'&&(q.cat==='Traits cognitifs'||q.dimension==='itca')){itcaT+=ans;itcaN++}
-  })
-  const maxS=questions.filter(q=>q.type==='situational').length*5
-  const cP=maxS>0?Math.round((combatif/maxS)*100):0
-  const eP=maxS>0?Math.round((expressif/maxS)*100):0
-  const aP=maxS>0?Math.round((analytique/maxS)*100):0
-  const abP=maxS>0?Math.round((absorbant/maxS)*100):0
-  const regS=regN>0?Math.round((regT/(regN*5))*100):50
-  const itcaAvg=itcaN>0?itcaT/itcaN:2.5
-  const typeMap=[{key:'combatif',val:cP},{key:'expressif',val:eP},{key:'analytique',val:aP},{key:'absorbant',val:abP}]
-  const dom=typeMap.sort((a,b)=>b.val-a.val)[0].key
-  const profil=PSYCHO_PROFILS[dom]
-  const itcaP=itcaAvg>=3.8?ITCA_PROFILS[0]:itcaAvg>=2.8?ITCA_PROFILS[1]:ITCA_PROFILS[2]
-  const g=Math.round((regS+(100-Math.abs(cP-abP)))/2)
-  return{globalScore:g,profilCode:profil.code,profilLabel:profil.label+' '+profil.emoji,description:profil.description,forces:profil.coping_naturel,vigilances:profil.coping_manquant,leviers:profil.recommandations,neurochimie:profil.neurochimie,itca:itcaP,scores:{combatif:cP,expressif:eP,analytique:aP,absorbant:abP,regulation:regS},dimensions:[{label:'Combatif 🔥',value:cP,color:'#7a1a1a'},{label:'Expressif 🌟',value:eP,color:'#1a3a6a'},{label:'Analytique 🧠',value:aP,color:'#1a4a2a'},{label:'Absorbant 🌊',value:abP,color:'#4a2a6a'},{label:'Régulation',value:regS,color:'#C9A84C'}]}
 // ═══════════════════════════════════════════════════
 // CMP — 30 SITUATIONS COMPLÈTES
 // ═══════════════════════════════════════════════════
-const CMP_Q=[
+const CMP_QUESTIONS=[
   {id:'C1',type:'situational',cat:'Compétition',situation:"Tu viens de rater deux gestes importants de suite en compétition.",text:"Comment réagis-tu ?",options:[{text:"Je reste concentré sur le prochain geste, l'erreur est déjà passée.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je prends une grande respiration et je me recentre mentalement.",scores:{pression:4,maturite:4,blocage:0,ressource:4}},{text:"Je me demande ce qui ne va pas et j'essaie de comprendre.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça m'affecte mais je continue quand même.",scores:{pression:2,maturite:2,blocage:3,ressource:2}},{text:"Je perds confiance et mon niveau de jeu se dégrade.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C2',type:'situational',cat:'Arbitrage',situation:"L'arbitre prend une décision que tu estimes injuste à un moment crucial.",text:"Quelle est ta réaction ?",options:[{text:"J'accepte et je me concentre immédiatement sur la suite.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je ressens la frustration mais je la mets de côté rapidement.",scores:{pression:4,maturite:4,blocage:1,ressource:4}},{text:"Je proteste brièvement puis je reprends le match.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Ça me perturbe et j'ai du mal à me reconcentrer.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je reste bloqué sur l'injustice et mon match est perturbé.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
   {id:'C3',type:'situational',cat:'Pression',situation:"Tu es mené au score à 10 minutes de la fin. Ton équipe compte sur toi.",text:"Comment tu te mobilises ?",options:[{text:"Je me focalise sur ce que je peux faire maintenant pour changer le cours.",scores:{pression:5,maturite:5,blocage:0,ressource:5}},{text:"Je puise dans ma combativité et j'intensifie mon engagement.",scores:{pression:4,maturite:4,blocage:0,ressource:5}},{text:"Je me sens sous pression mais je reste en jeu.",scores:{pression:3,maturite:3,blocage:2,ressource:3}},{text:"Le score m'oppresse et je joue moins librement.",scores:{pression:2,maturite:2,blocage:4,ressource:2}},{text:"Je commence à penser que c'est perdu.",scores:{pression:1,maturite:1,blocage:5,ressource:1}}]},
@@ -594,7 +1210,7 @@ const CMP_Q=[
 // ═══════════════════════════════════════════════════
 // PMP — 120 QUESTIONS COMPLÈTES
 // ═══════════════════════════════════════════════════
-const PMP_Q=[
+const PMP_QUESTIONS=[
   {id:'Q1',type:'likert',dimension:'Activation',reverse:false,text:"Avant une compétition, je me sens rapidement prêt à entrer dans l'action."},
   {id:'Q2',type:'likert',dimension:'Activation',reverse:false,text:"J'ai besoin de beaucoup de temps pour me mettre en rythme avant d'être performant."},
   {id:'Q3',type:'likert',dimension:'Activation',reverse:false,text:"Quand l'intensité monte, mon énergie mentale augmente aussi."},
@@ -720,7 +1336,7 @@ const PMP_Q=[
 // ═══════════════════════════════════════════════════
 // MPA — 100 QUESTIONS COMPLÈTES
 // ═══════════════════════════════════════════════════
-const MPA_Q=[
+const MPA_QUESTIONS=[
   {id:'M1',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Avant une compétition, l'ambiance autour de toi te donne de l'énergie.",textB:"Tu préfères te préparer seul, dans ta bulle, avant de performer."},
   {id:'M2',type:'binary',axe:'SR',pole:'R',title:'Énergie',text:"Tu préfères te préparer seul, dans ta bulle, avant de performer.",textB:"Avant une compétition, l'ambiance autour de toi te donne de l'énergie."},
   {id:'M3',type:'binary',axe:'SR',pole:'S',title:'Énergie',text:"Le contact avec tes coéquipiers avant le match te booste mentalement.",textB:"Après un effort intense, tu as besoin de silence pour récupérer."},
@@ -826,7 +1442,7 @@ const MPA_Q=[
 // ═══════════════════════════════════════════════════
 // PSYCHO — 50 QUESTIONS COMPLÈTES
 // ═══════════════════════════════════════════════════
-const PSYCHO_Q=[
+const PSYCHO_QUESTIONS=[
   {id:'PE1',type:'situational',cat:'Réactions',situation:"Tu commets une erreur décisive au pire moment du match.",text:"Comment tu réagis émotionnellement ?",options:[{text:"Je ressens une frustration intense mais elle me propulse.",scores:{combatif:5,expressif:2,analytique:1,absorbant:0}},{text:"Mes émotions explosent et je le montre visiblement.",scores:{combatif:1,expressif:5,analytique:0,absorbant:1}},{text:"Je prends du recul mentalement et j'analyse ce qui s'est passé.",scores:{combatif:1,expressif:0,analytique:5,absorbant:2}},{text:"L'émotion me submerge et j'ai du mal à rester dans le match.",scores:{combatif:0,expressif:2,analytique:1,absorbant:5}},{text:"Je reste calme extérieurement mais je rumine intérieurement.",scores:{combatif:2,expressif:0,analytique:3,absorbant:3}}]},
   {id:'PE2',type:'situational',cat:'Réactions',situation:"Un coéquipier te reproche publiquement une erreur que tu n'as pas commise.",text:"Quelle est ta réaction spontanée ?",options:[{text:"Je monte au créneau immédiatement pour défendre ma position.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je vis ça comme une injustice et j'en suis très affecté émotionnellement.",scores:{combatif:1,expressif:4,analytique:0,absorbant:5}},{text:"Je reste silencieux sur le moment et j'en parle calmement après.",scores:{combatif:1,expressif:0,analytique:5,absorbant:2}},{text:"Je me sens envahi par la honte ou la colère sans savoir quoi faire.",scores:{combatif:0,expressif:2,analytique:0,absorbant:5}},{text:"Je relativise et je passe à autre chose rapidement.",scores:{combatif:3,expressif:1,analytique:4,absorbant:0}}]},
   {id:'PE3',type:'situational',cat:'Pression',situation:"Tu dois performer devant un public nombreux et hostile.",text:"Comment tu vis ce moment ?",options:[{text:"L'hostilité m'électrise et décuple mon envie de gagner.",scores:{combatif:5,expressif:3,analytique:1,absorbant:0}},{text:"Je cherche à capter l'énergie du public, même hostile.",scores:{combatif:2,expressif:5,analytique:0,absorbant:1}},{text:"Je me concentre sur ma performance en faisant abstraction du public.",scores:{combatif:2,expressif:0,analytique:5,absorbant:1}},{text:"L'atmosphère hostile me déstabilise profondément.",scores:{combatif:0,expressif:1,analytique:1,absorbant:5}},{text:"Je ressens une légère appréhension mais je gère.",scores:{combatif:3,expressif:2,analytique:3,absorbant:2}}]},
