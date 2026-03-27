@@ -555,7 +555,6 @@ function calcPSYCHO(answers,questions){
   const itcaP=itcaAvg>=3.8?ITCA_PROFILS[0]:itcaAvg>=2.8?ITCA_PROFILS[1]:ITCA_PROFILS[2]
   const g=Math.round((regS+(100-Math.abs(cP-abP)))/2)
   return{globalScore:g,profilCode:profil.code,profilLabel:profil.label+' '+profil.emoji,description:profil.description,forces:profil.coping_naturel,vigilances:profil.coping_manquant,leviers:profil.recommandations,neurochimie:profil.neurochimie,itca:itcaP,scores:{combatif:cP,expressif:eP,analytique:aP,absorbant:abP,regulation:regS},dimensions:[{label:'Combatif 🔥',value:cP,color:'#7a1a1a'},{label:'Expressif 🌟',value:eP,color:'#1a3a6a'},{label:'Analytique 🧠',value:aP,color:'#1a4a2a'},{label:'Absorbant 🌊',value:abP,color:'#4a2a6a'},{label:'Régulation',value:regS,color:'#C9A84C'}]}
-<script>
 // ═══════════════════════════════════════════════════
 // CMP — 30 SITUATIONS COMPLÈTES
 // ═══════════════════════════════════════════════════
@@ -918,6 +917,8 @@ const ITCA_PROFILS=[
   {code:'ITCA-2',label:'Traits cognitifs atypiques présents',alert:false,color:'#3a1a6a',description:"Votre profil révèle la présence significative de traits associés aux fonctionnements cognitifs atypiques. Vous présentez plusieurs caractéristiques qui méritent attention — sans que cela constitue un signal d'alarme.",sport_impact:"Votre mode de fonctionnement peut nécessiter des adaptations spécifiques dans l'entraînement et la préparation mentale pour être pleinement efficace.",orientation:"Un bilan neuropsychologique pourrait apporter des réponses utiles. En attendant, travailler avec un préparateur mental sensibilisé aux fonctionnements atypiques est recommandé."},
   {code:'ITCA-1',label:'Fonctionnement cognitif dans la norme',alert:false,color:'#1a4a2a',description:"Votre profil ne présente pas de traits particulièrement marqués associés aux fonctionnements cognitifs atypiques. Cela ne signifie pas l'absence de particularités — tout fonctionnement humain est unique.",sport_impact:"Votre mode de fonctionnement cognitif n'est pas un facteur limitant particulier. Les autres dimensions de ce bilan sont plus pertinentes pour orienter votre développement.",orientation:"Concentrez-vous sur les recommandations issues de votre profil émotionnel et neurochimique pour optimiser votre performance mentale."}
 ]
+
 </script>
 
-</body></html>
+</body>
+</html>
