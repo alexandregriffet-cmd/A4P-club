@@ -215,37 +215,91 @@ async function loadReport() {
   html += '<div class="subtitle">' + clubNom + ' · ' + equipeNom + ' · ' + date + '</div>'
   html += '</div>'
 
-  // Synthèse scores
-  html += '<div class="score-grid">'
+  // Grouper par type de test
+  const byType = {}
   resultats.forEach(r => {
-    const color = COLORS[r.test_type] || '#1B3A6B'
+    if (!byType[r.test_type]) byType[r.test_type] = []
+    byType[r.test_type].push(r)
+  })
+
+  // Synthèse scores — dernier passage uniquement
+  html += '<div class="score-grid">'
+  Object.keys(byType).forEach(type => {
+    const last = byType[type][0] // le plus récent
+    const color = COLORS[type] || '#1B3A6B'
+    const passages = byType[type].length
     html += '<div class="score-card" style="border-top:3px solid ' + color + '">'
-    html += '<div class="badge" style="background:' + color + '">' + r.test_type + '</div>'
-    html += '<div class="num" style="color:' + color + '">' + (r.score_global || '—') + '</div>'
-    html += '<div class="label">/ 100</div>'
-    html += '<div class="profil">' + (r.profil_label || r.profil_code || '—') + '</div>'
+    html += '<div class="badge" style="background:' + color + '">' + type + '</div>'
+    html += '<div class="num" style="color:' + color + '">' + (last.score_global || '—') + '</div>'
+    html += '<div class="label">/ 100 · ' + passages + ' passage(s)</div>'
+    html += '<div class="profil">' + (last.profil_label || last.profil_code || '—') + '</div>'
     html += '</div>'
   })
   html += '</div>'
 
-  // Détail par test
-  resultats.forEach((r, idx) => {
-    const color = COLORS[r.test_type] || '#1B3A6B'
+  // Courbe d'évolution si plusieurs passages
+  const typesAvecEvolution = Object.keys(byType).filter(t => byType[t].length > 1)
+  if (typesAvecEvolution.length > 0) {
+    html += '<div class="section">'
+    html += '<div class="section-title" style="border-color:#C9A84C">📈 Évolution dans le temps</div>'
+    typesAvecEvolution.forEach(type => {
+      const passages = [...byType[type]].reverse() // du plus ancien au plus récent
+      const color = COLORS[type] || '#1B3A6B'
+      const scores = passages.map(r => r.score_global || 0)
+      const maxScore = Math.max(...scores)
+      const lastScore = scores[scores.length - 1]
+      const firstScore = scores[0]
+      const evolution = lastScore - firstScore
+      const evoLabel = evolution > 0 ? '▲ +' + evolution + ' pts' : evolution < 0 ? '▼ ' + evolution + ' pts' : '= Stable'
+      const evoColor = evolution > 0 ? '#16a34a' : evolution < 0 ? '#dc2626' : '#6c7a99'
+
+      html += '<div style="margin-bottom:20px;">'
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
+      html += '<span style="font-weight:800;color:' + color + ';font-size:14px;">' + type + '</span>'
+      html += '<span style="font-weight:800;color:' + evoColor + ';font-size:13px;">' + evoLabel + '</span>'
+      html += '</div>'
+
+      // Tableau des passages
+      html += '<div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;">'
+      passages.forEach((r, i) => {
+        const score = r.score_global || 0
+        const barH = maxScore > 0 ? Math.round((score / 100) * 80) : 0
+        const dateP = r.completed_at ? new Date(r.completed_at).toLocaleDateString('fr-FR', {day:'numeric',month:'short'}) : '—'
+        const isLast = i === passages.length - 1
+        html += '<div style="flex:1;text-align:center;">'
+        html += '<div style="font-size:13px;font-weight:900;color:' + color + ';margin-bottom:4px;">' + score + '</div>'
+        html += '<div style="height:' + barH + 'px;min-height:8px;background:' + (isLast ? color : color + '66') + ';border-radius:6px 6px 0 0;transition:height 0.5s;"></div>'
+        html += '<div style="font-size:10px;color:#6c7a99;margin-top:4px;border-top:1px solid #e8edf5;padding-top:4px;">' + (i === 0 ? 'Initial' : 'P' + (i+1)) + '</div>'
+        html += '<div style="font-size:9px;color:#a0aec0;">' + dateP + '</div>'
+        html += '</div>'
+      })
+      html += '</div>'
+
+      // Profil du dernier passage
+      const dernierProfil = byType[type][0].profil_label
+      if (dernierProfil) {
+        html += '<div style="font-size:12px;color:#6c7a99;text-align:right;">Dernier profil : <strong style="color:' + color + '">' + dernierProfil + '</strong></div>'
+      }
+      html += '</div>'
+    })
+    html += '</div>'
+  }
+
+  // Détail du dernier passage par test
+  Object.keys(byType).forEach((type, idx) => {
+    const r = byType[type][0] // dernier passage
+    const color = COLORS[type] || '#1B3A6B'
     const dateTest = r.completed_at ? new Date(r.completed_at).toLocaleDateString('fr-FR') : '—'
     if (idx > 0) html += '<div class="page-break"></div>'
 
-    // En-tête du test
     html += '<div class="test-header" style="background:linear-gradient(135deg,' + color + ',' + color + 'cc)">'
     html += '<div class="score-big">' + (r.score_global || '—') + '<span style="font-size:20px;opacity:0.7">/100</span></div>'
     html += '<div class="info">'
-    html += '<h2>' + r.test_type + ' — ' + (r.profil_label || '—') + '</h2>'
-    html += '<p>Code : ' + (r.profil_code || '—') + ' · ' + dateTest + '</p>'
+    html += '<h2>' + type + ' — ' + (r.profil_label || '—') + '</h2>'
+    html += '<p>Code : ' + (r.profil_code || '—') + ' · ' + dateTest + ' · ' + byType[type].length + ' passage(s)</p>'
     html += '</div></div>'
 
-    // Dimensions
     html += renderDimensions(r, color)
-
-    // Forces, vigilances, leviers
     html += renderInsights(r, color)
   })
 
