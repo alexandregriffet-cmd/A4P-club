@@ -5,44 +5,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A4P Mental — Rapport</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: Arial, sans-serif; background: #f0f4ff; color: #1a2a4a; }
-.no-print { }
+body { font-family: 'DM Sans', Arial, sans-serif; background: #f0f4ff; color: #1a2a4a; }
 @media print {
   .no-print { display: none !important; }
   body { background: #fff; }
+  .section { box-shadow: none !important; border: 1px solid #e2e8f4 !important; }
   .page-break { page-break-before: always; }
 }
-.topbar { background: linear-gradient(135deg,#0f2244,#1B3A6B); padding: 14px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.topbar-brand { font-family: Georgia, serif; font-size: 20px; font-weight: 700; color: #fff; }
+.topbar { background: linear-gradient(135deg,#0f2244,#1B3A6B); padding: 14px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; position:sticky; top:0; z-index:50; }
+.topbar-brand { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; font-weight: 700; color: #fff; }
 .topbar-brand span { color: #C9A84C; }
 .btn-print { padding: 10px 20px; background: linear-gradient(135deg,#C9A84C,#E8C56A); color: #0f2244; border: none; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; }
 .btn-back { padding: 10px 20px; background: transparent; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; font-size: 14px; cursor: pointer; text-decoration: none; display:inline-flex; align-items:center; }
-.container { max-width: 800px; margin: 0 auto; padding: 24px 16px 60px; }
+.container { max-width: 820px; margin: 0 auto; padding: 24px 16px 60px; }
 .loading { text-align: center; padding: 60px; color: #6c7a99; font-size: 16px; }
 .report-header { background: linear-gradient(135deg, #0f2244, #1B3A6B); color: #fff; border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 20px; }
 .report-header .eyebrow { font-size: 11px; letter-spacing: 0.3em; color: #C9A84C; text-transform: uppercase; margin-bottom: 8px; }
-.report-header h1 { font-family: Georgia, serif; font-size: 26px; margin-bottom: 6px; }
+.report-header h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 6px; }
 .report-header .subtitle { opacity: 0.7; font-size: 14px; }
-.score-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-.score-card { background: #fff; border-radius: 16px; padding: 18px; text-align: center; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
-.score-card .test-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 10px; }
-.score-card .score-num { font-family: Georgia, serif; font-size: 42px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
-.score-card .score-label { font-size: 11px; color: #6c7a99; font-weight: 600; }
-.score-card .profil { font-size: 13px; font-weight: 700; color: #1a2a4a; margin-top: 6px; }
-.section { background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
-.section h2 { font-size: 15px; font-weight: 800; color: #1a2a4a; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #e8edf5; }
+.score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.score-card { background: #fff; border-radius: 16px; padding: 16px; text-align: center; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
+.score-card .badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+.score-card .num { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 40px; font-weight: 700; line-height: 1; }
+.score-card .label { font-size: 10px; color: #6c7a99; margin-bottom: 4px; }
+.score-card .profil { font-size: 12px; font-weight: 700; color: #1a2a4a; margin-top: 4px; }
+.section { background: #fff; border-radius: 16px; padding: 22px; margin-bottom: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
+.section-title { font-size: 15px; font-weight: 800; color: #1a2a4a; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid; }
+.test-header { display: flex; align-items: center; gap: 14px; padding: 20px; border-radius: 16px; color: #fff; margin-bottom: 16px; }
+.test-header .score-big { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 52px; font-weight: 700; line-height: 1; }
+.test-header .info h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; margin-bottom: 4px; }
+.test-header .info p { opacity: 0.8; font-size: 13px; }
 .dim-row { margin-bottom: 12px; }
-.dim-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
+.dim-header { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 13px; }
 .dim-name { font-weight: 700; color: #22366c; }
 .dim-val { font-weight: 800; }
 .dim-bar { height: 8px; background: #e8edf5; border-radius: 999px; overflow: hidden; }
 .dim-fill { height: 100%; border-radius: 999px; }
-.insight { padding: 12px 14px; border-radius: 12px; margin-bottom: 8px; border-left: 4px solid; font-size: 13px; line-height: 1.6; }
+.insight { padding: 11px 14px; border-radius: 11px; margin-bottom: 8px; border-left: 4px solid; font-size: 13px; line-height: 1.6; color: #2a3a5a; }
 .insight-label { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
-.meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .meta-item { background: #f8faff; border-radius: 10px; padding: 10px 14px; }
 .meta-label { font-size: 10px; font-weight: 700; color: #a0aec0; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
 .meta-value { font-size: 14px; font-weight: 700; color: #1a2a4a; }
@@ -75,8 +80,98 @@ const sb = createClient(
 
 const COLORS = { PMP:'#2f4a8a', MPA:'#1a3a6a', CMP:'#1a4a2a', PSYCHO:'#4a1a6a' }
 
+// Profils CMP
+const CMP_PROFILS = [
+  { min:85, code:'CMP-5', label:'Expert mental', forces:["Capacité à rester dans l'action sous pression maximale","Rebond rapide et constructif après l'erreur ou l'échec","Prise de décision lucide dans les moments décisifs"], vigilances:["Risque de sous-estimer la charge mentale des coéquipiers","Tendance à gérer seul sans demander de soutien"], leviers:["Développer votre rôle de leadership mental au sein du collectif","Transmettre vos outils mentaux à vos coéquipiers"] },
+  { min:70, code:'CMP-4', label:'Performeur solide', forces:["Bonne capacité de régulation émotionnelle","Engagement constant même dans l'adversité","Aptitude à apprendre de ses erreurs"], vigilances:["Certaines situations de pression extrême encore déstabilisantes","Confiance parfois dépendante des résultats récents"], leviers:["Identifier les 2-3 situations qui fragilisent encore votre mental","Renforcer vos routines de préparation mentale"] },
+  { min:55, code:'CMP-3', label:'Potentiel engagé', forces:["Volonté réelle de progresser","Conscience claire de ses forces et limites"], vigilances:["Confiance fragilisée dans les moments à fort enjeu","Difficulté à s'adapter rapidement quand le contexte change"], leviers:["Développer des routines de recentrage utilisables en compétition","Construire une confiance ancrée sur des preuves concrètes"] },
+  { min:40, code:'CMP-2', label:'En construction', forces:["Honnêteté dans l'auto-évaluation","Potentiel de progression important"], vigilances:["Blocages mentaux fréquents en situation de pression","Confiance très dépendante des résultats immédiats"], leviers:["Commencer par un accompagnement structuré en préparation mentale","Mettre en place des routines simples d'activation et de récupération"] },
+  { min:0, code:'CMP-1', label:'Débutant mental', forces:["Courage de l'honnêteté dans l'auto-évaluation","Marge de progression considérable"], vigilances:["Blocages mentaux profonds en compétition","Pression compétitive très difficile à gérer"], leviers:["Commencer par des objectifs de processus très simples","S'engager dans un suivi régulier avec un préparateur mental"] }
+]
+
+function getDimLabel(type, key) {
+  const labels = {
+    CMP: { pression:'Sous pression', maturite:'Maturité mentale', blocage:'Blocage', ressource:'Ressources' },
+    PMP: { Activation:'Activation', Attention:'Attention', Regulation:'Régulation', Engagement:'Engagement', Confiance:'Confiance', Resilience:'Résilience', Cognition:'Cognition', Motricite:'Motricité' }
+  }
+  return (labels[type] && labels[type][key]) || key
+}
+
+function renderDimensions(r, color) {
+  if (!r.scores || typeof r.scores !== 'object') return ''
+  const entries = Object.entries(r.scores).filter(([k, v]) => typeof v === 'number')
+  if (entries.length === 0) return ''
+  let html = '<div class="section">'
+  html += '<div class="section-title" style="border-color:' + color + '">📊 Dimensions</div>'
+  entries.forEach(([key, val]) => {
+    // Pour CMP, blocage est inversé
+    const displayVal = (r.test_type === 'CMP' && key === 'blocage') ? (100 - val) : val
+    const label = getDimLabel(r.test_type, key)
+    if (r.test_type === 'CMP' && key === 'blocage') return // affiché via "Sans blocage"
+    html += '<div class="dim-row">'
+    html += '<div class="dim-header"><span class="dim-name">' + label + '</span><span class="dim-val" style="color:' + color + '">' + val + '%</span></div>'
+    html += '<div class="dim-bar"><div class="dim-fill" style="width:' + Math.min(val,100) + '%;background:' + color + '"></div></div>'
+    html += '</div>'
+  })
+  if (r.test_type === 'CMP' && r.scores.blocage !== undefined) {
+    const sb2 = 100 - r.scores.blocage
+    html += '<div class="dim-row">'
+    html += '<div class="dim-header"><span class="dim-name">Sans blocage</span><span class="dim-val" style="color:#C9A84C">' + sb2 + '%</span></div>'
+    html += '<div class="dim-bar"><div class="dim-fill" style="width:' + sb2 + '%;background:#C9A84C"></div></div>'
+    html += '</div>'
+  }
+  html += '</div>'
+  return html
+}
+
+function renderInsights(r, color) {
+  let forces = [], vigilances = [], leviers = []
+
+  if (r.test_type === 'CMP') {
+    const p = CMP_PROFILS.find(x => (r.score_global || 0) >= x.min) || CMP_PROFILS[4]
+    forces = p.forces; vigilances = p.vigilances; leviers = p.leviers
+  } else if (r.scores && typeof r.scores === 'object') {
+    // PMP — identifier les 3 dimensions les plus hautes comme forces
+    const dims = Object.entries(r.scores).filter(([k,v]) => typeof v === 'number').sort((a,b) => b[1]-a[1])
+    forces = dims.slice(0,3).map(([k,v]) => getDimLabel(r.test_type, k) + ' — ' + v + '%')
+    leviers = dims.slice(-2).map(([k,v]) => 'Renforcer ' + getDimLabel(r.test_type, k).toLowerCase() + ' (' + v + '%)')
+  }
+
+  let html = ''
+  if (forces.length > 0) {
+    html += '<div class="section">'
+    html += '<div class="section-title" style="border-color:#16a34a">💪 Forces mentales</div>'
+    forces.forEach(f => {
+      html += '<div class="insight" style="background:#f0fff4;border-color:#4ade80">'
+      html += '<div class="insight-label" style="color:#16a34a">Force</div>' + f
+      html += '</div>'
+    })
+    html += '</div>'
+  }
+  if (vigilances.length > 0) {
+    html += '<div class="section">'
+    html += '<div class="section-title" style="border-color:#f87171">⚠️ Points de vigilance</div>'
+    vigilances.forEach(v => {
+      html += '<div class="insight" style="background:#fff8f0;border-color:#f87171">'
+      html += '<div class="insight-label" style="color:#dc2626">Vigilance</div>' + v
+      html += '</div>'
+    })
+    html += '</div>'
+  }
+  if (leviers.length > 0) {
+    html += '<div class="section">'
+    html += '<div class="section-title" style="border-color:' + color + '">🚀 Leviers de progression</div>'
+    leviers.forEach(l => {
+      html += '<div class="insight" style="background:#eef3ff;border-color:' + color + '">'
+      html += '<div class="insight-label" style="color:' + color + '">Levier</div>' + l
+      html += '</div>'
+    })
+    html += '</div>'
+  }
+  return html
+}
+
 async function loadReport() {
-  // Récupérer les paramètres URL
   const params = new URLSearchParams(window.location.search)
   const targetUserId = params.get('uid')
   const targetTest = params.get('test')
@@ -86,20 +181,21 @@ async function loadReport() {
     return
   }
 
-  // Charger les résultats
   let query = sb.from('resultats').select('*').eq('utilisateur_id', targetUserId).order('completed_at', { ascending: false })
   if (targetTest) query = query.eq('test_type', targetTest)
   const { data: resultats } = await query
 
-  // Charger le profil du joueur
   const { data: joueur } = await sb.from('utilisateurs').select('*').eq('id', targetUserId).single()
   const nom = joueur ? (joueur.prenom + ' ' + joueur.nom) : 'Sportif'
 
-  // Charger l'équipe
-  let equipeNom = '—'
+  let equipeNom = '—', clubNom = '—'
   if (joueur && joueur.equipe_id) {
     const { data: eq } = await sb.from('equipes').select('nom').eq('id', joueur.equipe_id).single()
     if (eq) equipeNom = eq.nom
+  }
+  if (joueur && joueur.club_id) {
+    const { data: cl } = await sb.from('clubs').select('nom').eq('id', joueur.club_id).single()
+    if (cl) clubNom = cl.nom
   }
 
   const date = new Date().toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' })
@@ -114,61 +210,46 @@ async function loadReport() {
 
   // Header
   html += '<div class="report-header">'
-  html += '<div class="eyebrow">Rapport de diagnostic mental</div>'
+  html += '<div class="eyebrow">Rapport de diagnostic mental A4P</div>'
   html += '<h1>' + nom + '</h1>'
-  html += '<div class="subtitle">Équipe : ' + equipeNom + ' · ' + date + '</div>'
+  html += '<div class="subtitle">' + clubNom + ' · ' + equipeNom + ' · ' + date + '</div>'
   html += '</div>'
 
-  // Scores synthèse
-  html += '<div class="score-section">'
+  // Synthèse scores
+  html += '<div class="score-grid">'
   resultats.forEach(r => {
     const color = COLORS[r.test_type] || '#1B3A6B'
-    html += '<div class="score-card">'
-    html += '<div class="test-badge" style="background:' + color + '">' + r.test_type + '</div>'
-    html += '<div class="score-num" style="color:' + color + '">' + (r.score_global || '—') + '</div>'
-    html += '<div class="score-label">/ 100</div>'
+    html += '<div class="score-card" style="border-top:3px solid ' + color + '">'
+    html += '<div class="badge" style="background:' + color + '">' + r.test_type + '</div>'
+    html += '<div class="num" style="color:' + color + '">' + (r.score_global || '—') + '</div>'
+    html += '<div class="label">/ 100</div>'
     html += '<div class="profil">' + (r.profil_label || r.profil_code || '—') + '</div>'
     html += '</div>'
   })
   html += '</div>'
 
-  // Détail de chaque test
+  // Détail par test
   resultats.forEach((r, idx) => {
     const color = COLORS[r.test_type] || '#1B3A6B'
     const dateTest = r.completed_at ? new Date(r.completed_at).toLocaleDateString('fr-FR') : '—'
-
     if (idx > 0) html += '<div class="page-break"></div>'
 
-    html += '<div class="section">'
-    html += '<h2 style="color:' + color + '">Test ' + r.test_type + ' — ' + (r.profil_label || '—') + '</h2>'
+    // En-tête du test
+    html += '<div class="test-header" style="background:linear-gradient(135deg,' + color + ',' + color + 'cc)">'
+    html += '<div class="score-big">' + (r.score_global || '—') + '<span style="font-size:20px;opacity:0.7">/100</span></div>'
+    html += '<div class="info">'
+    html += '<h2>' + r.test_type + ' — ' + (r.profil_label || '—') + '</h2>'
+    html += '<p>Code : ' + (r.profil_code || '—') + ' · ' + dateTest + '</p>'
+    html += '</div></div>'
 
-    // Infos
-    html += '<div class="meta-grid" style="margin-bottom:14px;">'
-    html += '<div class="meta-item"><div class="meta-label">Score global</div><div class="meta-value" style="color:' + color + ';font-size:20px;">' + (r.score_global || '—') + '/100</div></div>'
-    html += '<div class="meta-item"><div class="meta-label">Profil</div><div class="meta-value">' + (r.profil_label || '—') + '</div></div>'
-    html += '<div class="meta-item"><div class="meta-label">Code</div><div class="meta-value">' + (r.profil_code || '—') + '</div></div>'
-    html += '<div class="meta-item"><div class="meta-label">Date de passation</div><div class="meta-value">' + dateTest + '</div></div>'
-    html += '</div>'
+    // Dimensions
+    html += renderDimensions(r, color)
 
-    // Scores par dimension si disponibles
-    if (r.scores && typeof r.scores === 'object') {
-      html += '<div style="margin-top:14px;">'
-      Object.entries(r.scores).forEach(([dim, val]) => {
-        if (typeof val !== 'number') return
-        html += '<div class="dim-row">'
-        html += '<div class="dim-header"><span class="dim-name">' + dim + '</span><span class="dim-val" style="color:' + color + '">' + val + '%</span></div>'
-        html += '<div class="dim-bar"><div class="dim-fill" style="width:' + val + '%;background:' + color + '"></div></div>'
-        html += '</div>'
-      })
-      html += '</div>'
-    }
-
-    html += '</div>'
+    // Forces, vigilances, leviers
+    html += renderInsights(r, color)
   })
 
-  // Footer
   html += '<div class="footer-print">Document confidentiel · A4P Mental · Académie de Performances · Alexandre Griffet · ' + date + '</div>'
-
   container.innerHTML = html
 }
 
