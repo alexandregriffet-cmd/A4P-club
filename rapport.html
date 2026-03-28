@@ -76,19 +76,15 @@ const sb = createClient(
 const COLORS = { PMP:'#2f4a8a', MPA:'#1a3a6a', CMP:'#1a4a2a', PSYCHO:'#4a1a6a' }
 
 async function loadReport() {
-  // Récupérer l'utilisateur depuis localStorage
-  const stored = localStorage.getItem('a4p_club_user')
-  if (!stored) {
-    document.getElementById('report-container').innerHTML = '<div class="empty">Vous devez être connecté pour voir ce rapport.<br><br><a href="index.html" style="color:#1B3A6B;font-weight:700;">← Retour au login</a></div>'
-    return
-  }
-
-  const user = JSON.parse(stored)
-
   // Récupérer les paramètres URL
   const params = new URLSearchParams(window.location.search)
-  const targetUserId = params.get('uid') || user.id
-  const targetTest = params.get('test') // optionnel - filtre sur un test
+  const targetUserId = params.get('uid')
+  const targetTest = params.get('test')
+
+  if (!targetUserId) {
+    document.getElementById('report-container').innerHTML = '<div class="empty">Paramètres manquants.<br><br><a href="index.html" style="color:#1B3A6B;font-weight:700;">← Retour</a></div>'
+    return
+  }
 
   // Charger les résultats
   let query = sb.from('resultats').select('*').eq('utilisateur_id', targetUserId).order('completed_at', { ascending: false })
