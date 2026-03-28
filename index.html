@@ -1121,7 +1121,7 @@ function adminTab(tab) {
         <div style="font-size:14px;font-weight:800;color:#1B3A6B;">${moy !== null ? moy+'%' : '—'}</div>
       </div>`
     })
-  }
+
 
   } else if (tab === 'gestion') {
     const optionsClubs = adminData.clubs.map(c => '<option value="' + c.id + '">' + (c.nom||'Club') + '</option>').join('')
@@ -1169,6 +1169,7 @@ function adminTab(tab) {
     html += '</div></div>'
 
     html += '</div>'
+  }
 
   document.getElementById('a-content').innerHTML = html || '<div class="empty-state">Aucune donnée.</div>'
 }
