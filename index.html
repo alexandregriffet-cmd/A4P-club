@@ -748,9 +748,10 @@ padding: 10px;
       <div class="stat-card"><div class="stat-num" id="a-total-resultats">—</div><div class="stat-label">Tests passés</div></div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-      <button onclick="adminTab('resultats')" id="tab-resultats" style="padding:10px 18px;border-radius:12px;border:none;fontWeight:700;font-size:13px;background:#1B3A6B;color:#fff;cursor:pointer;">📊 Tous les résultats</button>
+      <button onclick="adminTab('resultats')" id="tab-resultats" style="padding:10px 18px;border-radius:12px;border:none;fontWeight:700;font-size:13px;background:#1B3A6B;color:#fff;cursor:pointer;">📊 Résultats</button>
       <button onclick="adminTab('clubs')" id="tab-clubs" style="padding:10px 18px;border-radius:12px;border:none;fontWeight:700;font-size:13px;background:#fff;color:#6c7a99;cursor:pointer;">🏆 Clubs</button>
       <button onclick="adminTab('joueurs')" id="tab-joueurs" style="padding:10px 18px;border-radius:12px;border:none;fontWeight:700;font-size:13px;background:#fff;color:#6c7a99;cursor:pointer;">👥 Joueurs</button>
+      <button onclick="adminTab('gestion')" id="tab-gestion" style="padding:10px 18px;border-radius:12px;border:none;fontWeight:700;font-size:13px;background:#fff;color:#6c7a99;cursor:pointer;">⚙️ Gestion</button>
     </div>
     <div class="section-card" id="a-content">
       <div class="empty-state">Chargement...</div>
@@ -1057,7 +1058,7 @@ async function loadAdmin(user) {
 
 function adminTab(tab) {
   currentAdminTab = tab
-  const tabs = ['resultats','clubs','joueurs']
+  const tabs = ['resultats','clubs','joueurs','gestion']
   tabs.forEach(t => {
     const btn = document.getElementById('tab-'+t)
     if (btn) { btn.style.background = t===tab ? '#1B3A6B' : '#fff'; btn.style.color = t===tab ? '#fff' : '#6c7a99' }
@@ -1122,7 +1123,200 @@ function adminTab(tab) {
     })
   }
 
+  } else if (tab === 'gestion') {
+    html = `
+    <div style="display:flex;flex-direction:column;gap:20px;">
+
+      <!-- CRÉER UN CLUB -->
+      <div>
+        <div class="section-title">🏆 Créer un club</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <input id="g-club-nom" placeholder="Nom du club *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <input id="g-club-ville" placeholder="Ville" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <input id="g-club-email" placeholder="Email contact" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <button onclick="creerClub()" style="padding:13px;background:linear-gradient(135deg,#1B3A6B,#2E5BA8);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le club</button>
+          <div id="g-club-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Club créé !</div>
+        </div>
+      </div>
+
+      <!-- CRÉER UNE ÉQUIPE -->
+      <div>
+        <div class="section-title">👥 Créer une équipe</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <select id="g-equipe-club" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
+            <option value="">Choisir un club *</option>
+            ${adminData.clubs.map(c => `<option value="${c.id}">${c.nom||'Club'}</option>`).join('')}
+          </select>
+          <input id="g-equipe-nom" placeholder="Nom de l'équipe *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <input id="g-equipe-categorie" placeholder="Catégorie (ex: U17, Sénior...)" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <input id="g-equipe-saison" placeholder="Saison (ex: 2024-2025)" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <button onclick="creerEquipe()" style="padding:13px;background:linear-gradient(135deg,#2E5BA8,#4A90D9);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer l'équipe</button>
+          <div id="g-equipe-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Équipe créée !</div>
+        </div>
+      </div>
+
+      <!-- CRÉER UN COMPTE JOUEUR -->
+      <div>
+        <div class="section-title">🎮 Créer un compte joueur</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <select id="g-joueur-club" onchange="filtrerEquipes()" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
+            <option value="">Choisir un club *</option>
+            ${adminData.clubs.map(c => `<option value="${c.id}">${c.nom||'Club'}</option>`).join('')}
+          </select>
+          <select id="g-joueur-equipe" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
+            <option value="">Choisir une équipe *</option>
+          </select>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <input id="g-joueur-prenom" placeholder="Prénom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+            <input id="g-joueur-nom" placeholder="Nom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          </div>
+          <input id="g-joueur-email" placeholder="Email *" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <input id="g-joueur-mdp" placeholder="Mot de passe *" type="text" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <button onclick="creerJoueur()" style="padding:13px;background:linear-gradient(135deg,#1a4a2a,#1a6a5a);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le compte joueur</button>
+          <div id="g-joueur-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Compte joueur créé !</div>
+        </div>
+      </div>
+
+      <!-- CRÉER UN COMPTE COACH -->
+      <div>
+        <div class="section-title">👨‍💼 Créer un compte coach</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <select id="g-coach-club" onchange="filtrerEquipesCoach()" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
+            <option value="">Choisir un club *</option>
+            ${adminData.clubs.map(c => `<option value="${c.id}">${c.nom||'Club'}</option>`).join('')}
+          </select>
+          <select id="g-coach-equipe" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
+            <option value="">Choisir une équipe *</option>
+          </select>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <input id="g-coach-prenom" placeholder="Prénom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+            <input id="g-coach-nom" placeholder="Nom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          </div>
+          <input id="g-coach-email" placeholder="Email *" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <input id="g-coach-mdp" placeholder="Mot de passe *" type="text" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
+          <button onclick="creerCoach()" style="padding:13px;background:linear-gradient(135deg,#2E5BA8,#4A90D9);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le compte coach</button>
+          <div id="g-coach-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Compte coach créé !</div>
+        </div>
+      </div>
+
+    </div>`
+  }
+
   document.getElementById('a-content').innerHTML = html || '<div class="empty-state">Aucune donnée.</div>'
+}
+
+// ═══ FONCTIONS GESTION ADMIN ═══
+
+function filtrerEquipes() {
+  const clubId = document.getElementById('g-joueur-club').value
+  const sel = document.getElementById('g-joueur-equipe')
+  sel.innerHTML = '<option value="">Choisir une équipe *</option>'
+  adminData.equipes.filter(e => e.club_id === clubId).forEach(e => {
+    sel.innerHTML += `<option value="${e.id}">${e.nom}</option>`
+  })
+}
+
+function filtrerEquipesCoach() {
+  const clubId = document.getElementById('g-coach-club').value
+  const sel = document.getElementById('g-coach-equipe')
+  sel.innerHTML = '<option value="">Choisir une équipe *</option>'
+  adminData.equipes.filter(e => e.club_id === clubId).forEach(e => {
+    sel.innerHTML += `<option value="${e.id}">${e.nom}</option>`
+  })
+}
+
+async function creerClub() {
+  const nom = document.getElementById('g-club-nom').value.trim()
+  const ville = document.getElementById('g-club-ville').value.trim()
+  const email = document.getElementById('g-club-email').value.trim()
+  const msg = document.getElementById('g-club-msg')
+  if (!nom) { msg.textContent = '⚠️ Le nom est obligatoire.'; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+  msg.style.display = 'none'
+  const { data, error } = await sb.from('clubs').insert({ nom, ville: ville||null, email_contact: email||null }).select().single()
+  if (error) { msg.textContent = '❌ Erreur : ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+  adminData.clubs.push(data)
+  msg.textContent = '✅ Club "' + nom + '" créé !'
+  msg.style.color = '#16a34a'
+  msg.style.display = 'block'
+  document.getElementById('g-club-nom').value = ''
+  document.getElementById('g-club-ville').value = ''
+  document.getElementById('g-club-email').value = ''
+  // Mettre à jour les stats
+  document.getElementById('a-total-clubs').textContent = adminData.clubs.length
+}
+
+async function creerEquipe() {
+  const clubId = document.getElementById('g-equipe-club').value
+  const nom = document.getElementById('g-equipe-nom').value.trim()
+  const categorie = document.getElementById('g-equipe-categorie').value.trim()
+  const saison = document.getElementById('g-equipe-saison').value.trim()
+  const msg = document.getElementById('g-equipe-msg')
+  if (!clubId || !nom) { msg.textContent = '⚠️ Club et nom sont obligatoires.'; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+  msg.style.display = 'none'
+  const { data, error } = await sb.from('equipes').insert({ club_id: clubId, nom, categorie: categorie||null, saison: saison||null }).select().single()
+  if (error) { msg.textContent = '❌ Erreur : ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+  adminData.equipes.push(data)
+  msg.textContent = '✅ Équipe "' + nom + '" créée !'
+  msg.style.color = '#16a34a'
+  msg.style.display = 'block'
+  document.getElementById('g-equipe-nom').value = ''
+  document.getElementById('g-equipe-categorie').value = ''
+  document.getElementById('g-equipe-saison').value = ''
+  document.getElementById('a-total-equipes').textContent = adminData.equipes.length
+}
+
+async function creerJoueur() {
+  const clubId = document.getElementById('g-joueur-club').value
+  const equipeId = document.getElementById('g-joueur-equipe').value
+  const prenom = document.getElementById('g-joueur-prenom').value.trim()
+  const nom = document.getElementById('g-joueur-nom').value.trim()
+  const email = document.getElementById('g-joueur-email').value.trim().toLowerCase()
+  const mdp = document.getElementById('g-joueur-mdp').value.trim()
+  const msg = document.getElementById('g-joueur-msg')
+  if (!clubId || !equipeId || !prenom || !nom || !email || !mdp) {
+    msg.textContent = '⚠️ Tous les champs sont obligatoires.'; msg.style.color = '#dc2626'; msg.style.display = 'block'; return
+  }
+  msg.style.display = 'none'
+  const { data, error } = await sb.from('utilisateurs').insert({
+    prenom, nom, email, mot_de_passe: mdp,
+    role: 'joueur', club_id: clubId, equipe_id: equipeId, actif: true
+  }).select().single()
+  if (error) { msg.textContent = '❌ Erreur : ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+  adminData.joueurs.push(data)
+  msg.textContent = '✅ Joueur ' + prenom + ' ' + nom + ' créé !'
+  msg.style.color = '#16a34a'
+  msg.style.display = 'block'
+  document.getElementById('g-joueur-prenom').value = ''
+  document.getElementById('g-joueur-nom').value = ''
+  document.getElementById('g-joueur-email').value = ''
+  document.getElementById('g-joueur-mdp').value = ''
+  document.getElementById('a-total-joueurs').textContent = adminData.joueurs.length
+}
+
+async function creerCoach() {
+  const clubId = document.getElementById('g-coach-club').value
+  const equipeId = document.getElementById('g-coach-equipe').value
+  const prenom = document.getElementById('g-coach-prenom').value.trim()
+  const nom = document.getElementById('g-coach-nom').value.trim()
+  const email = document.getElementById('g-coach-email').value.trim().toLowerCase()
+  const mdp = document.getElementById('g-coach-mdp').value.trim()
+  const msg = document.getElementById('g-coach-msg')
+  if (!clubId || !equipeId || !prenom || !nom || !email || !mdp) {
+    msg.textContent = '⚠️ Tous les champs sont obligatoires.'; msg.style.color = '#dc2626'; msg.style.display = 'block'; return
+  }
+  msg.style.display = 'none'
+  const { data, error } = await sb.from('utilisateurs').insert({
+    prenom, nom, email, mot_de_passe: mdp,
+    role: 'coach', club_id: clubId, equipe_id: equipeId, actif: true
+  }).select().single()
+  if (error) { msg.textContent = '❌ Erreur : ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+  msg.textContent = '✅ Coach ' + prenom + ' ' + nom + ' créé !'
+  msg.style.color = '#16a34a'
+  msg.style.display = 'block'
+  document.getElementById('g-coach-prenom').value = ''
+  document.getElementById('g-coach-nom').value = ''
+  document.getElementById('g-coach-email').value = ''
+  document.getElementById('g-coach-mdp').value = ''
 }
 
 // ═══ DASHBOARD COACH ═══
