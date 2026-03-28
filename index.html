@@ -1335,7 +1335,7 @@ async function loadCoach(user) {
           <div style="font-size:11px;color:#6c7a99;">${jr.length} test(s) · ${doneTypes.join(', ')||'Aucun'}</div>
         </div>
         ${jmoy !== null ? `<div style="display:flex;align-items:center;gap:8px;"><div style="width:80px;height:6px;background:#e8edf5;border-radius:999px;overflow:hidden;"><div style="height:100%;border-radius:999px;background:#2E5BA8;width:${jmoy}%"></div></div><div style="font-size:13px;font-weight:800;color:#1B3A6B;">${jmoy}%</div></div>` : '<div style="font-size:12px;color:#a0aec0;">Pas de test</div>'}
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${jr.map((r,ri) => `<button onclick="exportPDFFromIndex(${ri},'coach-${j.id}')" style="padding:5px 10px;background:#1B3A6B;color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;">📄 ${r.test_type}</button>`).join('')}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${jr.map((r,ri) => '<button onclick="exportPDFFromIndex(' + ri + ',\'coach-' + j.id + '\')" style="padding:5px 10px;background:#1B3A6B;color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;">📄 ' + r.test_type + '</button>').join('')}</div>
       </div>`
     }).join('')
   }
