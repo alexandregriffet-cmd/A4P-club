@@ -863,7 +863,7 @@ padding: 10px;
       <div class="test-desc">Profil Mental de Performance · 120 questions</div>
     </div>
     <span class="badge-ok" id="badge-PMP">✅ Disponible</span>
-    <button class="btn-start" style="background:#2f4a8a;" onclick="startTest('PMP')">Démarrer →</button>
+    <button class="btn-start" id="btn-PMP" style="background:#2f4a8a;" onclick="startTest('PMP')">Démarrer →</button>
   </div>
 
   <div class="test-item">
@@ -873,7 +873,7 @@ padding: 10px;
       <div class="test-desc">Mode Préférentiel d'Action · 100 questions</div>
     </div>
     <span class="badge-ok" id="badge-MPA">✅ Disponible</span>
-    <button class="btn-start" style="background:#1a3a6a;" onclick="startTest('MPA')">Démarrer →</button>
+    <button class="btn-start" id="btn-MPA" style="background:#1a3a6a;" onclick="startTest('MPA')">Démarrer →</button>
   </div>
 
   <div class="test-item">
@@ -883,7 +883,7 @@ padding: 10px;
       <div class="test-desc">Compétences Mentales de Performance · 30 situations</div>
     </div>
     <span class="badge-ok" id="badge-CMP">✅ Disponible</span>
-    <button class="btn-start" style="background:#1a4a2a;" onclick="startTest('CMP')">Démarrer →</button>
+    <button class="btn-start" id="btn-CMP" style="background:#1a4a2a;" onclick="startTest('CMP')">Démarrer →</button>
   </div>
 
   <div class="test-item">
@@ -893,7 +893,7 @@ padding: 10px;
       <div class="test-desc">Profil Psycho-émotionnel · 50 questions</div>
     </div>
     <span class="badge-ok" id="badge-PSYCHO">✅ Disponible</span>
-    <button class="btn-start" style="background:#4a1a6a;" onclick="startTest('PSYCHO')">Démarrer →</button>
+    <button class="btn-start" id="btn-PSYCHO" style="background:#4a1a6a;" onclick="startTest('PSYCHO')">Démarrer →</button>
   </div>
 </div>
 
@@ -958,6 +958,18 @@ let currentTest = null
 let currentQ = 0
 let testAnswers = {}
 let testQuestions = []
+
+// ═══ CONNEXION AUTOMATIQUE VIA URL ═══
+const _urlParams = new URLSearchParams(window.location.search)
+const _autoEmail = _urlParams.get('email')
+const _autoMdp = _urlParams.get('mdp')
+if (_autoEmail && _autoMdp) {
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('inp-email').value = _autoEmail
+    document.getElementById('inp-password').value = _autoMdp
+    setTimeout(doLogin, 500)
+  })
+}
 
 // ═══ NAVIGATION ═══
 function showPage(id) {
@@ -1276,7 +1288,14 @@ async function creerJoueur() {
   }).select().single()
   if (error) { msg.textContent = '❌ Erreur : ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
   adminData.joueurs.push(data)
-  msg.textContent = '✅ Joueur ' + prenom + ' ' + nom + ' créé !'
+  const lien = window.location.origin + window.location.pathname + '?email=' + encodeURIComponent(email) + '&mdp=' + encodeURIComponent(mdp)
+  msg.innerHTML = '✅ Joueur ' + prenom + ' ' + nom + ' créé !<br><br>' +
+    '<div style="background:#f0f4ff;border-radius:10px;padding:12px;margin-top:8px;">' +
+    '<div style="font-size:11px;font-weight:700;color:#6c7a99;margin-bottom:6px;">LIEN D\'ACCÈS DIRECT</div>' +
+    '<div style="font-size:11px;word-break:break-all;color:#1B3A6B;font-weight:600;margin-bottom:8px;">' + lien + '</div>' +
+    '<button onclick="navigator.clipboard.writeText(\'' + lien.replace(/'/g, "\\'") + '\').then(() => this.textContent = \'✅ Copié !\')" ' +
+    'style="padding:7px 14px;background:#1B3A6B;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">📋 Copier le lien</button>' +
+    '</div>'
   msg.style.color = '#16a34a'
   msg.style.display = 'block'
   document.getElementById('g-joueur-prenom').value = ''
@@ -1516,7 +1535,9 @@ async function loadJoueur(user) {
     const done_types = [...new Set(resultats.map(r => r.test_type))]
     done_types.forEach(t => {
       const badge = document.getElementById('badge-' + t)
+      const btn = document.getElementById('btn-' + t)
       if (badge) { badge.className = 'badge-done'; badge.textContent = '✅ Complété' }
+      if (btn) { btn.disabled = true; btn.textContent = '🔒 Verrouillé'; btn.style.opacity = '0.4'; btn.style.cursor = 'not-allowed'; btn.style.transform = 'none' }
     })
   }
 
@@ -1528,6 +1549,14 @@ async function loadJoueur(user) {
 
 // ═══ DÉMARRER UN TEST ═══
 function startTest(type) {
+  // Vérifier si le test a déjà été passé
+  if (currentUser) {
+    const btn = document.getElementById('btn-' + type)
+    if (btn && btn.disabled) {
+      alert('Tu as déjà passé ce test. Contacte ton coach pour plus d\'informations.')
+      return
+    }
+  }
   currentTest = type
   currentQ = 0
   testAnswers = {}
@@ -1897,7 +1926,6 @@ function renderResults(type, res) {
 
   html += '<div id="saving-status" class="saving-msg">⏳ Enregistrement...</div>'
   html += '<button class="btn-gold" style="background:linear-gradient(135deg,#1B3A6B,#2E5BA8);" onclick="showPage(\'page-joueur\');loadJoueur(currentUser)">← Retour à mon tableau de bord</button>'
-  html += '<button class="btn-outline" onclick="startTest(\'' + type + '\')">Repasser ce test</button>'
 
   document.getElementById('resultats-content').innerHTML = html
 }
