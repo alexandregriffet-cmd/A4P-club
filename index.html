@@ -1168,6 +1168,16 @@ function adminTab(tab) {
     html += '<div id="g-coach-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Coach créé !</div>'
     html += '</div></div>'
 
+    // CRÉER UN DIRIGEANT
+    html += '<div><div class="section-title">🏛️ Créer un compte dirigeant</div><div style="display:flex;flex-direction:column;gap:10px;">'
+    html += '<select id="g-dirig-club" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;background:#fff;"><option value="">Choisir un club *</option>' + optionsClubs + '</select>'
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><input id="g-dirig-prenom" placeholder="Prénom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;"><input id="g-dirig-nom" placeholder="Nom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;"></div>'
+    html += '<input id="g-dirig-email" placeholder="Email *" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<input id="g-dirig-mdp" placeholder="Mot de passe *" type="text" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<button onclick="creerDirigeant()" style="padding:13px;background:linear-gradient(135deg,#1a4a2a,#1a6a5a);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le compte dirigeant</button>'
+    html += '<div id="g-dirig-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Dirigeant créé !</div>'
+    html += '</div></div>'
+
     html += '</div>'
   }
 
@@ -1259,6 +1269,31 @@ async function creerJoueur() {
   document.getElementById('g-joueur-email').value = ''
   document.getElementById('g-joueur-mdp').value = ''
   document.getElementById('a-total-joueurs').textContent = adminData.joueurs.length
+}
+
+async function creerDirigeant() {
+  const clubId = document.getElementById('g-dirig-club').value
+  const prenom = document.getElementById('g-dirig-prenom').value.trim()
+  const nom = document.getElementById('g-dirig-nom').value.trim()
+  const email = document.getElementById('g-dirig-email').value.trim().toLowerCase()
+  const mdp = document.getElementById('g-dirig-mdp').value.trim()
+  const msg = document.getElementById('g-dirig-msg')
+  if (!clubId || !prenom || !nom || !email || !mdp) {
+    msg.textContent = '⚠️ Tous les champs sont obligatoires.'; msg.style.color = '#dc2626'; msg.style.display = 'block'; return
+  }
+  msg.style.display = 'none'
+  const { data, error } = await sb.from('utilisateurs').insert({
+    prenom, nom, email, mot_de_passe: mdp,
+    role: 'dirigeant', club_id: clubId, actif: true
+  }).select().single()
+  if (error) { msg.textContent = '❌ Erreur : ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+  msg.textContent = '✅ Dirigeant ' + prenom + ' ' + nom + ' créé !'
+  msg.style.color = '#16a34a'
+  msg.style.display = 'block'
+  document.getElementById('g-dirig-prenom').value = ''
+  document.getElementById('g-dirig-nom').value = ''
+  document.getElementById('g-dirig-email').value = ''
+  document.getElementById('g-dirig-mdp').value = ''
 }
 
 async function creerCoach() {
