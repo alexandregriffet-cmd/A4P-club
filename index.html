@@ -1141,7 +1141,6 @@ function adminTab(tab) {
     html += '<select id="g-equipe-club" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;background:#fff;"><option value="">Choisir un club *</option>' + optionsClubs + '</select>'
     html += '<input id="g-equipe-nom" placeholder="Nom de l\'équipe *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
     html += '<input id="g-equipe-categorie" placeholder="Catégorie (ex: U17, Sénior...)" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
-    html += '<input id="g-equipe-saison" placeholder="Saison (ex: 2024-2025)" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
     html += '<button onclick="creerEquipe()" style="padding:13px;background:linear-gradient(135deg,#2E5BA8,#4A90D9);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer l\'équipe</button>'
     html += '<div id="g-equipe-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Équipe créée !</div>'
     html += '</div></div>'
@@ -1222,7 +1221,7 @@ async function creerEquipe() {
   const msg = document.getElementById('g-equipe-msg')
   if (!clubId || !nom) { msg.textContent = '⚠️ Club et nom sont obligatoires.'; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
   msg.style.display = 'none'
-  const { data, error } = await sb.from('equipes').insert({ club_id: clubId, nom, categorie: categorie||null, saison: saison||null }).select().single()
+  const { data, error } = await sb.from('equipes').insert({ club_id: clubId, nom, categorie: categorie||null }).select().single()
   if (error) { msg.textContent = '❌ Erreur : ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
   adminData.equipes.push(data)
   msg.textContent = '✅ Équipe "' + nom + '" créée !'
