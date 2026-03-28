@@ -1313,6 +1313,12 @@ async function loadCoach(user) {
   const avecTests = joueursData.filter(j => resultats.some(r => r.utilisateur_id === j.id)).length
   document.getElementById('c-completion').textContent = joueursData.length > 0 ? Math.round((avecTests/joueursData.length)*100)+'%' : '—'
 
+  window._coachJoueurs = joueursData
+  window._coachResultats = {}
+  joueursData.forEach(j => {
+    window._coachResultats[j.id] = resultats.filter(r => r.utilisateur_id === j.id)
+  })
+
   const colors = { PMP:'#2f4a8a', MPA:'#1a3a6a', CMP:'#1a4a2a', PSYCHO:'#4a1a6a' }
 
   if (joueursData.length === 0) {
@@ -1329,7 +1335,7 @@ async function loadCoach(user) {
           <div style="font-size:11px;color:#6c7a99;">${jr.length} test(s) · ${doneTypes.join(', ')||'Aucun'}</div>
         </div>
         ${jmoy !== null ? `<div style="display:flex;align-items:center;gap:8px;"><div style="width:80px;height:6px;background:#e8edf5;border-radius:999px;overflow:hidden;"><div style="height:100%;border-radius:999px;background:#2E5BA8;width:${jmoy}%"></div></div><div style="font-size:13px;font-weight:800;color:#1B3A6B;">${jmoy}%</div></div>` : '<div style="font-size:12px;color:#a0aec0;">Pas de test</div>'}
-        ${jr.map(r => `<button onclick="exportPDFFromResultat(${JSON.stringify(r).replace(/"/g,'&quot;')}, '${j.prenom||''} ${j.nom||''}')" style="padding:5px 10px;background:${(['PMP','MPA','CMP','PSYCHO'].includes(r.test_type)?{'PMP':'#2f4a8a','MPA':'#1a3a6a','CMP':'#1a4a2a','PSYCHO':'#4a1a6a'}[r.test_type]:'#1B3A6B')};color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;margin-top:4px;">📄 ${r.test_type}</button>`).join(' ')}
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${jr.map((r,ri) => `<button onclick="exportPDFFromIndex(${ri},'coach-${j.id}')" style="padding:5px 10px;background:#1B3A6B;color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;">📄 ${r.test_type}</button>`).join('')}</div>
       </div>`
     }).join('')
   }
@@ -1399,6 +1405,21 @@ async function loadDirigeant(user) {
       </div>`
     }).join('')
   }
+}
+
+function exportPDFFromIndex(idx, source) {
+  let r, nom
+  if (source === 'joueur') {
+    r = window._joueurResultats && window._joueurResultats[idx]
+    nom = currentUser ? (currentUser.prenom + ' ' + currentUser.nom) : 'Sportif'
+  } else {
+    const key = source.replace('coach-', '')
+    r = window._coachResultats && window._coachResultats[key] && window._coachResultats[key][idx]
+    const joueur = window._coachJoueurs && window._coachJoueurs.find(j => j.id === key)
+    nom = joueur ? (joueur.prenom + ' ' + joueur.nom) : 'Sportif'
+  }
+  if (!r) return
+  exportPDFFromResultat(r, nom)
 }
 
 // ═══ EXPORT PDF ═══
@@ -1543,7 +1564,8 @@ if (done > 0) {
 const moy = Math.round(resultats.reduce((a, r) => a + (r.score_global || 0), 0) / done)
 document.getElementById(‘j-moy’).textContent = moy + ‘%’
 const colors = { PMP: ‘#2f4a8a’, MPA: ‘#1a3a6a’, CMP: ‘#1a4a2a’, PSYCHO: ‘#4a1a6a’ }
-document.getElementById(‘j-resultats’).innerHTML = resultats.map(r => `<div class="result-row"> <div class="result-badge" style="background:${colors[r.test_type]||'#1B3A6B'}">${r.test_type}</div> <div class="result-info"> <div class="result-name">${r.profil_label || r.profil_code || 'Résultat'}</div> <div class="result-date">${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div> </div> <div class="score-wrap"> <div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:${colors[r.test_type]||'#1B3A6B'}"></div></div> <div class="score-val">${r.score_global || '—'}%</div> </div> <button onclick="exportPDFFromResultat(${JSON.stringify(r).replace(/"/g, '&quot;')}, '${(currentUser?.prenom||'')} ${(currentUser?.nom||'')}')" style="padding:7px 14px;background:#1B3A6B;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">📄 PDF</button> </div>`).join(’’)
+window._joueurResultats = resultats
+document.getElementById(‘j-resultats’).innerHTML = resultats.map((r, idx) => `<div class="result-row"> <div class="result-badge" style="background:${colors[r.test_type]||'#1B3A6B'}">${r.test_type}</div> <div class="result-info"> <div class="result-name">${r.profil_label || r.profil_code || 'Résultat'}</div> <div class="result-date">${new Date(r.completed_at).toLocaleDateString('fr-FR')}</div> </div> <div class="score-wrap"> <div class="score-bar"><div class="score-fill" style="width:${r.score_global||0}%;background:${colors[r.test_type]||'#1B3A6B'}"></div></div> <div class="score-val">${r.score_global || '—'}%</div> </div> <button onclick="exportPDFFromIndex(${idx},'joueur')" style="padding:7px 14px;background:#1B3A6B;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">📄 PDF</button> </div>`).join(’’)
 const done_types = […new Set(resultats.map(r => r.test_type))]
 done_types.forEach(t => {
 const badge = document.getElementById(‘badge-’ + t)
