@@ -1180,6 +1180,7 @@ function adminTab(tab) {
     html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><input id="g-joueur-prenom" placeholder="Prénom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;"><input id="g-joueur-nom" placeholder="Nom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;"></div>'
     html += '<input id="g-joueur-email" placeholder="Email *" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
     html += '<input id="g-joueur-mdp" placeholder="Mot de passe *" type="text" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<button onclick="genererMdpJoueur()" style="padding:10px;background:#e8edf5;color:#1B3A6B;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">🎲 Générer un code à 6 chiffres</button>'
     html += '<button onclick="creerJoueur()" style="padding:13px;background:linear-gradient(135deg,#1a4a2a,#1a6a5a);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le compte joueur</button>'
     html += '<div id="g-joueur-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Joueur créé !</div>'
     html += '</div></div>'
@@ -1270,6 +1271,11 @@ async function creerEquipe() {
   document.getElementById('a-total-equipes').textContent = adminData.equipes.length
 }
 
+function genererMdpJoueur() {
+  const code = Math.floor(100000 + Math.random() * 900000).toString()
+  document.getElementById('g-joueur-mdp').value = code
+}
+
 async function creerJoueur() {
   const clubId = document.getElementById('g-joueur-club').value
   const equipeId = document.getElementById('g-joueur-equipe').value
@@ -1289,13 +1295,24 @@ async function creerJoueur() {
   if (error) { msg.textContent = '❌ Erreur : ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
   adminData.joueurs.push(data)
   const lien = window.location.origin + window.location.pathname + '?email=' + encodeURIComponent(email) + '&mdp=' + encodeURIComponent(mdp)
+  const messageComplet = 'Bonjour ' + prenom + ',\n\nVoici vos accès à la plateforme A4P Mental :\n\n🔗 Lien : ' + lien + '\n📧 Email : ' + email + '\n🔑 Code : ' + mdp + '\n\nCliquez sur le lien pour accéder directement à vos tests.'
   msg.innerHTML = '✅ Joueur ' + prenom + ' ' + nom + ' créé !<br><br>' +
-    '<div style="background:#f0f4ff;border-radius:10px;padding:12px;margin-top:8px;">' +
-    '<div style="font-size:11px;font-weight:700;color:#6c7a99;margin-bottom:6px;">LIEN D\'ACCÈS DIRECT</div>' +
-    '<div style="font-size:11px;word-break:break-all;color:#1B3A6B;font-weight:600;margin-bottom:8px;">' + lien + '</div>' +
-    '<button onclick="navigator.clipboard.writeText(\'' + lien.replace(/'/g, "\\'") + '\').then(() => this.textContent = \'✅ Copié !\')" ' +
+    '<div style="background:#f0f4ff;border-radius:12px;padding:14px;margin-top:8px;text-align:left;">' +
+    '<div style="font-size:11px;font-weight:800;color:#6c7a99;margin-bottom:10px;letter-spacing:0.08em;">MESSAGE À ENVOYER AU JOUEUR</div>' +
+    '<div style="background:#fff;border-radius:9px;padding:12px;font-size:12px;color:#1a2a4a;line-height:1.8;margin-bottom:10px;">' +
+    'Bonjour ' + prenom + ',<br><br>' +
+    'Voici vos accès à la plateforme A4P Mental :<br><br>' +
+    '🔗 <strong>Lien :</strong> <span style="color:#1B3A6B;word-break:break-all;">' + lien + '</span><br>' +
+    '📧 <strong>Email :</strong> ' + email + '<br>' +
+    '🔑 <strong>Code :</strong> <strong style="font-size:18px;color:#1B3A6B;">' + mdp + '</strong><br><br>' +
+    'Cliquez sur le lien pour accéder directement à vos tests.' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+    '<button onclick="navigator.clipboard.writeText(\'' + lien.replace(/\\/g, '\\\\').replace(/'/g, "\\'") + '\').then(() => this.textContent = \'✅ Lien copié !\')" ' +
     'style="padding:7px 14px;background:#1B3A6B;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">📋 Copier le lien</button>' +
-    '</div>'
+    '<button onclick="navigator.clipboard.writeText(`' + messageComplet.replace(/`/g, "'") + '`).then(() => this.textContent = \'✅ Copié !\')" ' +
+    'style="padding:7px 14px;background:#2E5BA8;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">📋 Copier tout le message</button>' +
+    '</div></div>'
   msg.style.color = '#16a34a'
   msg.style.display = 'block'
   document.getElementById('g-joueur-prenom').value = ''
