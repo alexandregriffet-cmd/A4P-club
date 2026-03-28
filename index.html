@@ -1124,83 +1124,51 @@ function adminTab(tab) {
   }
 
   } else if (tab === 'gestion') {
-    html = `
-    <div style="display:flex;flex-direction:column;gap:20px;">
+    const optionsClubs = adminData.clubs.map(c => '<option value="' + c.id + '">' + (c.nom||'Club') + '</option>').join('')
+    html = '<div style="display:flex;flex-direction:column;gap:20px;">'
 
-      <!-- CRÉER UN CLUB -->
-      <div>
-        <div class="section-title">🏆 Créer un club</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <input id="g-club-nom" placeholder="Nom du club *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <input id="g-club-ville" placeholder="Ville" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <input id="g-club-email" placeholder="Email contact" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <button onclick="creerClub()" style="padding:13px;background:linear-gradient(135deg,#1B3A6B,#2E5BA8);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le club</button>
-          <div id="g-club-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Club créé !</div>
-        </div>
-      </div>
+    // CRÉER UN CLUB
+    html += '<div><div class="section-title">🏆 Créer un club</div><div style="display:flex;flex-direction:column;gap:10px;">'
+    html += '<input id="g-club-nom" placeholder="Nom du club *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<input id="g-club-ville" placeholder="Ville" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<input id="g-club-email" placeholder="Email contact" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<button onclick="creerClub()" style="padding:13px;background:linear-gradient(135deg,#1B3A6B,#2E5BA8);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le club</button>'
+    html += '<div id="g-club-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Club créé !</div>'
+    html += '</div></div>'
 
-      <!-- CRÉER UNE ÉQUIPE -->
-      <div>
-        <div class="section-title">👥 Créer une équipe</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <select id="g-equipe-club" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
-            <option value="">Choisir un club *</option>
-            ${adminData.clubs.map(c => `<option value="${c.id}">${c.nom||'Club'}</option>`).join('')}
-          </select>
-          <input id="g-equipe-nom" placeholder="Nom de l'équipe *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <input id="g-equipe-categorie" placeholder="Catégorie (ex: U17, Sénior...)" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <input id="g-equipe-saison" placeholder="Saison (ex: 2024-2025)" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <button onclick="creerEquipe()" style="padding:13px;background:linear-gradient(135deg,#2E5BA8,#4A90D9);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer l'équipe</button>
-          <div id="g-equipe-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Équipe créée !</div>
-        </div>
-      </div>
+    // CRÉER UNE ÉQUIPE
+    html += '<div><div class="section-title">👥 Créer une équipe</div><div style="display:flex;flex-direction:column;gap:10px;">'
+    html += '<select id="g-equipe-club" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;background:#fff;"><option value="">Choisir un club *</option>' + optionsClubs + '</select>'
+    html += '<input id="g-equipe-nom" placeholder="Nom de l\'équipe *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<input id="g-equipe-categorie" placeholder="Catégorie (ex: U17, Sénior...)" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<input id="g-equipe-saison" placeholder="Saison (ex: 2024-2025)" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<button onclick="creerEquipe()" style="padding:13px;background:linear-gradient(135deg,#2E5BA8,#4A90D9);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer l\'équipe</button>'
+    html += '<div id="g-equipe-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Équipe créée !</div>'
+    html += '</div></div>'
 
-      <!-- CRÉER UN COMPTE JOUEUR -->
-      <div>
-        <div class="section-title">🎮 Créer un compte joueur</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <select id="g-joueur-club" onchange="filtrerEquipes()" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
-            <option value="">Choisir un club *</option>
-            ${adminData.clubs.map(c => `<option value="${c.id}">${c.nom||'Club'}</option>`).join('')}
-          </select>
-          <select id="g-joueur-equipe" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
-            <option value="">Choisir une équipe *</option>
-          </select>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <input id="g-joueur-prenom" placeholder="Prénom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-            <input id="g-joueur-nom" placeholder="Nom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          </div>
-          <input id="g-joueur-email" placeholder="Email *" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <input id="g-joueur-mdp" placeholder="Mot de passe *" type="text" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <button onclick="creerJoueur()" style="padding:13px;background:linear-gradient(135deg,#1a4a2a,#1a6a5a);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le compte joueur</button>
-          <div id="g-joueur-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Compte joueur créé !</div>
-        </div>
-      </div>
+    // CRÉER UN JOUEUR
+    html += '<div><div class="section-title">🎮 Créer un compte joueur</div><div style="display:flex;flex-direction:column;gap:10px;">'
+    html += '<select id="g-joueur-club" onchange="filtrerEquipes()" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;background:#fff;"><option value="">Choisir un club *</option>' + optionsClubs + '</select>'
+    html += '<select id="g-joueur-equipe" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;background:#fff;"><option value="">Choisir une équipe *</option></select>'
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><input id="g-joueur-prenom" placeholder="Prénom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;"><input id="g-joueur-nom" placeholder="Nom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;"></div>'
+    html += '<input id="g-joueur-email" placeholder="Email *" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<input id="g-joueur-mdp" placeholder="Mot de passe *" type="text" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<button onclick="creerJoueur()" style="padding:13px;background:linear-gradient(135deg,#1a4a2a,#1a6a5a);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le compte joueur</button>'
+    html += '<div id="g-joueur-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Joueur créé !</div>'
+    html += '</div></div>'
 
-      <!-- CRÉER UN COMPTE COACH -->
-      <div>
-        <div class="section-title">👨‍💼 Créer un compte coach</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <select id="g-coach-club" onchange="filtrerEquipesCoach()" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
-            <option value="">Choisir un club *</option>
-            ${adminData.clubs.map(c => `<option value="${c.id}">${c.nom||'Club'}</option>`).join('')}
-          </select>
-          <select id="g-coach-equipe" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;background:#fff;">
-            <option value="">Choisir une équipe *</option>
-          </select>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <input id="g-coach-prenom" placeholder="Prénom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-            <input id="g-coach-nom" placeholder="Nom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          </div>
-          <input id="g-coach-email" placeholder="Email *" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <input id="g-coach-mdp" placeholder="Mot de passe *" type="text" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;font-family:DM Sans,sans-serif;">
-          <button onclick="creerCoach()" style="padding:13px;background:linear-gradient(135deg,#2E5BA8,#4A90D9);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le compte coach</button>
-          <div id="g-coach-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Compte coach créé !</div>
-        </div>
-      </div>
+    // CRÉER UN COACH
+    html += '<div><div class="section-title">👨‍💼 Créer un compte coach</div><div style="display:flex;flex-direction:column;gap:10px;">'
+    html += '<select id="g-coach-club" onchange="filtrerEquipesCoach()" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;background:#fff;"><option value="">Choisir un club *</option>' + optionsClubs + '</select>'
+    html += '<select id="g-coach-equipe" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;background:#fff;"><option value="">Choisir une équipe *</option></select>'
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><input id="g-coach-prenom" placeholder="Prénom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;"><input id="g-coach-nom" placeholder="Nom *" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;"></div>'
+    html += '<input id="g-coach-email" placeholder="Email *" type="email" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<input id="g-coach-mdp" placeholder="Mot de passe *" type="text" style="padding:12px 16px;border-radius:12px;border:1px solid #e2e8f4;font-size:14px;outline:none;">'
+    html += '<button onclick="creerCoach()" style="padding:13px;background:linear-gradient(135deg,#2E5BA8,#4A90D9);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;">+ Créer le compte coach</button>'
+    html += '<div id="g-coach-msg" style="font-size:13px;text-align:center;color:#16a34a;display:none;">✅ Coach créé !</div>'
+    html += '</div></div>'
 
-    </div>`
-  }
+    html += '</div>'
 
   document.getElementById('a-content').innerHTML = html || '<div class="empty-state">Aucune donnée.</div>'
 }
