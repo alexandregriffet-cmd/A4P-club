@@ -1070,17 +1070,32 @@ function adminTab(tab) {
   if (tab === 'resultats') {
     if (adminData.resultats.length === 0) { html = '<div class="empty-state">Aucun résultat pour l\'instant.</div>' }
     else {
-      // Chercher le nom du joueur
+      // Synthèse globale par test
+      html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">'
+      ;['PMP','MPA','CMP','PSYCHO'].forEach(type => {
+        const vals = adminData.resultats.filter(r => r.test_type === type && r.score_global !== null).map(r => r.score_global)
+        const avg = vals.length > 0 ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null
+        const color = colors[type] || '#1B3A6B'
+        html += `<div style="background:#fff;border-radius:14px;padding:14px;text-align:center;border-top:3px solid ${color};box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+          <div style="font-size:11px;font-weight:800;color:${color};letter-spacing:0.1em;">${type}</div>
+          <div style="font-size:26px;font-weight:900;color:${color};line-height:1.2;">${avg !== null ? avg+'%' : '—'}</div>
+          <div style="font-size:10px;color:#a0aec0;">${vals.length} test(s)</div>
+        </div>`
+      })
+      html += '</div>'
+
+      // Liste des résultats
       adminData.resultats.forEach(r => {
         const joueur = adminData.joueurs.find(j => j.id === r.utilisateur_id)
         const nom = joueur ? joueur.prenom + ' ' + joueur.nom : r.utilisateur_id || 'Joueur'
         const equipe = joueur?.equipe_id ? adminData.equipes.find(e => e.id === joueur.equipe_id) : null
+        const club = joueur?.club_id ? adminData.clubs.find(c => c.id === joueur.club_id) : null
         const color = colors[r.test_type] || '#1B3A6B'
         html += `<div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:13px;background:#f8faff;margin-bottom:8px;flex-wrap:wrap;">
           <div style="padding:5px 12px;border-radius:20px;font-size:12px;font-weight:800;color:#fff;background:${color};">${r.test_type}</div>
           <div style="flex:1;min-width:100px;">
             <div style="font-weight:700;color:#1a2a4a;font-size:14px;">${nom}</div>
-            <div style="font-size:11px;color:#6c7a99;">${r.profil_label || r.profil_code || '—'} · ${equipe ? equipe.nom : ''} · ${r.completed_at ? new Date(r.completed_at).toLocaleDateString('fr-FR') : '—'}</div>
+            <div style="font-size:11px;color:#6c7a99;">${r.profil_label || r.profil_code || '—'} · ${equipe ? equipe.nom : ''} · ${club ? club.nom : ''} · ${r.completed_at ? new Date(r.completed_at).toLocaleDateString('fr-FR') : '—'}</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <div style="width:80px;height:6px;background:#e8edf5;border-radius:999px;overflow:hidden;"><div style="height:100%;border-radius:999px;background:${color};width:${r.score_global||0}%"></div></div>
