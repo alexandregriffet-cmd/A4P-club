@@ -1140,13 +1140,27 @@ function adminTab(tab) {
       const moy = joueurRes.length > 0 ? Math.round(joueurRes.reduce((a,r)=>a+(r.score_global||0),0)/joueurRes.length) : null
       const eq = j.equipe_id ? adminData.equipes.find(e => e.id === j.equipe_id) : null
       const doneTypes = [...new Set(joueurRes.map(r => r.test_type))]
-      html += `<div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:13px;background:#f8faff;margin-bottom:8px;flex-wrap:wrap;">
-        <div style="width:36px;height:36px;border-radius:10px;background:#1B3A6B;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;">${(j.prenom||'?')[0].toUpperCase()}</div>
-        <div style="flex:1;">
-          <div style="font-weight:700;color:#1a2a4a;font-size:14px;">${j.prenom||''} ${j.nom||''}</div>
-          <div style="font-size:11px;color:#6c7a99;">${j.email||''} · ${eq ? eq.nom : '—'} · ${doneTypes.join(', ')||'Aucun test'}</div>
+      const passages = {}
+      joueurRes.forEach(r => { passages[r.test_type] = (passages[r.test_type] || 0) + 1 })
+      html += `<div style="border:1px solid #e8edf5;border-radius:14px;background:#f8faff;margin-bottom:10px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;flex-wrap:wrap;">
+          <div style="width:36px;height:36px;border-radius:10px;background:#1B3A6B;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;">${(j.prenom||'?')[0].toUpperCase()}</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:#1a2a4a;font-size:14px;">${j.prenom||''} ${j.nom||''}</div>
+            <div style="font-size:11px;color:#6c7a99;">${j.email||''} · ${eq ? eq.nom : '—'}</div>
+            <div style="font-size:11px;color:#6c7a99;margin-top:2px;">${doneTypes.length > 0 ? doneTypes.map(t => t + ' (' + (passages[t]||0) + ' passage(s))').join(' · ') : 'Aucun test passé'}</div>
+          </div>
+          ${moy !== null ? `<div style="font-size:16px;font-weight:900;color:#1B3A6B;">${moy}%</div>` : ''}
+          <a href="rapport.html?uid=${j.id}" target="_blank" style="padding:6px 12px;background:#1B3A6B;color:#fff;border-radius:9px;font-size:11px;font-weight:700;text-decoration:none;">📄</a>
         </div>
-        <div style="font-size:14px;font-weight:800;color:#1B3A6B;">${moy !== null ? moy+'%' : '—'}</div>
+        <div style="padding:0 14px 12px;border-top:1px solid #e8edf5;">
+          <div style="font-size:11px;font-weight:700;color:#a0aec0;letter-spacing:0.08em;text-transform:uppercase;margin:10px 0 8px;">Autoriser un nouveau passage</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="autoriserTest('${j.id}','tous')" style="padding:7px 14px;background:linear-gradient(135deg,#C9A84C,#E8C56A);color:#0f2244;border:none;border-radius:9px;font-size:12px;font-weight:800;cursor:pointer;">🔓 Tous les tests</button>
+            ${['PMP','MPA','CMP','PSYCHO'].map(t => `<button onclick="autoriserTest('${j.id}','${t}')" style="padding:7px 12px;background:#fff;color:#1B3A6B;border:1px solid #1B3A6B;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;">${t}</button>`).join('')}
+          </div>
+          <div id="auth-msg-${j.id}" style="font-size:12px;color:#16a34a;margin-top:6px;display:none;"></div>
+        </div>
       </div>`
     })
 
@@ -1269,6 +1283,26 @@ async function creerEquipe() {
   document.getElementById('g-equipe-categorie').value = ''
   document.getElementById('g-equipe-saison').value = ''
   document.getElementById('a-total-equipes').textContent = adminData.equipes.length
+}
+
+async function autoriserTest(joueurId, testType) {
+  const msg = document.getElementById('auth-msg-' + joueurId)
+  if (!msg) return
+  msg.style.display = 'none'
+
+  if (testType === 'tous') {
+    const tests = ['PMP','MPA','CMP','PSYCHO']
+    const inserts = tests.map(t => ({ joueur_id: joueurId, test_type: t }))
+    const { error } = await sb.from('autorisations').insert(inserts)
+    if (error) { msg.textContent = '❌ ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+    msg.textContent = '✅ Tous les tests autorisés pour un nouveau passage'
+  } else {
+    const { error } = await sb.from('autorisations').insert({ joueur_id: joueurId, test_type: testType })
+    if (error) { msg.textContent = '❌ ' + error.message; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
+    msg.textContent = '✅ ' + testType + ' autorisé pour un nouveau passage'
+  }
+  msg.style.color = '#16a34a'
+  msg.style.display = 'block'
 }
 
 function genererMdpJoueur() {
@@ -1528,6 +1562,7 @@ async function loadJoueur(user) {
   showPage('page-joueur')
 
   const { data: resultats } = await sb.from('resultats').select('*').eq('utilisateur_id', user.id).order('completed_at', { ascending: false })
+  const { data: autorisations } = await sb.from('autorisations').select('*').eq('joueur_id', user.id)
   const done = resultats?.length || 0
   document.getElementById('j-done').textContent = done
 
@@ -1550,11 +1585,19 @@ async function loadJoueur(user) {
       </div>
     `).join('')
     const done_types = [...new Set(resultats.map(r => r.test_type))]
+    const autosTypes = (autorisations || []).map(a => a.test_type)
     done_types.forEach(t => {
       const badge = document.getElementById('badge-' + t)
       const btn = document.getElementById('btn-' + t)
-      if (badge) { badge.className = 'badge-done'; badge.textContent = '✅ Complété' }
-      if (btn) { btn.disabled = true; btn.textContent = '🔒 Verrouillé'; btn.style.opacity = '0.4'; btn.style.cursor = 'not-allowed'; btn.style.transform = 'none' }
+      const estAutorise = autosTypes.includes(t)
+      if (badge) { badge.className = 'badge-done'; badge.textContent = estAutorise ? '🔓 Nouveau passage autorisé' : '✅ Complété' }
+      if (btn) {
+        if (estAutorise) {
+          btn.disabled = false; btn.textContent = 'Repasser →'; btn.style.opacity = '1'; btn.style.cursor = 'pointer'
+        } else {
+          btn.disabled = true; btn.textContent = '🔒 Verrouillé'; btn.style.opacity = '0.4'; btn.style.cursor = 'not-allowed'
+        }
+      }
     })
   }
 
@@ -1813,6 +1856,8 @@ async function saveResult(type, results) {
       equipe_id: currentUser.equipe_id || null,
       club_id: currentUser.club_id || null
     })
+    // Supprimer l'autorisation utilisée
+    await sb.from('autorisations').delete().eq('joueur_id', currentUser.id).eq('test_type', type)
     document.getElementById('saving-status') && (document.getElementById('saving-status').textContent = '✅ Résultat enregistré')
   } catch(e) { console.error(e) }
 }
