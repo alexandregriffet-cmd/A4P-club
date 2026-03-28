@@ -1217,7 +1217,6 @@ async function creerEquipe() {
   const clubId = document.getElementById('g-equipe-club').value
   const nom = document.getElementById('g-equipe-nom').value.trim()
   const categorie = document.getElementById('g-equipe-categorie').value.trim()
-  const saison = document.getElementById('g-equipe-saison').value.trim()
   const msg = document.getElementById('g-equipe-msg')
   if (!clubId || !nom) { msg.textContent = '⚠️ Club et nom sont obligatoires.'; msg.style.color = '#dc2626'; msg.style.display = 'block'; return }
   msg.style.display = 'none'
