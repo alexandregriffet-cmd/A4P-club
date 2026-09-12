@@ -117,7 +117,105 @@ function getDimLabel(type, key) {
   return (labels[type] && labels[type][key]) || key
 }
 
+// Légende courte sous chaque dimension — ce que l'axe mesure concrètement
+// (comme dans le rapport par test de l'app individuelle)
+const DIM_CAPTIONS = {
+  PMP: {
+    'Activation': "Votre capacité à mobiliser rapidement votre énergie avant l'effort.",
+    'Attention': "Votre capacité à rester concentré et à vous reconcentrer rapidement.",
+    'Régulation': "Votre gestion des émotions sous pression.",
+    'Engagement': "Votre constance et votre investissement dans l'effort, même dans l'adversité.",
+    'Confiance': "Votre solidité intérieure dans les moments décisifs.",
+    'Résilience': "Votre capacité à rebondir après un échec ou une erreur.",
+    'Cognition': "Votre lucidité d'analyse et de prise de décision.",
+    'Motricité': "Votre conscience corporelle et la finesse de vos ajustements techniques."
+  },
+  CMP: {
+    'Sous pression': "Ce que vous faites concrètement quand la pression monte.",
+    'Maturité mentale': "Votre niveau de développement mental global.",
+    'Ressources': "Les ressources mentales que vous pouvez activer immédiatement.",
+    'Sans blocage': "Plus ce score est haut, moins vos freins compétitifs vous limitent."
+  },
+  MPA: {
+    SR: "Votre source d'énergie : stimulation extérieure ou ressource intérieure.",
+    CI: "Votre mode de traitement de l'information : concret ou intuitif.",
+    LH: "Votre mode de décision : logique ou humain / relationnel.",
+    StF: "Votre mode d'organisation : structuré ou fluide / adaptable."
+  },
+  PSYCHO: {
+    'Combatif': "La part de votre énergie qui se transforme en combativité face à la pression.",
+    'Expressif': "La part de votre énergie qui s'exprime et se partage avec les autres.",
+    'Analytique': "La part de votre énergie qui passe par l'analyse et la prise de recul.",
+    'Absorbant': "La part de votre énergie qui absorbe les émotions de l'environnement.",
+    'Régulation': "Votre capacité à réguler vos émotions de façon autonome."
+  }
+}
+function dimCaption(type, label) {
+  const map = DIM_CAPTIONS[type]
+  if (!map) return ''
+  if (map[label]) return map[label]
+  // MPA : le label contient l'émoji du pôle dominant + le code d'axe entre parenthèses, ex "Intuitif (CI)"
+  const m = /\(([A-Za-z]+)\)\s*$/.exec(label || '')
+  if (m && map[m[1]]) return map[m[1]]
+  return ''
+}
+
 function esc(s) { return (s === undefined || s === null) ? '' : String(s) }
+
+// ── Radar par test (utilise les mêmes dimensions que les barres) ──
+function drawTestRadar(canvasId, dims) {
+  const canvas = document.getElementById(canvasId)
+  if (!canvas || !dims || dims.length < 3) return
+  const ctx = canvas.getContext('2d')
+  const size = canvas.width, cx = size/2, cy = size/2, R = size/2 - 40
+  const n = dims.length
+  ctx.clearRect(0,0,size,size)
+  ctx.strokeStyle = '#e2e8f4'; ctx.lineWidth = 1
+  ;[0.25,0.5,0.75,1].forEach(f => {
+    ctx.beginPath()
+    for (let i=0;i<=n;i++) {
+      const a = (Math.PI*2*i/n) - Math.PI/2
+      const x = cx + Math.cos(a)*R*f, y = cy + Math.sin(a)*R*f
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y)
+    }
+    ctx.stroke()
+  })
+  ctx.fillStyle = '#1a2a4a'; ctx.font = '700 11px DM Sans, Arial'
+  dims.forEach((dim,i) => {
+    const a = (Math.PI*2*i/n) - Math.PI/2
+    const x = cx + Math.cos(a)*R, y = cy + Math.sin(a)*R
+    ctx.strokeStyle = '#e2e8f4'
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y); ctx.stroke()
+    const lx = cx + Math.cos(a)*(R+30), ly = cy + Math.sin(a)*(R+30)
+    ctx.textAlign = Math.abs(Math.cos(a))<0.2 ? 'center' : (Math.cos(a)>0?'left':'right')
+    ctx.fillText(dim.label.replace(/\s*\([^)]*\)\s*$/,''), lx, ly)
+  })
+  ctx.beginPath()
+  dims.forEach((dim,i) => {
+    const a = (Math.PI*2*i/n) - Math.PI/2
+    const r = R * (Math.min(dim.value,100)/100)
+    const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y)
+  })
+  ctx.closePath()
+  ctx.fillStyle = 'rgba(47,74,138,0.14)'
+  ctx.strokeStyle = '#2f4a8a'; ctx.lineWidth = 2.5
+  ctx.fill(); ctx.stroke()
+  dims.forEach((dim,i) => {
+    const a = (Math.PI*2*i/n) - Math.PI/2
+    const r = R * (Math.min(dim.value,100)/100)
+    const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r
+    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle = dim.color || '#2f4a8a'; ctx.fill()
+  })
+}
+
+function renderTestRadar(r, color) {
+  const d = r.details
+  if (!d || !Array.isArray(d.dimensions) || d.dimensions.length < 3) return ''
+  const canvasId = 'radar-' + r.test_type
+  return '<div class="section"><div class="section-title" style="border-color:' + color + '">🎯 Radar du profil</div>'
+    + '<div class="radar-wrap"><canvas id="' + canvasId + '" width="300" height="300"></canvas></div></div>'
+}
 
 // ── Dimensions ────────────────────────────────────────────
 function renderDimensions(r, color) {
@@ -127,9 +225,11 @@ function renderDimensions(r, color) {
     html += '<div class="section-title" style="border-color:' + color + '">📊 Dimensions</div>'
     d.dimensions.forEach(dim => {
       const c = dim.color || color
+      const cap = dimCaption(r.test_type, dim.label)
       html += '<div class="dim-row">'
       html += '<div class="dim-header"><span class="dim-name">' + esc(dim.label) + '</span><span class="dim-val" style="color:' + c + '">' + dim.value + '%</span></div>'
       html += '<div class="dim-bar"><div class="dim-fill" style="width:' + Math.min(dim.value,100) + '%;background:' + c + '"></div></div>'
+      if (cap) html += '<div style="font-size:11.5px;color:#8a9ab5;margin-top:4px;">' + esc(cap) + '</div>'
       html += '</div>'
     })
     html += '</div>'
@@ -329,6 +429,104 @@ function firstSentence(txt) {
   const m = txt.split('.'); return (m[0] || txt).trim() + '.'
 }
 
+// ── BIPM : heuristiques de croisement des 4 tests ─────────
+// Port fidèle de la logique de synthèse de l'app individuelle (ICG,
+// forces, valeurs, zones de flow, vulnérabilités, plan d'action),
+// adapté aux champs réellement stockés côté Club (scores bruts +
+// details.forces/vigilances/leviers/itca déjà calculés par test).
+
+function numCard(text, i, color, bg, raw) {
+  return '<div style="background:' + bg + ';border-radius:14px;padding:14px 16px;margin-bottom:10px;border-left:4px solid ' + color + ';display:flex;align-items:flex-start;gap:12px;">'
+    + '<div style="background:' + color + ';color:#fff;border-radius:50%;width:24px;height:24px;min-width:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;">' + (i+1) + '</div>'
+    + '<div style="font-size:13.5px;line-height:1.6;color:#2a3a5a;">' + (raw ? text : esc(text)) + '</div></div>'
+}
+
+function bipmData(last) {
+  const dPMP = last.PMP.details || {}, dMPA = last.MPA.details || {}, dCMP = last.CMP.details || {}, dPSY = last.PSYCHO.details || {}
+  const sCMP = last.CMP.scores || {}, sPSY = last.PSYCHO.scores || {}
+  const pmpScore = last.PMP.score_global || 0
+  const cmpScore = last.CMP.score_global || 0
+  const pression = sCMP.pression ?? 50, maturite = sCMP.maturite ?? 50, ressource = sCMP.ressource ?? 50, blocage = sCMP.blocage ?? 30
+  const regulation = sPSY.regulation ?? 50
+  const typeMap = [{key:'combatif',val:sPSY.combatif||0},{key:'expressif',val:sPSY.expressif||0},{key:'analytique',val:sPSY.analytique||0},{key:'absorbant',val:sPSY.absorbant||0}]
+  const dominantType = [...typeMap].sort((a,b)=>b.val-a.val)[0].key
+  const code4 = (last.MPA.profil_code||'')
+  const aerien = code4.charAt(0) === 'R'
+  const itcaAlert = !!(dPSY.itca && dPSY.itca.alert)
+  return { dPMP, dMPA, dCMP, dPSY, pmpScore, cmpScore, pression, maturite, ressource, blocage, regulation, dominantType, aerien, itcaAlert }
+}
+
+function computeICG(d) {
+  const scores = []
+  if (d.pmpScore && d.cmpScore) scores.push(100 - Math.abs(d.pmpScore - d.cmpScore))
+  if (d.regulation && d.pression) scores.push(100 - Math.abs(d.regulation - d.pression))
+  const isActif = ['expressif','combatif'].includes(d.dominantType)
+  scores.push(d.aerien === isActif ? 85 : 70)
+  if (d.maturite && d.regulation) scores.push(100 - Math.abs(d.maturite - d.regulation) * 0.5)
+  if (!scores.length) return 70
+  return Math.round(scores.reduce((a,b)=>a+b,0) / scores.length)
+}
+
+function computeForces(d) {
+  const f = []
+  const byType = {combatif:"Transformation naturelle de la pression en carburant d'action",expressif:"Capacité à électriser le collectif et à créer de l'énergie partagée",analytique:"Lucidité tactique et prise de décision structurée sous pression",absorbant:"Intelligence émotionnelle fine et lecture subtile des dynamiques collectives"}
+  f.push(byType[d.dominantType])
+  f.push(d.aerien ? "Légèreté motrice et capacité d'adaptation aux espaces ouverts" : "Ancrage au sol et puissance dans les situations de contact")
+  if (d.pression > 70) f.push("Solidité mentale éprouvée dans les situations de haute pression")
+  if (d.maturite > 70) f.push("Maturité mentale développée permettant d'apprendre de chaque expérience")
+  if (d.ressource > 70) f.push("Richesse des ressources mentales disponibles et activables rapidement")
+  if (d.regulation > 70) f.push("Autonomie émotionnelle et capacité à se réguler sans dépendance au contexte")
+  return f.slice(0,4)
+}
+
+function computeValeurs(d) {
+  const v = []
+  const byType = {combatif:"Dépassement — La victoire sur soi avant la victoire sur l'adversaire",expressif:"Connexion — La performance comme acte de partage et d'appartenance",analytique:"Maîtrise — La compréhension profonde comme fondation de l'excellence",absorbant:"Authenticité — L'alignement entre ce qu'on ressent et ce qu'on exprime"}
+  v.push(byType[d.dominantType])
+  v.push(d.aerien ? "Liberté — L'espace créatif comme condition de la performance optimale" : "Ancrage — La stabilité et la fiabilité comme socle de la confiance collective")
+  if (d.pmpScore > 65) v.push("Engagement — L'investissement total comme signature personnelle")
+  v.push("Progression — La croissance continue comme moteur identitaire")
+  return v.slice(0,4)
+}
+
+function computeZones(d) {
+  const z = []
+  const byType = {combatif:"Matchs à fort enjeu avec adversaire identifié",expressif:"Ambiance collective positive et public présent",analytique:"Préparation structurée avec objectifs clairs définis à l'avance",absorbant:"Environnement calme, bien maîtrisé, avec soutien relationnel fort"}
+  z.push(byType[d.dominantType])
+  z.push(d.aerien ? "Espaces ouverts, jeu en mouvement, liberté d'initiative" : "Jeu ancré, contact physique, repères stables et connus")
+  if (d.pression > 70) z.push("Situations de pression extrême qui libèrent votre énergie")
+  if (d.regulation > 65) z.push("Contextes où l'autonomie mentale est valorisée")
+  return z.slice(0,4)
+}
+
+function computeVulnerabilites(d) {
+  const v = []
+  const byType = {combatif:"Série d'injustices perçues qui font basculer la combativité en agressivité contre-productive",expressif:"Atmosphère collective négative qui coupe votre source d'énergie relationnelle",analytique:"Situations d'imprévu total où l'analyse n'a plus le temps de fonctionner",absorbant:"Accumulation de pressions émotionnelles sans espace de récupération"}
+  v.push(byType[d.dominantType])
+  v.push(d.blocage > 50 ? "Erreur décisive en moment critique qui déclenche une spirale de doute" : "Montée brutale de l'enjeu sans préparation mentale spécifique")
+  v.push(d.itcaAlert ? "Environnements hyper-stimulants ou trop monotones qui désactivent votre fonctionnement optimal" : "Rupture de routine préparatoire en veille de compétition importante")
+  return v.slice(0,3)
+}
+
+function computeActions(d) {
+  const a = []
+  const byType = {combatif:"Développer un protocole de récupération post-compétition pour éviter la surchauffe émotionnelle chronique",expressif:"Construire des ressources de régulation interne indépendantes du contexte social",analytique:"Intégrer une pratique corporelle quotidienne pour reconnecter l'intellect au ressenti",absorbant:"Mettre en place un protocole de régulation émotionnelle d'urgence utilisable en compétition"}
+  a.push(byType[d.dominantType])
+  a.push(d.blocage > 50 ? "Travailler spécifiquement la gestion de l'erreur avec des exercices de reset mental ciblés" : "Consolider les routines de préparation mentale pour les rendre automatiques sous pression")
+  a.push(d.itcaAlert ? "Consulter un neuropsychologue pour adapter l'environnement d'entraînement à votre fonctionnement cognitif" : "Identifier et protéger les 3 conditions environnementales qui favorisent votre état de flow")
+  a.push("Construire un carnet de suivi pour tracker l'évolution du profil mental sur la saison")
+  return a.slice(0,4)
+}
+
+function computePortrait(nom, last, d) {
+  const dPMP = d.dPMP, dMPA = d.dMPA, dCMP = d.dCMP, dPSY = d.dPSY
+  const typeAdj = {combatif:"un profil combatif, qui puise dans la pression une énergie d'action plutôt qu'un frein",expressif:"un profil expressif, qui vit et communique ses émotions avec une intensité contagieuse",analytique:"un profil analytique, qui traite ses émotions par la prise de recul et l'analyse",absorbant:"un profil absorbant, particulièrement sensible et perméable aux dynamiques émotionnelles de son environnement"}[d.dominantType]
+  const p1 = nom + " présente " + (typeAdj||'un profil émotionnel singulier') + ", combiné à un mode d'action de type " + (last.MPA.profil_label||'—') + (dMPA.description ? (' : ' + firstSentence(dMPA.description)) : '') + " Sur le plan de la performance mentale globale, son profil ressort comme " + (last.PMP.profil_label||'—') + "."
+  const p2 = "Face à la pression compétitive, sa maturité mentale correspond au profil " + (last.CMP.profil_label||'—') + (dCMP.description ? (' : ' + firstSentence(dCMP.description)) : '') + " Sur le plan émotionnel, ce fonctionnement de type " + (last.PSYCHO.profil_label||'—') + " se traduit par un niveau de régulation de " + (d.regulation) + "/100" + (dPSY.description ? (' : ' + firstSentence(dPSY.description)) : '') + ""
+  const p3 = "Le croisement de ces quatre diagnostics dessine un potentiel clair : en travaillant les leviers identifiés ci-dessous de façon régulière, " + nom + " peut transformer ces particularités en véritables atouts de performance, sur la durée d'une saison comme sur le temps long d'une carrière."
+  return [p1, p2, p3]
+}
+
 function renderSynthese(nom, byType) {
   const need = ['PMP','MPA','CMP','PSYCHO']
   if (!need.every(t => byType[t] && byType[t].length > 0)) return ''
@@ -336,52 +534,96 @@ function renderSynthese(nom, byType) {
   const last = {}
   need.forEach(t => { last[t] = byType[t][0] })
 
-  const scores = need.map(t => last[t].score_global || 0)
-  const icg = Math.round(scores.reduce((a,b)=>a+b,0) / scores.length)
-  const icgLabel = icg>=80?'Cohérence mentale élevée':icg>=65?'Cohérence mentale solide':icg>=50?'Cohérence en construction':'Cohérence à renforcer en priorité'
+  const d = bipmData(last)
+  const icg = computeICG(d)
+  const icgInfo = icg>=85?{label:'Très élevée',color:'#1a4a2a'}:icg>=70?{label:'Élevée',color:'#1a3a6a'}:icg>=55?{label:'Modérée',color:'#5a3a00'}:{label:'Complexe',color:'#4a2a6a'}
+  const icgDesc = icg>=85?"Vos 4 profils sont remarquablement alignés. Vous fonctionnez avec une grande cohérence entre votre motricité, votre mental, vos émotions et vos compétences."
+    :icg>=70?"Vos profils montrent une bonne cohérence globale avec quelques zones de tension créative qui peuvent devenir des leviers de progression."
+    :icg>=55?"Votre profil présente une complexité intéressante — des tensions entre certaines dimensions qui, bien comprises, peuvent être transformées en richesse."
+    :"Votre profil est d'une grande complexité. Les tensions révèlent un fonctionnement atypique et potentiellement très puissant s'il est bien compris."
 
-  const dPMP = last.PMP.details || {}, dMPA = last.MPA.details || {}, dCMP = last.CMP.details || {}, dPSY = last.PSYCHO.details || {}
-
-  const forces = uniq([...(dCMP.forces||[]).slice(0,2), ...(dPMP.forces||[]).slice(0,2), ...(dPSY.forces||[]).slice(0,1)]).slice(0,6)
-  const vulnerabilites = uniq([...(dCMP.vigilances||[]), ...(dPSY.vigilances||[]), ...(dMPA.vigilances||[])]).slice(0,6)
-  const actions = uniq([...(dCMP.leviers||[]), ...(dPMP.leviers||[]), ...(dPSY.leviers||[]), ...(dMPA.leviers||[])]).slice(0,6)
-
-  const zoneFlow = "Votre zone de flow se situe à la croisée de votre mode d'action " + (dMPA.description ? '(' + (last.MPA.profil_label||'') + ')' : '') + " et de votre fonctionnement émotionnel " + (last.PSYCHO.profil_label||'') + ". C'est dans les contextes qui sollicitent à la fois cette approche naturelle du jeu et ce mode de gestion émotionnelle que votre performance mentale est la plus fluide et la plus durable."
-
-  const portrait = "Sur le plan de la performance mentale, " + nom + " présente un profil " + (last.PMP.profil_label||'—') + ". Sur le plan comportemental, son mode d'action se rapproche du profil " + (last.MPA.profil_label||'—') + " : " + firstSentence(dMPA.description) + " Face à la pression compétitive, sa maturité mentale correspond au profil " + (last.CMP.profil_label||'—') + " : " + firstSentence(dCMP.description) + " Enfin, sur le plan émotionnel, son fonctionnement dominant est de type " + (last.PSYCHO.profil_label||'—') + " : " + firstSentence(dPSY.description)
+  const forces = computeForces(d)
+  const valeurs = computeValeurs(d)
+  const zones = computeZones(d)
+  const vulnerabilites = computeVulnerabilites(d)
+  const actions = computeActions(d)
+  const portrait = computePortrait(nom, last, d)
 
   let html = '<div class="page-break"></div>'
   html += '<div class="synth-hero">'
   html += '<div style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.7;margin-bottom:10px;">Bilan Intégré de Performance Mentale</div>'
   html += '<div class="icg-num">' + icg + '</div>'
-  html += '<div class="icg-label">' + icgLabel + ' · Index de Cohérence Globale</div>'
+  html += '<div class="icg-label">Index de Cohérence Globale · Cohérence ' + icgInfo.label + '</div>'
   html += '</div>'
 
-  html += '<div class="section"><div class="section-title" style="border-color:#C9A84C">🕸️ Radar de synthèse</div>'
-  html += '<div class="radar-wrap"><canvas id="radar-synth" width="360" height="360"></canvas></div></div>'
+  html += '<div class="section"><div class="section-title" style="border-color:#C9A84C">🕸️ Radar des 4 diagnostics</div>'
+  html += '<div class="radar-wrap"><canvas id="radar-synth" width="360" height="360"></canvas></div>'
+  html += '<div class="desc-text" style="text-align:center;color:' + icgInfo.color + ';font-weight:700;">' + esc(icgDesc) + '</div></div>'
 
-  html += '<div class="section"><div class="section-title" style="border-color:#C9A84C">📖 Portrait synthétique</div><div class="desc-text">' + esc(portrait) + '</div></div>'
+  html += '<div class="section"><div class="section-title" style="border-color:#C9A84C">🧠 Portrait mental intégré</div>'
+  portrait.forEach(p => { html += '<div class="desc-text" style="margin-bottom:14px;">' + esc(p) + '</div>' })
+  html += '<div style="font-size:11px;color:#a0aec0;font-style:italic;border-top:1px solid #e2e8f4;padding-top:10px;margin-top:6px;">Portrait construit à partir du croisement de vos 4 diagnostics réels — A4P Mental</div>'
+  html += '</div>'
 
-  html += '<div class="synth-cols">'
   if (forces.length) {
-    html += '<div class="section"><div class="section-title" style="border-color:#16a34a">💪 Forces transversales</div>'
-    forces.forEach(f => html += '<div class="insight" style="background:#f0fff4;border-color:#4ade80">' + esc(f) + '</div>')
+    html += '<div class="section"><div class="section-title" style="border-color:#16a34a">💪 Vos forces principales</div>'
+    forces.forEach((f,i) => html += numCard(f, i, '#1a6a5a', '#f0fff4'))
     html += '</div>'
   }
-  if (vulnerabilites.length) {
-    html += '<div class="section"><div class="section-title" style="border-color:#f87171">⚠️ Vulnérabilités transversales</div>'
-    vulnerabilites.forEach(v => html += '<div class="insight" style="background:#fff8f0;border-color:#f87171">' + esc(v) + '</div>')
-    html += '</div>'
-  }
-  html += '</div>'
 
-  html += '<div class="section"><div class="section-title" style="border-color:#4a1a6a">🌊 Zone de flow</div><div class="desc-text">' + esc(zoneFlow) + '</div></div>'
+  if (valeurs.length) {
+    html += '<div class="section"><div class="section-title" style="border-color:#5a3a8a">🌟 Vos valeurs dominantes</div>'
+    valeurs.forEach((v,i) => {
+      const parts = v.split(' — ')
+      const inner = parts[1] ? ('<strong>' + esc(parts[0]) + '</strong> — ' + esc(parts[1])) : esc(v)
+      html += numCard(inner, i, '#5a3a8a', '#f8f0ff', true)
+    })
+    html += '</div>'
+  }
+
+  if (zones.length) {
+    html += '<div class="section"><div class="section-title" style="border-color:#d4a017">⚡ Carte de vos zones de flow</div>'
+    html += '<div class="desc-text" style="margin-bottom:10px;">Conditions précises dans lesquelles vous entrez naturellement en état de performance optimale :</div>'
+    zones.forEach(z => {
+      html += '<div style="background:#fff8e0;border-radius:14px;padding:12px 16px;margin-bottom:8px;border-left:4px solid #d4a017;display:flex;align-items:center;gap:10px;">'
+        + '<span style="font-size:16px;">🌊</span><div style="font-size:13.5px;color:#4a3a00;font-weight:600;line-height:1.5;">' + esc(z) + '</div></div>'
+    })
+    html += '</div>'
+  }
+
+  if (vulnerabilites.length) {
+    html += '<div class="section"><div class="section-title" style="border-color:#8a1a1a">🎯 Matrice de vulnérabilité</div>'
+    html += '<div class="desc-text" style="margin-bottom:10px;">Les scénarios précis où votre profil est le plus exposé à la défaillance mentale :</div>'
+    vulnerabilites.forEach(v => {
+      html += '<div style="background:#fff0f0;border-radius:14px;padding:12px 16px;margin-bottom:8px;border-left:4px solid #8a1a1a;display:flex;align-items:flex-start;gap:10px;">'
+        + '<div style="background:#8a1a1a;color:#fff;border-radius:50%;width:22px;height:22px;min-width:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;">⚠</div>'
+        + '<div style="font-size:13.5px;color:#4a1a1a;font-weight:600;line-height:1.5;">' + esc(v) + '</div></div>'
+    })
+    html += '</div>'
+  }
 
   if (actions.length) {
-    html += '<div class="section"><div class="section-title" style="border-color:#C9A84C">🎯 Plan d\'action prioritaire</div>'
-    actions.forEach((a,i) => html += '<div class="insight" style="background:#eef3ff;border-color:#C9A84C"><div class="insight-label" style="color:#C9A84C">Action ' + (i+1) + '</div>' + esc(a) + '</div>')
+    html += '<div class="section"><div class="section-title" style="border-color:#2f4a8a">🚀 Protocole de préparation personnalisé</div>'
+    html += '<div class="desc-text" style="margin-bottom:10px;">Les actions prioritaires issues du croisement de vos 4 diagnostics :</div>'
+    actions.forEach((a,i) => html += numCard(a, i, '#2f4a8a', '#eef3ff'))
     html += '</div>'
   }
+
+  html += '<div class="section" style="background:linear-gradient(135deg,#0f2244,#2a3a6a);color:#fff;">'
+  html += '<div style="font-weight:900;font-size:15px;margin-bottom:14px;opacity:0.9;">📚 Fondements du BIPM</div>'
+  ;[
+    ['ActionTypes®', "Théraulaz & Hippolyte — Théorie des préférences motrices et modes d'action"],
+    ['Flow Theory', "Csikszentmihalyi (1990) — Conditions de l'état de performance optimale"],
+    ['Neurobiologie émotionnelle', "LeDoux (1996), Damasio (1994) — Rôle des émotions dans la décision sportive"],
+    ['Mental Performance', "Vealey (2007), Orlick (2008) — Modèles dimensionnels de la performance mentale"]
+  ].forEach(([ref,desc]) => {
+    html += '<div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:12px 16px;margin-bottom:8px;">'
+      + '<div style="font-weight:800;font-size:12.5px;color:#a0b4d0;margin-bottom:3px;">' + esc(ref) + '</div>'
+      + '<div style="font-size:11.5px;opacity:0.75;line-height:1.5;">' + esc(desc) + '</div></div>'
+  })
+  html += '<div style="margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.05);border-radius:10px;border-left:3px solid rgba(255,255,255,0.2);font-size:11px;opacity:0.65;font-style:italic;line-height:1.6;">'
+    + "L'Index de Cohérence Globale (ICG) est une méthodologie propriétaire A4P. Ce bilan ne constitue pas un diagnostic clinique mais un outil de développement de la performance mentale sportive."
+    + '</div></div>'
 
   return html
 }
@@ -518,6 +760,7 @@ async function loadReport() {
     html += '</div></div>'
 
     html += renderDescription(r, color)
+    html += renderTestRadar(r, color)
     html += renderDimensions(r, color)
     html += renderInsights(r, color)
     if (type === 'MPA') html += renderSport(r)
@@ -541,6 +784,12 @@ async function loadReport() {
       ])
     }
   }
+  Object.keys(byType).forEach(type => {
+    const r = byType[type][0]
+    if (r.details && Array.isArray(r.details.dimensions) && r.details.dimensions.length >= 3) {
+      drawTestRadar('radar-' + type, r.details.dimensions)
+    }
+  })
 }
 
 loadReport()
