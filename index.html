@@ -1906,10 +1906,19 @@ function calcPSYCHO(answers, questions) {
 // ═══ FIN DU TEST ═══
 async function finishTest() {
   const results = calcResults(currentTest, testAnswers, testQuestions)
+  // Écran transitoire pendant l'enregistrement, puis redirection vers le
+  // rapport complet (rapport.html) — c'est la même page riche (radar,
+  // analyse du profil, forces/vigilances/leviers, etc.) que celle vue
+  // plus tard par le joueur, le coach et le dirigeant : un seul et même
+  // rapport, partout.
   showPage('page-resultats')
   document.getElementById('res-title').textContent = 'Résultats ' + currentTest
-  renderResults(currentTest, results)
+  const resContainer = document.getElementById('resultats-content')
+  if (resContainer) {
+    resContainer.innerHTML = '<div style="text-align:center;padding:80px 20px;color:#6c7a99;font-size:16px;">Préparation de votre rapport complet...</div>'
+  }
   await saveResult(currentTest, results)
+  window.location.href = 'rapport.html?uid=' + currentUser.id + '&test=' + currentTest
 }
 
 async function saveResult(type, results) {
