@@ -786,6 +786,10 @@ padding: 10px;
       <div class="section-title">📊 Moyenne équipe par test</div>
       <div id="c-moyennes"><div class="empty-state">Chargement...</div></div>
     </div>
+    <div class="section-card">
+      <div class="section-title">🎯 3 axes de travail collectif</div>
+      <div id="c-axes"><div class="empty-state">Chargement...</div></div>
+    </div>
   </div>
 </div>
 
@@ -1403,6 +1407,74 @@ async function creerCoach() {
   document.getElementById('g-coach-mdp').value = ''
 }
 
+// ═══ AXES DE TRAVAIL COLLECTIF (vue coach) ═══
+// Ne prend en compte que les dimensions à orientation claire ("plus haut = plus solide
+// mentalement") : PMP en entier, CMP (hors blocage brut, remplacé par "Sans blocage"),
+// et la régulation émotionnelle de PSYCHO. Les axes MPA (style comportemental) et les
+// 4 types émotionnels PSYCHO (combatif/expressif/analytique/absorbant) sont des profils,
+// pas des forces/faiblesses, donc ils ne sont pas éligibles ici.
+const COACH_AXES_ELIGIBLES = {
+  PMP: ['Activation','Attention','Régulation','Engagement','Confiance','Résilience','Cognition','Motricité'],
+  CMP: ['Sous pression','Maturité mentale','Ressources','Sans blocage'],
+  PSYCHO: ['Régulation']
+}
+const COACH_AXES_CONSEILS = {
+  'Activation': "Mettre en place des routines d'activation collectives avant chaque séance et chaque match (rituel d'échauffement mental partagé, mots d'ordre, musique).",
+  'Attention': "Travailler en groupe la concentration et la re-focalisation rapide après une erreur ou une interruption de jeu (exercices de recentrage, signaux collectifs).",
+  'Régulation': "Introduire des temps de régulation émotionnelle collective (respiration guidée, débriefs courts, protocole de retour au calme après un pic de tension).",
+  'Engagement': "Renforcer l'engagement collectif via des objectifs de processus partagés et une reconnaissance de l'effort indépendante du seul résultat.",
+  'Confiance': "Construire une confiance collective ancrée sur des preuves concrètes (statistiques d'entraînement, réussites récentes rappelées avant les matchs).",
+  'Résilience': "Structurer des temps dédiés au rebond après l'échec (analyse à froid des contre-performances, rituel collectif de 'tourner la page').",
+  'Cognition': "Développer la lecture collective du jeu via des ateliers vidéo et des mises en situation décisionnelles sous contrainte de temps.",
+  'Motricité': "Travailler la conscience corporelle collective (feedback proprioceptif, ajustements techniques fins en situation de fatigue).",
+  'Sous pression': "Créer des mises en situation d'entraînement à charge de pression croissante pour désensibiliser progressivement le collectif aux enjeux.",
+  'Maturité mentale': "Installer des rituels de préparation mentale collective avant les échéances importantes (visualisation, plan de match partagé).",
+  'Ressources': "Développer une boîte à outils mentale commune à l'équipe (mots-clés, gestes d'ancrage, respiration) mobilisable en match.",
+  'Sans blocage': "Travailler collectivement le rapport à l'erreur pour réduire les blocages sous pression (droit à l'erreur affiché, culture du rebond)."
+}
+
+function computeAxesCollectifs(resultats) {
+  // Ne garder que le dernier passage de chaque joueur pour chaque test
+  const latest = {}
+  resultats.forEach(r => {
+    const k = r.utilisateur_id + '|' + r.test_type
+    if (!latest[k] || new Date(r.completed_at) > new Date(latest[k].completed_at)) latest[k] = r
+  })
+  const buckets = {}
+  Object.values(latest).forEach(r => {
+    const allowed = COACH_AXES_ELIGIBLES[r.test_type]
+    if (!allowed || !r.details || !Array.isArray(r.details.dimensions)) return
+    r.details.dimensions.forEach(d => {
+      if (!allowed.includes(d.label) || typeof d.value !== 'number') return
+      if (!buckets[d.label]) buckets[d.label] = { sum:0, n:0 }
+      buckets[d.label].sum += d.value; buckets[d.label].n++
+    })
+  })
+  return Object.keys(buckets)
+    .map(label => ({ label, avg: Math.round(buckets[label].sum / buckets[label].n), n: buckets[label].n }))
+    .sort((a,b) => a.avg - b.avg)
+    .slice(0, 3)
+}
+
+function renderAxesCollectifs(containerId, resultats) {
+  const el = document.getElementById(containerId)
+  if (!el) return
+  const axes = computeAxesCollectifs(resultats)
+  if (axes.length === 0) {
+    el.innerHTML = '<div class="empty-state">Pas encore assez de données (PMP, CMP ou PSYCHO) pour identifier des axes de travail collectif.</div>'
+    return
+  }
+  el.innerHTML = axes.map((a, i) => `
+    <div style="padding:14px 16px;border-radius:14px;background:#f8faff;margin-bottom:10px;border-left:4px solid #2E5BA8;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+        <span style="font-weight:800;color:#1a2a4a;font-size:13px;">Axe ${i+1} · ${a.label}</span>
+        <span style="font-weight:800;color:#2E5BA8;font-size:13px;">${a.avg}% en moyenne · ${a.n} joueur(s)</span>
+      </div>
+      <div style="font-size:12.5px;color:#4a5a7a;line-height:1.6;">${COACH_AXES_CONSEILS[a.label] || "Travailler cette dimension au niveau collectif lors des prochaines séances."}</div>
+    </div>
+  `).join('')
+}
+
 // ═══ DASHBOARD COACH ═══
 async function loadCoach(user) {
   document.getElementById('c-avatar').textContent = user.prenom[0].toUpperCase()
@@ -1467,6 +1539,7 @@ async function loadCoach(user) {
   }).join('')
   document.getElementById('c-moyennes').innerHTML = moyHtml
 
+  renderAxesCollectifs('c-axes', resultats)
 }
 
 // ═══ DASHBOARD DIRIGEANT ═══
@@ -1850,7 +1923,17 @@ async function saveResult(type, results) {
       profil_label: results.profilLabel,
       score_global: results.globalScore,
       equipe_id: currentUser.equipe_id || null,
-      club_id: currentUser.club_id || null
+      club_id: currentUser.club_id || null,
+      details: {
+        description: results.description || null,
+        forces: results.forces || [],
+        vigilances: results.vigilances || [],
+        leviers: results.leviers || [],
+        neurochimie: results.neurochimie || null,
+        itca: results.itca || null,
+        sport: results.sport || [],
+        dimensions: results.dimensions || []
+      }
     })
     // Supprimer l'autorisation utilisée
     await sb.from('autorisations').delete().eq('joueur_id', currentUser.id).eq('test_type', type)

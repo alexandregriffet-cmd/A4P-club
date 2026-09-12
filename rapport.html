@@ -47,12 +47,29 @@ body { font-family: 'DM Sans', Arial, sans-serif; background: #f0f4ff; color: #1
 .dim-fill { height: 100%; border-radius: 999px; }
 .insight { padding: 11px 14px; border-radius: 11px; margin-bottom: 8px; border-left: 4px solid; font-size: 13px; line-height: 1.6; color: #2a3a5a; }
 .insight-label { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.desc-text { font-size: 14px; line-height: 1.75; color: #2a3a5a; }
 .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .meta-item { background: #f8faff; border-radius: 10px; padding: 10px 14px; }
 .meta-label { font-size: 10px; font-weight: 700; color: #a0aec0; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
 .meta-value { font-size: 14px; font-weight: 700; color: #1a2a4a; }
 .empty { text-align: center; padding: 40px; color: #a0aec0; font-size: 15px; }
 .footer-print { text-align: center; margin-top: 32px; padding-top: 16px; border-top: 1px solid #e2e8f4; font-size: 11px; color: #a0aec0; }
+.nt-card { background: #f8faff; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border-left: 4px solid; }
+.nt-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.nt-name { font-weight: 800; font-size: 13px; }
+.nt-statut { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 10px; border-radius: 20px; color:#fff; }
+.nt-desc { font-size: 12.5px; line-height: 1.6; color: #2a3a5a; margin-bottom: 6px; }
+.nt-reg { font-size: 12px; color: #4a5a7a; padding-left: 16px; margin: 2px 0; }
+.itca-card { border-radius: 14px; padding: 18px; color: #fff; }
+.itca-card h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; margin-bottom: 8px; }
+.itca-card p { font-size: 13px; line-height: 1.7; opacity: 0.95; margin-bottom: 8px; }
+.sport-chip { display: inline-block; background: #eef3ff; color: #1B3A6B; font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-radius: 10px; margin: 0 8px 8px 0; }
+.synth-hero { background: linear-gradient(135deg,#0f2244,#3a2a6a); border-radius: 20px; padding: 28px; color: #fff; margin-bottom: 16px; text-align: center; }
+.synth-hero .icg-num { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 64px; font-weight: 700; line-height: 1; color: #C9A84C; }
+.synth-hero .icg-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.75; margin-top: 6px; }
+.radar-wrap { display: flex; justify-content: center; padding: 10px 0 4px; }
+.synth-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .synth-cols { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -79,9 +96,10 @@ const sb = createClient(
 )
 
 const COLORS = { PMP:'#2f4a8a', MPA:'#1a3a6a', CMP:'#1a4a2a', PSYCHO:'#4a1a6a' }
+const TEST_NAMES = { PMP:'Profil Mental de Performance', MPA:"Mode d'Action Personnel", CMP:'Coefficient de Maturité Psychologique', PSYCHO:'Profil Émotionnel & Psychologique' }
 
-// Profils CMP
-const CMP_PROFILS = [
+// Fallback (résultats anciens enregistrés avant l'ajout de la colonne "details")
+const CMP_PROFILS_FALLBACK = [
   { min:85, code:'CMP-5', label:'Expert mental', forces:["Capacité à rester dans l'action sous pression maximale","Rebond rapide et constructif après l'erreur ou l'échec","Prise de décision lucide dans les moments décisifs"], vigilances:["Risque de sous-estimer la charge mentale des coéquipiers","Tendance à gérer seul sans demander de soutien"], leviers:["Développer votre rôle de leadership mental au sein du collectif","Transmettre vos outils mentaux à vos coéquipiers"] },
   { min:70, code:'CMP-4', label:'Performeur solide', forces:["Bonne capacité de régulation émotionnelle","Engagement constant même dans l'adversité","Aptitude à apprendre de ses erreurs"], vigilances:["Certaines situations de pression extrême encore déstabilisantes","Confiance parfois dépendante des résultats récents"], leviers:["Identifier les 2-3 situations qui fragilisent encore votre mental","Renforcer vos routines de préparation mentale"] },
   { min:55, code:'CMP-3', label:'Potentiel engagé', forces:["Volonté réelle de progresser","Conscience claire de ses forces et limites"], vigilances:["Confiance fragilisée dans les moments à fort enjeu","Difficulté à s'adapter rapidement quand le contexte change"], leviers:["Développer des routines de recentrage utilisables en compétition","Construire une confiance ancrée sur des preuves concrètes"] },
@@ -92,22 +110,40 @@ const CMP_PROFILS = [
 function getDimLabel(type, key) {
   const labels = {
     CMP: { pression:'Sous pression', maturite:'Maturité mentale', blocage:'Blocage', ressource:'Ressources' },
-    PMP: { Activation:'Activation', Attention:'Attention', Regulation:'Régulation', Engagement:'Engagement', Confiance:'Confiance', Resilience:'Résilience', Cognition:'Cognition', Motricite:'Motricité' }
+    PMP: { Activation:'Activation', Attention:'Attention', Regulation:'Régulation', Engagement:'Engagement', Confiance:'Confiance', Resilience:'Résilience', Cognition:'Cognition', Motricite:'Motricité' },
+    MPA: { SR:'Stimulation / Ressource', CI:'Concret / Intuitif', LH:'Logique / Humain', StF:'Structure / Fluidité' },
+    PSYCHO: { combatif:'Combatif', expressif:'Expressif', analytique:'Analytique', absorbant:'Absorbant', regulation:'Régulation' }
   }
   return (labels[type] && labels[type][key]) || key
 }
 
+function esc(s) { return (s === undefined || s === null) ? '' : String(s) }
+
+// ── Dimensions ────────────────────────────────────────────
 function renderDimensions(r, color) {
+  const d = r.details
+  if (d && Array.isArray(d.dimensions) && d.dimensions.length > 0) {
+    let html = '<div class="section">'
+    html += '<div class="section-title" style="border-color:' + color + '">📊 Dimensions</div>'
+    d.dimensions.forEach(dim => {
+      const c = dim.color || color
+      html += '<div class="dim-row">'
+      html += '<div class="dim-header"><span class="dim-name">' + esc(dim.label) + '</span><span class="dim-val" style="color:' + c + '">' + dim.value + '%</span></div>'
+      html += '<div class="dim-bar"><div class="dim-fill" style="width:' + Math.min(dim.value,100) + '%;background:' + c + '"></div></div>'
+      html += '</div>'
+    })
+    html += '</div>'
+    return html
+  }
+  // Fallback pour anciens résultats sans "details"
   if (!r.scores || typeof r.scores !== 'object') return ''
   const entries = Object.entries(r.scores).filter(([k, v]) => typeof v === 'number')
   if (entries.length === 0) return ''
   let html = '<div class="section">'
   html += '<div class="section-title" style="border-color:' + color + '">📊 Dimensions</div>'
   entries.forEach(([key, val]) => {
-    // Pour CMP, blocage est inversé
-    const displayVal = (r.test_type === 'CMP' && key === 'blocage') ? (100 - val) : val
+    if (r.test_type === 'CMP' && key === 'blocage') return
     const label = getDimLabel(r.test_type, key)
-    if (r.test_type === 'CMP' && key === 'blocage') return // affiché via "Sans blocage"
     html += '<div class="dim-row">'
     html += '<div class="dim-header"><span class="dim-name">' + label + '</span><span class="dim-val" style="color:' + color + '">' + val + '%</span></div>'
     html += '<div class="dim-bar"><div class="dim-fill" style="width:' + Math.min(val,100) + '%;background:' + color + '"></div></div>'
@@ -124,14 +160,24 @@ function renderDimensions(r, color) {
   return html
 }
 
+// ── Description du profil ────────────────────────────────
+function renderDescription(r, color) {
+  const d = r.details
+  if (!d || !d.description) return ''
+  return '<div class="section"><div class="section-title" style="border-color:' + color + '">🧭 Analyse du profil</div><div class="desc-text">' + esc(d.description) + '</div></div>'
+}
+
+// ── Forces / vigilances / leviers ────────────────────────
 function renderInsights(r, color) {
   let forces = [], vigilances = [], leviers = []
+  const d = r.details
 
-  if (r.test_type === 'CMP') {
-    const p = CMP_PROFILS.find(x => (r.score_global || 0) >= x.min) || CMP_PROFILS[4]
+  if (d && (d.forces?.length || d.vigilances?.length || d.leviers?.length)) {
+    forces = d.forces || []; vigilances = d.vigilances || []; leviers = d.leviers || []
+  } else if (r.test_type === 'CMP') {
+    const p = CMP_PROFILS_FALLBACK.find(x => (r.score_global || 0) >= x.min) || CMP_PROFILS_FALLBACK[4]
     forces = p.forces; vigilances = p.vigilances; leviers = p.leviers
   } else if (r.scores && typeof r.scores === 'object') {
-    // PMP — identifier les 3 dimensions les plus hautes comme forces
     const dims = Object.entries(r.scores).filter(([k,v]) => typeof v === 'number').sort((a,b) => b[1]-a[1])
     forces = dims.slice(0,3).map(([k,v]) => getDimLabel(r.test_type, k) + ' — ' + v + '%')
     leviers = dims.slice(-2).map(([k,v]) => 'Renforcer ' + getDimLabel(r.test_type, k).toLowerCase() + ' (' + v + '%)')
@@ -143,7 +189,7 @@ function renderInsights(r, color) {
     html += '<div class="section-title" style="border-color:#16a34a">💪 Forces mentales</div>'
     forces.forEach(f => {
       html += '<div class="insight" style="background:#f0fff4;border-color:#4ade80">'
-      html += '<div class="insight-label" style="color:#16a34a">Force</div>' + f
+      html += '<div class="insight-label" style="color:#16a34a">Force</div>' + esc(f)
       html += '</div>'
     })
     html += '</div>'
@@ -153,7 +199,7 @@ function renderInsights(r, color) {
     html += '<div class="section-title" style="border-color:#f87171">⚠️ Points de vigilance</div>'
     vigilances.forEach(v => {
       html += '<div class="insight" style="background:#fff8f0;border-color:#f87171">'
-      html += '<div class="insight-label" style="color:#dc2626">Vigilance</div>' + v
+      html += '<div class="insight-label" style="color:#dc2626">Vigilance</div>' + esc(v)
       html += '</div>'
     })
     html += '</div>'
@@ -163,11 +209,180 @@ function renderInsights(r, color) {
     html += '<div class="section-title" style="border-color:' + color + '">🚀 Leviers de progression</div>'
     leviers.forEach(l => {
       html += '<div class="insight" style="background:#eef3ff;border-color:' + color + '">'
-      html += '<div class="insight-label" style="color:' + color + '">Levier</div>' + l
+      html += '<div class="insight-label" style="color:' + color + '">Levier</div>' + esc(l)
       html += '</div>'
     })
     html += '</div>'
   }
+  return html
+}
+
+// ── Sports recommandés (MPA) ──────────────────────────────
+function renderSport(r) {
+  const d = r.details
+  if (!d || !Array.isArray(d.sport) || d.sport.length === 0) return ''
+  let html = '<div class="section">'
+  html += '<div class="section-title" style="border-color:#1a3a6a">🏅 Postes / disciplines en cohérence avec votre profil</div>'
+  d.sport.forEach(s => { html += '<span class="sport-chip">' + esc(s) + '</span>' })
+  html += '</div>'
+  return html
+}
+
+// ── Neurochimie (PSYCHO) ──────────────────────────────────
+function renderNeurochimie(r) {
+  const d = r.details
+  if (!d || !Array.isArray(d.neurochimie) || d.neurochimie.length === 0) return ''
+  let html = '<div class="section">'
+  html += '<div class="section-title" style="border-color:#4a1a6a">🧬 Profil neurochimique</div>'
+  d.neurochimie.forEach(nt => {
+    const c = nt.color || '#4a1a6a'
+    const statutLabel = nt.statut === 'dominant' ? 'Dominant' : nt.statut === 'carence' ? 'À soutenir' : esc(nt.statut)
+    const statutBg = nt.statut === 'dominant' ? c : '#8a8a8a'
+    html += '<div class="nt-card" style="border-color:' + c + '">'
+    html += '<div class="nt-head"><span class="nt-name" style="color:' + c + '">' + esc(nt.nt) + '</span><span class="nt-statut" style="background:' + statutBg + '">' + statutLabel + '</span></div>'
+    html += '<div class="nt-desc">' + esc(nt.description) + '</div>'
+    if (Array.isArray(nt.regulation) && nt.regulation.length) {
+      nt.regulation.forEach(rg => { html += '<div class="nt-reg">• ' + esc(rg) + '</div>' })
+    }
+    html += '</div>'
+  })
+  html += '</div>'
+  return html
+}
+
+// ── ITCA (dépistage traits cognitifs atypiques — PSYCHO) ──
+function renderItca(r) {
+  const d = r.details
+  if (!d || !d.itca) return ''
+  const it = d.itca
+  const bg = it.alert ? 'linear-gradient(135deg,#5a1a7a,#7a2a9a)' : (it.color || '#3a1a6a')
+  let html = '<div class="section"><div class="itca-card" style="background:' + bg + '">'
+  html += '<h3>🔍 ' + esc(it.label) + '</h3>'
+  html += '<p>' + esc(it.description) + '</p>'
+  if (it.sport_impact) html += '<p><strong>Impact sportif :</strong> ' + esc(it.sport_impact) + '</p>'
+  if (it.orientation) html += '<p><strong>Orientation :</strong> ' + esc(it.orientation) + '</p>'
+  html += '</div></div>'
+  return html
+}
+
+// ── Synthèse croisée (type BIPM) ──────────────────────────
+function drawRadar(canvasId, axes) {
+  const canvas = document.getElementById(canvasId)
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  const size = canvas.width, cx = size/2, cy = size/2, R = size/2 - 46
+  const n = axes.length
+  ctx.clearRect(0,0,size,size)
+  // grille
+  ctx.strokeStyle = '#e2e8f4'; ctx.lineWidth = 1
+  ;[0.25,0.5,0.75,1].forEach(f => {
+    ctx.beginPath()
+    for (let i=0;i<=n;i++) {
+      const a = (Math.PI*2*i/n) - Math.PI/2
+      const x = cx + Math.cos(a)*R*f, y = cy + Math.sin(a)*R*f
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y)
+    }
+    ctx.stroke()
+  })
+  // axes + labels
+  ctx.fillStyle = '#1a2a4a'; ctx.font = '700 12px DM Sans, Arial'
+  axes.forEach((ax,i) => {
+    const a = (Math.PI*2*i/n) - Math.PI/2
+    const x = cx + Math.cos(a)*R, y = cy + Math.sin(a)*R
+    ctx.strokeStyle = '#e2e8f4'
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y); ctx.stroke()
+    const lx = cx + Math.cos(a)*(R+34), ly = cy + Math.sin(a)*(R+34)
+    ctx.textAlign = Math.abs(Math.cos(a))<0.2 ? 'center' : (Math.cos(a)>0?'left':'right')
+    ctx.fillText(ax.label, lx, ly)
+    ctx.fillStyle = ax.color; ctx.font = '900 15px Cormorant Garamond, Georgia, serif'
+    ctx.fillText(ax.value + '%', lx, ly+16)
+    ctx.fillStyle = '#1a2a4a'; ctx.font = '700 12px DM Sans, Arial'
+  })
+  // polygone de valeurs
+  ctx.beginPath()
+  axes.forEach((ax,i) => {
+    const a = (Math.PI*2*i/n) - Math.PI/2
+    const r = R * (ax.value/100)
+    const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y)
+  })
+  ctx.closePath()
+  ctx.fillStyle = 'rgba(201,168,76,0.30)'
+  ctx.strokeStyle = '#C9A84C'; ctx.lineWidth = 2.5
+  ctx.fill(); ctx.stroke()
+  axes.forEach((ax,i) => {
+    const a = (Math.PI*2*i/n) - Math.PI/2
+    const r = R * (ax.value/100)
+    const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r
+    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle = '#C9A84C'; ctx.fill()
+  })
+}
+
+function uniq(arr) {
+  const seen = new Set(), out = []
+  arr.forEach(x => { const k = (x||'').trim(); if (k && !seen.has(k)) { seen.add(k); out.push(x) } })
+  return out
+}
+
+function firstSentence(txt) {
+  if (!txt) return ''
+  const m = txt.split('.'); return (m[0] || txt).trim() + '.'
+}
+
+function renderSynthese(nom, byType) {
+  const need = ['PMP','MPA','CMP','PSYCHO']
+  if (!need.every(t => byType[t] && byType[t].length > 0)) return ''
+
+  const last = {}
+  need.forEach(t => { last[t] = byType[t][0] })
+
+  const scores = need.map(t => last[t].score_global || 0)
+  const icg = Math.round(scores.reduce((a,b)=>a+b,0) / scores.length)
+  const icgLabel = icg>=80?'Cohérence mentale élevée':icg>=65?'Cohérence mentale solide':icg>=50?'Cohérence en construction':'Cohérence à renforcer en priorité'
+
+  const dPMP = last.PMP.details || {}, dMPA = last.MPA.details || {}, dCMP = last.CMP.details || {}, dPSY = last.PSYCHO.details || {}
+
+  const forces = uniq([...(dCMP.forces||[]).slice(0,2), ...(dPMP.forces||[]).slice(0,2), ...(dPSY.forces||[]).slice(0,1)]).slice(0,6)
+  const vulnerabilites = uniq([...(dCMP.vigilances||[]), ...(dPSY.vigilances||[]), ...(dMPA.vigilances||[])]).slice(0,6)
+  const actions = uniq([...(dCMP.leviers||[]), ...(dPMP.leviers||[]), ...(dPSY.leviers||[]), ...(dMPA.leviers||[])]).slice(0,6)
+
+  const zoneFlow = "Votre zone de flow se situe à la croisée de votre mode d'action " + (dMPA.description ? '(' + (last.MPA.profil_label||'') + ')' : '') + " et de votre fonctionnement émotionnel " + (last.PSYCHO.profil_label||'') + ". C'est dans les contextes qui sollicitent à la fois cette approche naturelle du jeu et ce mode de gestion émotionnelle que votre performance mentale est la plus fluide et la plus durable."
+
+  const portrait = "Sur le plan de la performance mentale, " + nom + " présente un profil " + (last.PMP.profil_label||'—') + ". Sur le plan comportemental, son mode d'action se rapproche du profil " + (last.MPA.profil_label||'—') + " : " + firstSentence(dMPA.description) + " Face à la pression compétitive, sa maturité mentale correspond au profil " + (last.CMP.profil_label||'—') + " : " + firstSentence(dCMP.description) + " Enfin, sur le plan émotionnel, son fonctionnement dominant est de type " + (last.PSYCHO.profil_label||'—') + " : " + firstSentence(dPSY.description)
+
+  let html = '<div class="page-break"></div>'
+  html += '<div class="synth-hero">'
+  html += '<div style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.7;margin-bottom:10px;">Bilan Intégré de Performance Mentale</div>'
+  html += '<div class="icg-num">' + icg + '</div>'
+  html += '<div class="icg-label">' + icgLabel + ' · Index de Cohérence Globale</div>'
+  html += '</div>'
+
+  html += '<div class="section"><div class="section-title" style="border-color:#C9A84C">🕸️ Radar de synthèse</div>'
+  html += '<div class="radar-wrap"><canvas id="radar-synth" width="360" height="360"></canvas></div></div>'
+
+  html += '<div class="section"><div class="section-title" style="border-color:#C9A84C">📖 Portrait synthétique</div><div class="desc-text">' + esc(portrait) + '</div></div>'
+
+  html += '<div class="synth-cols">'
+  if (forces.length) {
+    html += '<div class="section"><div class="section-title" style="border-color:#16a34a">💪 Forces transversales</div>'
+    forces.forEach(f => html += '<div class="insight" style="background:#f0fff4;border-color:#4ade80">' + esc(f) + '</div>')
+    html += '</div>'
+  }
+  if (vulnerabilites.length) {
+    html += '<div class="section"><div class="section-title" style="border-color:#f87171">⚠️ Vulnérabilités transversales</div>'
+    vulnerabilites.forEach(v => html += '<div class="insight" style="background:#fff8f0;border-color:#f87171">' + esc(v) + '</div>')
+    html += '</div>'
+  }
+  html += '</div>'
+
+  html += '<div class="section"><div class="section-title" style="border-color:#4a1a6a">🌊 Zone de flow</div><div class="desc-text">' + esc(zoneFlow) + '</div></div>'
+
+  if (actions.length) {
+    html += '<div class="section"><div class="section-title" style="border-color:#C9A84C">🎯 Plan d\'action prioritaire</div>'
+    actions.forEach((a,i) => html += '<div class="insight" style="background:#eef3ff;border-color:#C9A84C"><div class="insight-label" style="color:#C9A84C">Action ' + (i+1) + '</div>' + esc(a) + '</div>')
+    html += '</div>'
+  }
+
   return html
 }
 
@@ -259,7 +474,6 @@ async function loadReport() {
       html += '<span style="font-weight:800;color:' + evoColor + ';font-size:13px;">' + evoLabel + '</span>'
       html += '</div>'
 
-      // Tableau des passages
       html += '<div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;">'
       passages.forEach((r, i) => {
         const score = r.score_global || 0
@@ -275,7 +489,6 @@ async function loadReport() {
       })
       html += '</div>'
 
-      // Profil du dernier passage
       const dernierProfil = byType[type][0].profil_label
       if (dernierProfil) {
         html += '<div style="font-size:12px;color:#6c7a99;text-align:right;">Dernier profil : <strong style="color:' + color + '">' + dernierProfil + '</strong></div>'
@@ -285,26 +498,49 @@ async function loadReport() {
     html += '</div>'
   }
 
+  // Synthèse croisée type BIPM (uniquement si les 4 tests ont été passés et qu'on n'a pas filtré sur un seul test)
+  if (!targetTest) {
+    html += renderSynthese(nom, byType)
+  }
+
   // Détail du dernier passage par test
   Object.keys(byType).forEach((type, idx) => {
     const r = byType[type][0] // dernier passage
     const color = COLORS[type] || '#1B3A6B'
     const dateTest = r.completed_at ? new Date(r.completed_at).toLocaleDateString('fr-FR') : '—'
-    if (idx > 0) html += '<div class="page-break"></div>'
+    html += '<div class="page-break"></div>'
 
     html += '<div class="test-header" style="background:linear-gradient(135deg,' + color + ',' + color + 'cc)">'
     html += '<div class="score-big">' + (r.score_global || '—') + '<span style="font-size:20px;opacity:0.7">/100</span></div>'
     html += '<div class="info">'
-    html += '<h2>' + type + ' — ' + (r.profil_label || '—') + '</h2>'
-    html += '<p>Code : ' + (r.profil_code || '—') + ' · ' + dateTest + ' · ' + byType[type].length + ' passage(s)</p>'
+    html += '<h2>' + (TEST_NAMES[type] || type) + '</h2>'
+    html += '<p>' + (r.profil_label || '—') + ' · Code : ' + (r.profil_code || '—') + ' · ' + dateTest + ' · ' + byType[type].length + ' passage(s)</p>'
     html += '</div></div>'
 
+    html += renderDescription(r, color)
     html += renderDimensions(r, color)
     html += renderInsights(r, color)
+    if (type === 'MPA') html += renderSport(r)
+    if (type === 'PSYCHO') { html += renderNeurochimie(r); html += renderItca(r) }
   })
 
   html += '<div class="footer-print">Document confidentiel · A4P Mental · Académie de Performances · Alexandre Griffet · ' + date + '</div>'
   container.innerHTML = html
+
+  // redessiner les radars insérés via innerHTML (les <canvas> sont recréés)
+  if (!targetTest) {
+    const need = ['PMP','MPA','CMP','PSYCHO']
+    if (need.every(t => byType[t] && byType[t].length > 0)) {
+      const last = {}
+      need.forEach(t => { last[t] = byType[t][0] })
+      drawRadar('radar-synth', [
+        { label:'PMP', value: last.PMP.score_global||0, color: COLORS.PMP },
+        { label:'MPA', value: last.MPA.score_global||0, color: COLORS.MPA },
+        { label:'CMP', value: last.CMP.score_global||0, color: COLORS.CMP },
+        { label:'PSYCHO', value: last.PSYCHO.score_global||0, color: COLORS.PSYCHO }
+      ])
+    }
+  }
 }
 
 loadReport()
